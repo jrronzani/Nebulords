@@ -1,7 +1,7 @@
    ;***************************************************************
    ;  NEBULORDS - Warlords-style Space Combat
-   ;  Version 19 - 8-Position Discrete Aiming System
-   ;  Up/Down = Move Ship, Left/Right = Rotate Aim (8 positions)
+   ;  Version 19 - 8-Direction Movement + 8-Position Discrete Paddle Placement
+   ;  Joystick = 8-direction movement, Paddle uses discrete coordinates
    ;***************************************************************
 
    ;***************************************************************
@@ -10,33 +10,35 @@
    ; Player 1
    dim p1_xpos = player0x.a
    dim p1_ypos = player0y.b
-   dim p1_yspeed = c              ; Only Y movement now
-   dim p1_aim_pos = d             ; 0-7 for 8 discrete aim positions
-   dim p1_shields = e             ; bit flags for shield state (future)
-   dim p1_state = f               ; bit 0=button held, bit 1=catch cooldown
-   dim p1_timer = g               ; button hold timer
+   dim p1_xspeed = c              ; Current frame X movement
+   dim p1_yspeed = d              ; Current frame Y movement
+   dim p1_direction = e           ; 0-7 for 8 directions - remembers last move direction
+   dim p1_shields = f             ; bit flags for shield state (future)
+   dim p1_state = g               ; bit 0=button held, bit 1=catch cooldown
+   dim p1_timer = h               ; button hold timer
 
    ; Player 2
-   dim p2_xpos = player1x.h
-   dim p2_ypos = player1y.i
-   dim p2_yspeed = j
-   dim p2_aim_pos = k             ; 0-7
-   dim p2_shields = l             ; bit flags (future)
-   dim p2_state = m               ; bit 0=button held, bit 1=catch cooldown
-   dim p2_timer = n               ; button hold timer
+   dim p2_xpos = player1x.i
+   dim p2_ypos = player1y.j
+   dim p2_xspeed = k
+   dim p2_yspeed = l
+   dim p2_direction = m           ; 0-7
+   dim p2_shields = n             ; bit flags (future)
+   dim p2_state = o               ; bit 0=button held, bit 1=catch cooldown
+   dim p2_timer = p               ; button hold timer
 
    ; Ball (using simple integers)
-   dim ball_xvel = o
-   dim ball_yvel = p
-   dim ball_state = q             ; bit 0=attached to p1, bit 1=attached to p2
-   dim ball_speed_timer = r       ; countdown for high speed duration
-   dim frame_toggle = s           ; for alternating frame collision detection
+   dim ball_xvel = q
+   dim ball_yvel = r
+   dim ball_state = s             ; bit 0=attached to p1, bit 1=attached to p2
+   dim ball_speed_timer = t       ; countdown for high speed duration
+   dim frame_toggle = u           ; for alternating frame collision detection
 
    ; Game state
-   dim game_state = t             ; 0=playing, 1=death cooldown
-   dim death_timer = u            ; countdown to reset
-   dim p1_alive = v               ; 0=dead, 1=alive
-   dim p2_alive = w               ; 0=dead, 1=alive
+   dim game_state = var0          ; 0=playing, 1=death cooldown
+   dim death_timer = var1         ; countdown to reset
+   dim p1_alive = var2            ; 0=dead, 1=alive
+   dim p2_alive = var3            ; 0=dead, 1=alive
 
    ; Constants
    const PLAYER_SPEED = 1         ; Pixels per frame
@@ -51,9 +53,9 @@ __Game_Init
    p1_xpos = 40 : p1_ypos = 50
    p2_xpos = 120 : p2_ypos = 50
 
-   ; Initial aim directions (East and West)
-   p1_aim_pos = 2  ; East
-   p2_aim_pos = 6  ; West
+   ; Initial directions (East and West)
+   p1_direction = 2  ; East
+   p2_direction = 6  ; West
 
    ; Full shields
    p1_shields = 15 : p2_shields = 15
@@ -143,21 +145,42 @@ __Main_Loop
 
 
    ;***************************************************************
-   ;  Handle Player 1 controls
+   ;  Handle Player 1 controls - X axis first
    ;***************************************************************
    ; Only process if alive
    if !p1_alive then goto __Skip_P1_Controls
 
-   ; Y-axis movement (up/down)
+   ; Handle X collision bounce
+   if p1_xspeed && collision(player0, playfield) then p1_xspeed = 0 - p1_xspeed : player0x = player0x + p1_xspeed
+
+   ; Reset speed
+   p1_xspeed = 0
+
+   ; Check joystick for X movement
+   if joy0right then p1_xspeed = PLAYER_SPEED
+   if joy0left then p1_xspeed = 0 - PLAYER_SPEED
+
+   ; Apply X movement
+   player0x = player0x + p1_xspeed
+
+   ;***************************************************************
+   ;  Handle Player 1 controls - Y axis
+   ;***************************************************************
+   ; Handle Y collision bounce
    if p1_yspeed && collision(player0, playfield) then p1_yspeed = 0 - p1_yspeed : player0y = player0y + p1_yspeed
+
+   ; Reset speed
    p1_yspeed = 0
+
+   ; Check joystick for Y movement
    if joy0down then p1_yspeed = PLAYER_SPEED
    if joy0up then p1_yspeed = 0 - PLAYER_SPEED
+
+   ; Apply Y movement
    player0y = player0y + p1_yspeed
 
-   ; Aim rotation (left/right) - rotate through 8 positions
-   if joy0left then gosub __P1_Rotate_Left
-   if joy0right then gosub __P1_Rotate_Right
+   ; Update paddle direction based on movement
+   if p1_xspeed || p1_yspeed then gosub __Update_P1_Direction
 
    ; Button (catch/launch)
    if joy0fire then gosub __P1_Button_Held else gosub __P1_Button_Released
@@ -165,22 +188,28 @@ __Main_Loop
 __Skip_P1_Controls
 
    ;***************************************************************
-   ;  Handle Player 2 controls
+   ;  Handle Player 2 controls - X axis
    ;***************************************************************
    if !p2_alive then goto __Skip_P2_Controls
 
-   ; Y-axis movement
+   if p2_xspeed && collision(player1, playfield) then p2_xspeed = 0 - p2_xspeed : player1x = player1x + p2_xspeed
+   p2_xspeed = 0
+   if joy1right then p2_xspeed = PLAYER_SPEED
+   if joy1left then p2_xspeed = 0 - PLAYER_SPEED
+   player1x = player1x + p2_xspeed
+
+   ;***************************************************************
+   ;  Handle Player 2 controls - Y axis
+   ;***************************************************************
    if p2_yspeed && collision(player1, playfield) then p2_yspeed = 0 - p2_yspeed : player1y = player1y + p2_yspeed
    p2_yspeed = 0
    if joy1down then p2_yspeed = PLAYER_SPEED
    if joy1up then p2_yspeed = 0 - PLAYER_SPEED
    player1y = player1y + p2_yspeed
 
-   ; Aim rotation
-   if joy1left then gosub __P2_Rotate_Left
-   if joy1right then gosub __P2_Rotate_Right
+   ; Update paddle direction
+   if p2_xspeed || p2_yspeed then gosub __Update_P2_Direction
 
-   ; Button
    if joy1fire then gosub __P2_Button_Held else gosub __P2_Button_Released
 
 __Skip_P2_Controls
@@ -240,7 +269,7 @@ __Skip_Ball_Move
    if ball_state = 0 && p2_alive && collision(ball,player1) then gosub __P2_Destroyed
 
    ; Player vs player collision (just stop for now)
-   if collision(player0,player1) then p1_yspeed = 0 : p2_yspeed = 0
+   if collision(player0,player1) then p1_xspeed = 0 : p1_yspeed = 0 : p2_xspeed = 0 : p2_yspeed = 0
 
    ;***************************************************************
    ;  Update timers
@@ -296,26 +325,34 @@ __P2_Destroyed
 
 
    ;***************************************************************
-   ;  Aim rotation controls (8 positions: 0-7)
+   ;  Update paddle direction based on current movement (8 directions)
    ;***************************************************************
-__P1_Rotate_Left
-   p1_aim_pos = p1_aim_pos - 1
-   if p1_aim_pos > 250 then p1_aim_pos = 7  ; Wrap around (255 wraps to 7)
+__Update_P1_Direction
+   ; Determine direction from xspeed and yspeed (0-7)
+   ; North/South
+   if !p1_xspeed && p1_yspeed < 0 then p1_direction = 0 : return  ; N
+   if !p1_xspeed && p1_yspeed > 0 then p1_direction = 4 : return  ; S
+
+   ; East/West
+   if p1_xspeed > 0 && !p1_yspeed then p1_direction = 2 : return  ; E
+   if p1_xspeed < 0 && !p1_yspeed then p1_direction = 6 : return  ; W
+
+   ; Diagonals
+   if p1_xspeed > 0 && p1_yspeed < 0 then p1_direction = 1 : return  ; NE
+   if p1_xspeed > 0 && p1_yspeed > 0 then p1_direction = 3 : return  ; SE
+   if p1_xspeed < 0 && p1_yspeed > 0 then p1_direction = 5 : return  ; SW
+   if p1_xspeed < 0 && p1_yspeed < 0 then p1_direction = 7 : return  ; NW
    return
 
-__P1_Rotate_Right
-   p1_aim_pos = p1_aim_pos + 1
-   if p1_aim_pos > 7 then p1_aim_pos = 0    ; Wrap around
-   return
-
-__P2_Rotate_Left
-   p2_aim_pos = p2_aim_pos - 1
-   if p2_aim_pos > 250 then p2_aim_pos = 7
-   return
-
-__P2_Rotate_Right
-   p2_aim_pos = p2_aim_pos + 1
-   if p2_aim_pos > 7 then p2_aim_pos = 0
+__Update_P2_Direction
+   if !p2_xspeed && p2_yspeed < 0 then p2_direction = 0 : return
+   if !p2_xspeed && p2_yspeed > 0 then p2_direction = 4 : return
+   if p2_xspeed > 0 && !p2_yspeed then p2_direction = 2 : return
+   if p2_xspeed < 0 && !p2_yspeed then p2_direction = 6 : return
+   if p2_xspeed > 0 && p2_yspeed < 0 then p2_direction = 1 : return
+   if p2_xspeed > 0 && p2_yspeed > 0 then p2_direction = 3 : return
+   if p2_xspeed < 0 && p2_yspeed > 0 then p2_direction = 5 : return
+   if p2_xspeed < 0 && p2_yspeed < 0 then p2_direction = 7 : return
    return
 
 
@@ -357,7 +394,7 @@ __P2_Button_Released
    ;***************************************************************
 __P1_Launch_Ball
    ball_state = 0  ; Detach from P1
-   temp1 = p1_aim_pos  ; Use current aim position
+   temp1 = p1_direction  ; Use current paddle direction
    gosub __Set_Ball_Direction_Fast
    ball_speed_timer = FAST_BALL_DURATION  ; Start fast ball timer
    ; Set brief cooldown so ball doesn't immediately re-collide with P1
@@ -367,7 +404,7 @@ __P1_Launch_Ball
 
 __P2_Launch_Ball
    ball_state = 0  ; Detach from P2
-   temp1 = p2_aim_pos  ; Use current aim position
+   temp1 = p2_direction  ; Use current paddle direction
    gosub __Set_Ball_Direction_Fast
    ball_speed_timer = FAST_BALL_DURATION  ; Start fast ball timer
    p2_state{1} = 1
@@ -456,7 +493,7 @@ __BDF7  ; NW
    ;***************************************************************
 __Ball_Follow_P1
    ; Position ball at one of 8 positions around ship
-   temp1 = p1_aim_pos
+   temp1 = p1_direction
    on temp1 goto __BP1_N __BP1_NE __BP1_E __BP1_SE __BP1_S __BP1_SW __BP1_W __BP1_NW
 
 __BP1_N
@@ -477,7 +514,7 @@ __BP1_NW
    ballx = player0x - 4 : bally = player0y - 6 : return
 
 __Ball_Follow_P2
-   temp1 = p2_aim_pos
+   temp1 = p2_direction
    on temp1 goto __BP2_N __BP2_NE __BP2_E __BP2_SE __BP2_S __BP2_SW __BP2_W __BP2_NW
 
 __BP2_N
@@ -503,7 +540,7 @@ __BP2_NW
    ;***************************************************************
 __Update_P1_Paddle
    ; Position missile at one of 8 positions around ship
-   temp1 = p1_aim_pos
+   temp1 = p1_direction
    on temp1 goto __MP1_N __MP1_NE __MP1_E __MP1_SE __MP1_S __MP1_SW __MP1_W __MP1_NW
 
 __MP1_N
@@ -530,7 +567,7 @@ __MP1_Done
 
 __Update_P2_Paddle
    ; Position missile at one of 8 positions around ship
-   temp1 = p2_aim_pos
+   temp1 = p2_direction
    on temp1 goto __MP2_N __MP2_NE __MP2_E __MP2_SE __MP2_S __MP2_SW __MP2_W __MP2_NW
 
 __MP2_N
