@@ -57,11 +57,16 @@ __Game_Init
    p1_direction = 2  ; East
    p2_direction = 6  ; West
 
+   ; Reset player colors
+   COLUP0 = $96 : COLUP1 = $34
+
    ; Full shields
    p1_shields = 15 : p2_shields = 15
 
-   ; Both players alive
+   ; Both players alive and clear all states
    p1_alive = 1 : p2_alive = 1
+   p1_state = 0 : p2_state = 0
+   p1_timer = 0 : p2_timer = 0
    game_state = 0
 
    ; Ball spawns center, launches in random direction at normal speed
@@ -134,15 +139,14 @@ end
 __Main_Loop
 
    ;***************************************************************
-   ;  Check for death and handle reset timer
-   ;***************************************************************
-   if game_state = 1 then goto __Death_State
-
-   ;***************************************************************
    ;  Set colors
    ;***************************************************************
    COLUBK = $00 : COLUPF = $0E : COLUP0 = $96 : COLUP1 = $34
 
+   ;***************************************************************
+   ;  Check for death and handle reset timer
+   ;***************************************************************
+   if game_state = 1 then goto __Death_Countdown
 
    ;***************************************************************
    ;  Handle Player 1 controls - X axis first
@@ -214,6 +218,7 @@ __Skip_P1_Controls
 
 __Skip_P2_Controls
 
+__Death_Ball_Movement
    ;***************************************************************
    ;  Handle ball movement (using alternating frame collision detection)
    ;***************************************************************
@@ -288,16 +293,13 @@ __Skip_Ball_Move
 
 
    ;***************************************************************
-   ;  Death state - countdown and reset
+   ;  Death countdown - skip controls but keep ball/paddles active
    ;***************************************************************
-__Death_State
+__Death_Countdown
    death_timer = death_timer - 1
    if death_timer = 0 then goto __Game_Init
-
-   ; Keep rendering while counting down
-   ballheight = 1
-   drawscreen
-   goto __Main_Loop
+   ; Skip to ball movement (bypassing controls)
+   goto __Death_Ball_Movement
 
 
    ;***************************************************************
@@ -309,7 +311,8 @@ __Death_State
    ;***************************************************************
 __P1_Destroyed
    p1_alive = 0
-   player0x = 200 : player0y = 0
+   player0x = 0 : player0y = 0  ; Move to corner
+   COLUP0 = 0  ; Make invisible by setting color to background
    ball_state = 0  ; Release ball if attached
    game_state = 1
    death_timer = 180  ; 3 second countdown
@@ -317,7 +320,8 @@ __P1_Destroyed
 
 __P2_Destroyed
    p2_alive = 0
-   player1x = 200 : player1y = 0
+   player1x = 0 : player1y = 0  ; Move to corner
+   COLUP1 = 0  ; Make invisible by setting color to background
    ball_state = 0  ; Release ball if attached
    game_state = 1
    death_timer = 180  ; 3 second countdown
@@ -371,9 +375,11 @@ __P1_Button_Held
 
 __P1_Button_Released
    ; Launch ball if attached
-   if ball_state{0} then gosub __P1_Launch_Ball
-   p1_state{0} = 0  ; Button not held
+   if ball_state{0} then gosub __P1_Launch_Ball : goto __P1BR_Done
+   ; Only clear timer if ball was not attached (no launch)
    p1_timer = 0
+__P1BR_Done
+   p1_state{0} = 0  ; Button not held
    return
 
 __P2_Button_Held
@@ -383,9 +389,11 @@ __P2_Button_Held
    return
 
 __P2_Button_Released
-   if ball_state{1} then gosub __P2_Launch_Ball
-   p2_state{0} = 0
+   if ball_state{1} then gosub __P2_Launch_Ball : goto __P2BR_Done
+   ; Only clear timer if ball was not attached (no launch)
    p2_timer = 0
+__P2BR_Done
+   p2_state{0} = 0
    return
 
 
@@ -397,9 +405,9 @@ __P1_Launch_Ball
    temp1 = p1_direction  ; Use current paddle direction
    gosub __Set_Ball_Direction_Fast
    ball_speed_timer = FAST_BALL_DURATION  ; Start fast ball timer
-   ; Set brief cooldown so ball doesn't immediately re-collide with P1
+   ; Set cooldown so ball doesn't immediately re-collide with P1
    p1_state{1} = 1
-   p1_timer = 10  ; Brief 10-frame invincibility
+   p1_timer = 30  ; 30-frame cooldown after launch
    return
 
 __P2_Launch_Ball
@@ -408,7 +416,7 @@ __P2_Launch_Ball
    gosub __Set_Ball_Direction_Fast
    ball_speed_timer = FAST_BALL_DURATION  ; Start fast ball timer
    p2_state{1} = 1
-   p2_timer = 10
+   p2_timer = 30  ; 30-frame cooldown after launch
    return
 
 __P1_Auto_Launch
