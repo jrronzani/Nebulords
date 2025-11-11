@@ -3,6 +3,8 @@
    ;  Version 20 - Complete working 1-hit version with scores
    ;***************************************************************
 
+   set romsize 8k
+
    ;***************************************************************
    ;  Variable declarations
    ;***************************************************************
@@ -39,7 +41,7 @@
 
    ; Constants
    const PLAYER_SPEED = 1         ; Pixels per frame
-   const FAST_BALL_DURATION = 255 ; ~4.25 seconds at 60fps (max byte value)
+   const FAST_BALL_DURATION = 210 ; 3.5 seconds at 60fps
    const LAUNCH_SPEED = 3         ; Faster than player
 
 
@@ -607,24 +609,14 @@ __BP2_NW
    ;***************************************************************
 __Update_P1_Paddle
    temp1 = p1_direction
-   on temp1 goto __MP1_N __MP1_NE __MP1_E __MP1_SE __MP1_S __MP1_SW __MP1_W __MP1_NW
-
-__MP1_N
-   missile0x = player0x + 8 : missile0y = player0y - 12 : goto __MP1_Done
-__MP1_NE
-   missile0x = player0x + 13 : missile0y = player0y - 10 : goto __MP1_Done
-__MP1_E
-   missile0x = player0x + 15 : missile0y = player0y - 4 : goto __MP1_Done
-__MP1_SE
-   missile0x = player0x + 13 : missile0y = player0y + 2 : goto __MP1_Done
-__MP1_S
-   missile0x = player0x + 8 : missile0y = player0y + 4 : goto __MP1_Done
-__MP1_SW
-   missile0x = player0x + 0 : missile0y = player0y + 2 : goto __MP1_Done
-__MP1_W
-   missile0x = player0x - 2 : missile0y = player0y - 4 : goto __MP1_Done
-__MP1_NW
-   missile0x = player0x + 0 : missile0y = player0y - 10 : goto __MP1_Done
+   if temp1 = 0 then missile0x = player0x + 8 : missile0y = player0y - 12 : goto __MP1_Done
+   if temp1 = 1 then missile0x = player0x + 13 : missile0y = player0y - 10 : goto __MP1_Done
+   if temp1 = 2 then missile0x = player0x + 15 : missile0y = player0y - 4 : goto __MP1_Done
+   if temp1 = 3 then missile0x = player0x + 13 : missile0y = player0y + 2 : goto __MP1_Done
+   if temp1 = 4 then missile0x = player0x + 8 : missile0y = player0y + 4 : goto __MP1_Done
+   if temp1 = 5 then missile0x = player0x + 0 : missile0y = player0y + 2 : goto __MP1_Done
+   if temp1 = 6 then missile0x = player0x - 2 : missile0y = player0y - 4 : goto __MP1_Done
+   if temp1 = 7 then missile0x = player0x + 0 : missile0y = player0y - 10 : goto __MP1_Done
 
 __MP1_Done
    missile0height = 4
@@ -633,24 +625,14 @@ __MP1_Done
 
 __Update_P2_Paddle
    temp1 = p2_direction
-   on temp1 goto __MP2_N __MP2_NE __MP2_E __MP2_SE __MP2_S __MP2_SW __MP2_W __MP2_NW
-
-__MP2_N
-   missile1x = player1x + 8 : missile1y = player1y - 12 : goto __MP2_Done
-__MP2_NE
-   missile1x = player1x + 13 : missile1y = player1y - 10 : goto __MP2_Done
-__MP2_E
-   missile1x = player1x + 15 : missile1y = player1y - 4 : goto __MP2_Done
-__MP2_SE
-   missile1x = player1x + 13 : missile1y = player1y + 2 : goto __MP2_Done
-__MP2_S
-   missile1x = player1x + 8 : missile1y = player1y + 4 : goto __MP2_Done
-__MP2_SW
-   missile1x = player1x + 0 : missile1y = player1y + 2 : goto __MP2_Done
-__MP2_W
-   missile1x = player1x - 2 : missile1y = player1y - 4 : goto __MP2_Done
-__MP2_NW
-   missile1x = player1x + 0 : missile1y = player1y - 10 : goto __MP2_Done
+   if temp1 = 0 then missile1x = player1x + 8 : missile1y = player1y - 12 : goto __MP2_Done
+   if temp1 = 1 then missile1x = player1x + 13 : missile1y = player1y - 10 : goto __MP2_Done
+   if temp1 = 2 then missile1x = player1x + 15 : missile1y = player1y - 4 : goto __MP2_Done
+   if temp1 = 3 then missile1x = player1x + 13 : missile1y = player1y + 2 : goto __MP2_Done
+   if temp1 = 4 then missile1x = player1x + 8 : missile1y = player1y + 4 : goto __MP2_Done
+   if temp1 = 5 then missile1x = player1x + 0 : missile1y = player1y + 2 : goto __MP2_Done
+   if temp1 = 6 then missile1x = player1x - 2 : missile1y = player1y - 4 : goto __MP2_Done
+   if temp1 = 7 then missile1x = player1x + 0 : missile1y = player1y - 10 : goto __MP2_Done
 
 __MP2_Done
    missile1height = 4
