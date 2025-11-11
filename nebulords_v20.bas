@@ -39,7 +39,7 @@
 
    ; Constants
    const PLAYER_SPEED = 1         ; Pixels per frame
-   const FAST_BALL_DURATION = 300 ; 5 seconds at 60fps
+   const FAST_BALL_DURATION = 255 ; ~4.25 seconds at 60fps (max byte value)
    const LAUNCH_SPEED = 3         ; Faster than player
 
 
