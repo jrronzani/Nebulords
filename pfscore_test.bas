@@ -1,8 +1,14 @@
    ;***************************************************************
-   ;  PFSCORE TEST - Isolated test for playfield scoring
-   ;  P1 score increments every 1 second (left)
-   ;  P2 score increments every 2 seconds (right)
+   ;  PFSCORE TEST - Isolated test for pfscore BARS (not scores)
+   ;  P1 bar (left): Fills up every 1 second
+   ;  P2 bar (right): Drains every 2 seconds
+   ;  NUMERIC score increments to show difference
    ;***************************************************************
+
+   ;***************************************************************
+   ;  Enable pfscore bars
+   ;***************************************************************
+   const pfscore = 1
 
    ;***************************************************************
    ;  Variable declarations
@@ -14,9 +20,12 @@
    ;  Initialize
    ;***************************************************************
 __Init
-   ; Start scores at 0
-   pfscore1 = 0
-   pfscore2 = 0
+   ; Start with empty left bar, full right bar
+   pfscore1 = %00000000           ; Left bar empty
+   pfscore2 = %11111111           ; Right bar full
+
+   ; Start numeric score at 0
+   score = 0
 
    ; Reset counters
    p1_counter = 0
@@ -24,7 +33,8 @@ __Init
 
    ; Set colors
    COLUBK = $00                   ; Black background
-   COLUPF = $0E                   ; White playfield/scores
+   COLUPF = $0E                   ; White bars
+   pfscorecolor = $0E             ; White bar color
 
 
    ;***************************************************************
