@@ -1,7 +1,10 @@
+   set romsize 8k
+
    ;***************************************************************
    ;  NEBULORDS - Warlords-style Space Combat
    ;  Version 33 - Improved player movement with pfread() collision
    ;  Uses proactive collision detection for smooth wall-sliding
+   ;  Requires 8k ROM due to additional movement subroutines
    ;***************************************************************
 
    ;***************************************************************
@@ -635,10 +638,10 @@ __P1_Move_Right
    temp3 = (player0y - 7) / 8        ; Middle Y coord
    temp4 = (player0y - 13) / 8       ; Bottom Y coord
 
-   ; Skip movement if any point hits playfield
-   if temp1 < 32 then if pfread(temp1, temp2) then return
-   if temp1 < 32 then if pfread(temp1, temp3) then return
-   if temp1 < 32 then if pfread(temp1, temp4) then return
+   ; Skip movement if any point hits playfield (validate X and Y bounds)
+   if temp1 < 32 && temp2 < 12 then if pfread(temp1, temp2) then return
+   if temp1 < 32 && temp3 < 12 then if pfread(temp1, temp3) then return
+   if temp1 < 32 && temp4 < 12 then if pfread(temp1, temp4) then return
 
    ; Safe to move
    player0x = player0x + PLAYER_SPEED
@@ -651,10 +654,10 @@ __P1_Move_Left
    temp3 = (player0y - 7) / 8        ; Middle Y coord
    temp4 = (player0y - 13) / 8       ; Bottom Y coord
 
-   ; Skip movement if any point hits playfield
-   if temp1 < 32 then if pfread(temp1, temp2) then return
-   if temp1 < 32 then if pfread(temp1, temp3) then return
-   if temp1 < 32 then if pfread(temp1, temp4) then return
+   ; Skip movement if any point hits playfield (validate X and Y bounds)
+   if temp1 < 32 && temp2 < 12 then if pfread(temp1, temp2) then return
+   if temp1 < 32 && temp3 < 12 then if pfread(temp1, temp3) then return
+   if temp1 < 32 && temp4 < 12 then if pfread(temp1, temp4) then return
 
    ; Safe to move
    player0x = player0x - PLAYER_SPEED
@@ -667,10 +670,10 @@ __P1_Move_Up
    temp3 = player0x / 4              ; Center X coord
    temp4 = (player0x + 4) / 4        ; Right X coord
 
-   ; Skip movement if any point hits playfield
-   if temp2 < 32 then if pfread(temp2, temp1) then return
-   if temp3 < 32 then if pfread(temp3, temp1) then return
-   if temp4 < 32 then if pfread(temp4, temp1) then return
+   ; Skip movement if any point hits playfield (validate X and Y bounds)
+   if temp2 < 32 && temp1 < 12 then if pfread(temp2, temp1) then return
+   if temp3 < 32 && temp1 < 12 then if pfread(temp3, temp1) then return
+   if temp4 < 32 && temp1 < 12 then if pfread(temp4, temp1) then return
 
    ; Safe to move
    player0y = player0y - PLAYER_SPEED
@@ -683,10 +686,10 @@ __P1_Move_Down
    temp3 = player0x / 4              ; Center X coord
    temp4 = (player0x + 4) / 4        ; Right X coord
 
-   ; Skip movement if any point hits playfield
-   if temp2 < 32 then if pfread(temp2, temp1) then return
-   if temp3 < 32 then if pfread(temp3, temp1) then return
-   if temp4 < 32 then if pfread(temp4, temp1) then return
+   ; Skip movement if any point hits playfield (validate X and Y bounds)
+   if temp2 < 32 && temp1 < 12 then if pfread(temp2, temp1) then return
+   if temp3 < 32 && temp1 < 12 then if pfread(temp3, temp1) then return
+   if temp4 < 32 && temp1 < 12 then if pfread(temp4, temp1) then return
 
    ; Safe to move
    player0y = player0y + PLAYER_SPEED
@@ -704,10 +707,10 @@ __P2_Move_Right
    temp3 = (player1y - 7) / 8        ; Middle Y coord
    temp4 = (player1y - 13) / 8       ; Bottom Y coord
 
-   ; Skip movement if any point hits playfield
-   if temp1 < 32 then if pfread(temp1, temp2) then return
-   if temp1 < 32 then if pfread(temp1, temp3) then return
-   if temp1 < 32 then if pfread(temp1, temp4) then return
+   ; Skip movement if any point hits playfield (validate X and Y bounds)
+   if temp1 < 32 && temp2 < 12 then if pfread(temp1, temp2) then return
+   if temp1 < 32 && temp3 < 12 then if pfread(temp1, temp3) then return
+   if temp1 < 32 && temp4 < 12 then if pfread(temp1, temp4) then return
 
    ; Safe to move
    player1x = player1x + PLAYER_SPEED
@@ -720,10 +723,10 @@ __P2_Move_Left
    temp3 = (player1y - 7) / 8        ; Middle Y coord
    temp4 = (player1y - 13) / 8       ; Bottom Y coord
 
-   ; Skip movement if any point hits playfield
-   if temp1 < 32 then if pfread(temp1, temp2) then return
-   if temp1 < 32 then if pfread(temp1, temp3) then return
-   if temp1 < 32 then if pfread(temp1, temp4) then return
+   ; Skip movement if any point hits playfield (validate X and Y bounds)
+   if temp1 < 32 && temp2 < 12 then if pfread(temp1, temp2) then return
+   if temp1 < 32 && temp3 < 12 then if pfread(temp1, temp3) then return
+   if temp1 < 32 && temp4 < 12 then if pfread(temp1, temp4) then return
 
    ; Safe to move
    player1x = player1x - PLAYER_SPEED
@@ -736,10 +739,10 @@ __P2_Move_Up
    temp3 = player1x / 4              ; Center X coord
    temp4 = (player1x + 4) / 4        ; Right X coord
 
-   ; Skip movement if any point hits playfield
-   if temp2 < 32 then if pfread(temp2, temp1) then return
-   if temp3 < 32 then if pfread(temp3, temp1) then return
-   if temp4 < 32 then if pfread(temp4, temp1) then return
+   ; Skip movement if any point hits playfield (validate X and Y bounds)
+   if temp2 < 32 && temp1 < 12 then if pfread(temp2, temp1) then return
+   if temp3 < 32 && temp1 < 12 then if pfread(temp3, temp1) then return
+   if temp4 < 32 && temp1 < 12 then if pfread(temp4, temp1) then return
 
    ; Safe to move
    player1y = player1y - PLAYER_SPEED
@@ -752,10 +755,10 @@ __P2_Move_Down
    temp3 = player1x / 4              ; Center X coord
    temp4 = (player1x + 4) / 4        ; Right X coord
 
-   ; Skip movement if any point hits playfield
-   if temp2 < 32 then if pfread(temp2, temp1) then return
-   if temp3 < 32 then if pfread(temp3, temp1) then return
-   if temp4 < 32 then if pfread(temp4, temp1) then return
+   ; Skip movement if any point hits playfield (validate X and Y bounds)
+   if temp2 < 32 && temp1 < 12 then if pfread(temp2, temp1) then return
+   if temp3 < 32 && temp1 < 12 then if pfread(temp3, temp1) then return
+   if temp4 < 32 && temp1 < 12 then if pfread(temp4, temp1) then return
 
    ; Safe to move
    player1y = player1y + PLAYER_SPEED
