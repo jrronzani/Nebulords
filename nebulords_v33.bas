@@ -155,19 +155,19 @@ __Main_Loop
    if !p1_alive then goto __Skip_P1_Controls
 
    ; Check for RIGHT movement
-   if joy0right then gosub __P1_Move_Right
+   if joy0right then gosub __P1_Move_Right bank2
 
    ; Check for LEFT movement
-   if joy0left then gosub __P1_Move_Left
+   if joy0left then gosub __P1_Move_Left bank2
 
    ;***************************************************************
    ;  Handle Player 1 controls - Y axis with pfread() collision
    ;***************************************************************
    ; Check for UP movement
-   if joy0up then gosub __P1_Move_Up
+   if joy0up then gosub __P1_Move_Up bank2
 
    ; Check for DOWN movement
-   if joy0down then gosub __P1_Move_Down
+   if joy0down then gosub __P1_Move_Down bank2
 
    ; Button (catch/launch)
    if joy0fire then gosub __P1_Button_Held else gosub __P1_Button_Released
@@ -180,19 +180,19 @@ __Skip_P1_Controls
    if !p2_alive then goto __Skip_P2_Controls
 
    ; Check for RIGHT movement
-   if joy1right then gosub __P2_Move_Right
+   if joy1right then gosub __P2_Move_Right bank2
 
    ; Check for LEFT movement
-   if joy1left then gosub __P2_Move_Left
+   if joy1left then gosub __P2_Move_Left bank2
 
    ;***************************************************************
    ;  Handle Player 2 controls - Y axis with pfread() collision
    ;***************************************************************
    ; Check for UP movement
-   if joy1up then gosub __P2_Move_Up
+   if joy1up then gosub __P2_Move_Up bank2
 
    ; Check for DOWN movement
-   if joy1down then gosub __P2_Move_Down
+   if joy1down then gosub __P2_Move_Down bank2
 
    if joy1fire then gosub __P2_Button_Held else gosub __P2_Button_Released
 
@@ -627,9 +627,13 @@ __Ball_Hit_P2_Paddle
    return
 
 
+   bank 2
+
+
    ;***************************************************************
    ;  Player 1 Movement Subroutines (pfread collision)
    ;  Sprite: 8 pixels wide, 13 pixels tall
+   ;  Bank 2 contains all movement subroutines to free up bank 1 space
    ;***************************************************************
 __P1_Move_Right
    ; Check right edge of sprite (multiple Y points)
