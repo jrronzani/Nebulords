@@ -1,8 +1,7 @@
    ;***************************************************************
-   ;  PFSCORE TEST - Isolated test for pfscore BARS (not scores)
-   ;  P1 bar (left): Fills up every 1 second
-   ;  P2 bar (right): Drains every 2 seconds
-   ;  NUMERIC score increments to show difference
+   ;  PFSCORE TEST - Shows BOTH bars and numeric scores
+   ;  BARS: P1 bar (left) fills up, P2 bar (right) drains
+   ;  NUMERIC SCORE: P1 (left digits) and P2 (right digits) at top
    ;***************************************************************
 
    ;***************************************************************
@@ -60,21 +59,24 @@ __Main_Loop
 
    ;***************************************************************
    ;  Increment P1 counter (1 second = 60 frames)
+   ;  Fills LEFT bar and increments LEFT score digits
    ;***************************************************************
    p1_counter = p1_counter + 1
-   if p1_counter >= 60 then p1_counter = 0 : pfscore1 = pfscore1 + 1
+   if p1_counter >= 60 then p1_counter = 0 : pfscore1 = pfscore1 * 2 | 1 : score = score + $10
 
    ;***************************************************************
    ;  Increment P2 counter (2 seconds = 120 frames)
+   ;  Drains RIGHT bar and increments RIGHT score digits
    ;***************************************************************
    p2_counter = p2_counter + 1
-   if p2_counter >= 120 then p2_counter = 0 : pfscore2 = pfscore2 + 1
+   if p2_counter >= 120 then p2_counter = 0 : pfscore2 = pfscore2 / 2 : score = score + 1
 
    ;***************************************************************
-   ;  Prevent overflow (keep scores under 100)
+   ;  Reset when bars are full/empty or score overflows
    ;***************************************************************
-   if pfscore1 >= 100 then pfscore1 = 0
-   if pfscore2 >= 100 then pfscore2 = 0
+   if pfscore1 >= 255 then pfscore1 = 0
+   if pfscore2 = 0 then pfscore2 = 255
+   if score >= $100 then score = 0
 
    drawscreen
    goto __Main_Loop
