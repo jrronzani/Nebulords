@@ -227,36 +227,33 @@ __Death_Ball_Movement
    if ball_state{0} then gosub __Ball_Follow_P1 bank2 : goto __Skip_Ball_Move
    if ball_state{1} then gosub __Ball_Follow_P2 bank2 : goto __Skip_Ball_Move
 
-   ; Ball is free - use lookahead collision detection
-   ; Save current position
-   temp3 = ballx
-   temp4 = bally
-
-   ; Move ball to NEXT position (temporarily)
-   ballx = ballx + ball_xvel
-   bally = bally + ball_yvel
-
-   ; Check paddle collision at FUTURE position (prevents penetration)
-   if p1_alive && collision(ball,missile0) then gosub __Ball_Hit_P1_Paddle_Lookahead bank2
-   if p2_alive && collision(ball,missile1) then gosub __Ball_Hit_P2_Paddle_Lookahead bank2
-
-   ; Check playfield collision and bounce
+   ; Ball is free - use alternating frame collision with lookahead
    frame_toggle = frame_toggle + 1
    temp1 = frame_toggle & 1
-   if temp1 then goto __Ball_Lookahead_Odd
+   if temp1 then goto __Ball_Odd_Frame
 
-   ; Even frame: check Y collisions
+   ; Even frame: move X with lookahead, check Y collisions
+   temp3 = ballx
+   ballx = ballx + ball_xvel
+   if p1_alive && collision(ball,missile0) then gosub __Ball_Hit_P1_Paddle_Lookahead bank2
+   if p2_alive && collision(ball,missile1) then gosub __Ball_Hit_P2_Paddle_Lookahead bank2
    if collision(ball,playfield) then ball_yvel = 0 - ball_yvel : bally = bally + ball_yvel
-   goto __Ball_Lookahead_Done
 
-__Ball_Lookahead_Odd
-   ; Odd frame: check X collisions
-   if collision(ball,playfield) then ball_xvel = 0 - ball_xvel : ballx = ballx + ball_xvel
-
-__Ball_Lookahead_Done
    ; Keep ball in bounds
    if ballx < 10 then ballx = 10 : ball_xvel = 0 - ball_xvel
    if ballx > 150 then ballx = 150 : ball_xvel = 0 - ball_xvel
+
+   goto __Skip_Ball_Move
+
+__Ball_Odd_Frame
+   ; Odd frame: move Y with lookahead, check X collisions
+   temp4 = bally
+   bally = bally + ball_yvel
+   if p1_alive && collision(ball,missile0) then gosub __Ball_Hit_P1_Paddle_Lookahead bank2
+   if p2_alive && collision(ball,missile1) then gosub __Ball_Hit_P2_Paddle_Lookahead bank2
+   if collision(ball,playfield) then ball_xvel = 0 - ball_xvel : ballx = ballx + ball_xvel
+
+   ; Keep ball in bounds
    if bally < 10 then bally = 10 : ball_yvel = 0 - ball_yvel
    if bally > 85 then bally = 85 : ball_yvel = 0 - ball_yvel
 
