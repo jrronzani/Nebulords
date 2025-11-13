@@ -60,7 +60,7 @@
 __Game_Init
    ; Start positions (opposite corners)
    p1_xpos = 40 : p1_ypos = 50
-   p2_xpos = 120 : p2_ypos = 50
+   p2_xpos = 108 : p2_ypos = 50
 
    ; Reset player colors
    COLUP0 = $96 : COLUP1 = $34
