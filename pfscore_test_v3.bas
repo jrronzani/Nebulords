@@ -23,11 +23,14 @@
    ;***************************************************************
    dim game_mode = a              ; Current game mode (1-10)
    dim select_debounce = b        ; Debounce for SELECT button
-   dim p1_score = c               ; Player 1 score (0-99)
-   dim p2_score = d               ; Player 2 score (0-99)
    dim p1_lives = e               ; Player 1 lives (0-8)
    dim p2_lives = f               ; Player 2 lives (0-8)
    dim test_counter = g           ; Frame counter for demo
+
+   ; Score byte aliases (BCD format)
+   dim sc1 = score                ; Leftmost 2 digits
+   dim sc2 = score+1              ; Middle 2 digits (P1)
+   dim sc3 = score+2              ; Rightmost 2 digits (P2)
 
    ;***************************************************************
    ;  Initialize
@@ -39,10 +42,11 @@ __Init
    pfscore1 = %11111111           ; Left bar full (P1 lives)
    pfscore2 = %11111111           ; Right bar full (P2 lives)
 
-   ; Start scores at 0
-   p1_score = 0
-   p2_score = 0
-   score = 0
+   ; Start scores at 0 in BCD format
+   ; Display format: [0][Mode] [P1:00] [P2:00]
+   sc1 = $01                      ; Left: 0 and mode 1
+   sc2 = $00                      ; Middle: P1 score 00
+   sc3 = $00                      ; Right: P2 score 00
 
    ; Initialize mode to 1
    game_mode = 1
@@ -81,13 +85,15 @@ __Main_Loop
    ;***************************************************************
    if switchselect then select_debounce = select_debounce + 1 else select_debounce = 0
    if select_debounce = 1 then game_mode = game_mode + 1 : if game_mode > 10 then game_mode = 1
+   if select_debounce = 1 then sc1 = game_mode
 
    ;***************************************************************
-   ;  Build score display:
-   ;  Format: [Mode: 1 digit][P1: 2 digits][P2: 2 digits]
-   ;  Example: 10203 = Mode 1, P1=02, P2=03
+   ;  Score display is updated in the demo routine
+   ;  Format: [0][Mode] [P1: 2 digits] [P2: 2 digits]
+   ;  sc1 = mode (0-9 in lower nibble)
+   ;  sc2 = P1 score (BCD)
+   ;  sc3 = P2 score (BCD)
    ;***************************************************************
-   score = (game_mode * $10000) + (p1_score * $100) + p2_score
 
    ;***************************************************************
    ;  Demo: Increment scores and drain lives every 2 seconds
@@ -102,13 +108,16 @@ __Main_Loop
 
 
 __Demo_Update
-   ; Increment both player scores
-   p1_score = p1_score + 1
-   p2_score = p2_score + 1
+   ; Increment both player scores in BCD
+   ; P1 score (sc2)
+   sc2 = sc2 + 1
+   if (sc2 & $0F) > 9 then sc2 = sc2 + 6   ; Fix ones digit
+   if sc2 > $99 then sc2 = 0               ; Wrap at 99
 
-   ; Wrap scores at 99
-   if p1_score > 99 then p1_score = 0
-   if p2_score > 99 then p2_score = 0
+   ; P2 score (sc3)
+   sc3 = sc3 + 1
+   if (sc3 & $0F) > 9 then sc3 = sc3 + 6   ; Fix ones digit
+   if sc3 > $99 then sc3 = 0               ; Wrap at 99
 
    ; Drain P1 lives (left bar)
    if p1_lives > 0 then p1_lives = p1_lives - 1 : pfscore1 = pfscore1 / 2
