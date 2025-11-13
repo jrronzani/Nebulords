@@ -2,11 +2,11 @@
 
    ;***************************************************************
    ;  NEBULORDS - Warlords-style Space Combat
-   ;  Version 47 - Direction-based squeeze out prevents wall penetration
-   ;  Based on v46 (adjusted catch positions)
+   ;  Version 47 - Diagonal squeeze out to prevent wall penetration
+   ;  Based on v46 (adjust catch positions)
    ;
-   ;  Ball "squeezes out" perpendicular when pushed into walls
-   ;  Works with any playfield layout (gaps, wraps, obstacles)
+   ;  P2 starting position set to 108 for visual symmetry
+   ;  Ball squeezed out diagonally when pushed into walls (earlier detection)
    ;
    ;  Bank 1: Init, sprites, playfield, main loop, player controls
    ;  Bank 2: Ball physics and movement
@@ -61,7 +61,7 @@
 __Game_Init
    ; Start positions (opposite corners)
    p1_xpos = 40 : p1_ypos = 50
-   p2_xpos = 120 : p2_ypos = 50
+   p2_xpos = 108 : p2_ypos = 50
 
    ; Reset player colors
    COLUP0 = $96 : COLUP1 = $34
@@ -222,10 +222,11 @@ __Skip_P2_Controls
 
 __Death_Ball_Movement
    ;***************************************************************
-   ;  Handle ball movement (using alternating frame collision detection)
+   ;  Handle ball movement (with early wall detection for squeeze out)
    ;***************************************************************
-   if ball_state{0} then gosub __Ball_Follow_P1 bank2 : if collision(ball,playfield) then gosub __Squeeze_Out_P1 bank2 : goto __Skip_Ball_Move
-   if ball_state{1} then gosub __Ball_Follow_P2 bank2 : if collision(ball,playfield) then gosub __Squeeze_Out_P2 bank2 : goto __Skip_Ball_Move
+   ; Check if ball is caught - position it and check for wall collision
+   if ball_state{0} then gosub __Ball_Follow_P1 bank2 : if collision(ball,playfield) then gosub __Squeeze_Caught_P1 bank2 : goto __Skip_Ball_Move
+   if ball_state{1} then gosub __Ball_Follow_P2 bank2 : if collision(ball,playfield) then gosub __Squeeze_Caught_P2 bank2 : goto __Skip_Ball_Move
 
    ; Ball is free - use alternating frame collision pattern
    frame_toggle = frame_toggle + 1
@@ -665,8 +666,8 @@ __P1B_Done
    ; Push ball away with boosted velocity
    ballx = ballx + ball_xvel
    bally = bally + ball_yvel
-   ; Check if ball hit wall - if so, squeeze out perpendicular
-   if collision(ball,playfield) then gosub __Squeeze_Bounce bank2
+   ; Check if ball would hit wall after bounce - squeeze diagonally if so
+   if collision(ball,playfield) then gosub __Squeeze_Bounced
    return
 
 __Ball_Hit_P2_Paddle
@@ -700,19 +701,44 @@ __P2B_Done
    if ball_speed_timer = 0 then ball_speed_timer = BOUNCE_BOOST_DURATION
    ballx = ballx + ball_xvel
    bally = bally + ball_yvel
-   ; Check if ball hit wall - if so, squeeze out perpendicular
-   if collision(ball,playfield) then gosub __Squeeze_Bounce bank2
+   ; Check if ball would hit wall after bounce - squeeze diagonally if so
+   if collision(ball,playfield) then gosub __Squeeze_Bounced
    return
 
 
    ;***************************************************************
-   ;  Squeeze out - Caught ball pushed into wall
-   ;  Launches ball perpendicular to paddle direction
+   ;  Squeeze out caught ball - diagonal launch away from wall
+   ;  Detects which wall and launches diagonally into play area
    ;***************************************************************
-__Squeeze_Out_P1
-   ; Rotate paddle direction 90 degrees clockwise: (dir + 2) & 7
-   temp1 = p1_paddle_dir + 2
-   temp1 = temp1 & 7
+__Squeeze_Caught_P1
+   ; Determine which wall - use larger margins for earlier detection
+   if bally < 18 then goto __SC1_Top
+   if bally > 77 then goto __SC1_Bottom
+   if ballx < 18 then goto __SC1_Left
+   if ballx > 142 then goto __SC1_Right
+   return  ; Safety fallback
+
+__SC1_Top
+   ; Hit top - bounce down diagonally (SE or SW)
+   if ballx < 80 then temp1 = 3 else temp1 = 5  ; SE if left side, SW if right
+   goto __SC1_Launch
+
+__SC1_Bottom
+   ; Hit bottom - bounce up diagonally (NE or NW)
+   if ballx < 80 then temp1 = 1 else temp1 = 7  ; NE if left side, NW if right
+   goto __SC1_Launch
+
+__SC1_Left
+   ; Hit left - bounce right diagonally (NE or SE)
+   if bally < 50 then temp1 = 1 else temp1 = 3  ; NE if top half, SE if bottom
+   goto __SC1_Launch
+
+__SC1_Right
+   ; Hit right - bounce left diagonally (NW or SW)
+   if bally < 50 then temp1 = 7 else temp1 = 5  ; NW if top half, SW if bottom
+   goto __SC1_Launch
+
+__SC1_Launch
    ball_state = 0  ; Release ball
    gosub __Set_Ball_Direction_Fast
    ball_speed_timer = FAST_BALL_DURATION
@@ -720,10 +746,35 @@ __Squeeze_Out_P1
    p1_timer = 30
    return
 
-__Squeeze_Out_P2
-   ; Rotate paddle direction 90 degrees clockwise: (dir + 2) & 7
-   temp1 = p2_paddle_dir + 2
-   temp1 = temp1 & 7
+__Squeeze_Caught_P2
+   ; Determine which wall - use larger margins for earlier detection
+   if bally < 18 then goto __SC2_Top
+   if bally > 77 then goto __SC2_Bottom
+   if ballx < 18 then goto __SC2_Left
+   if ballx > 142 then goto __SC2_Right
+   return  ; Safety fallback
+
+__SC2_Top
+   ; Hit top - bounce down diagonally (SE or SW)
+   if ballx < 80 then temp1 = 3 else temp1 = 5  ; SE if left side, SW if right
+   goto __SC2_Launch
+
+__SC2_Bottom
+   ; Hit bottom - bounce up diagonally (NE or NW)
+   if ballx < 80 then temp1 = 1 else temp1 = 7  ; NE if left side, NW if right
+   goto __SC2_Launch
+
+__SC2_Left
+   ; Hit left - bounce right diagonally (NE or SE)
+   if bally < 50 then temp1 = 1 else temp1 = 3  ; NE if top half, SE if bottom
+   goto __SC2_Launch
+
+__SC2_Right
+   ; Hit right - bounce left diagonally (NW or SW)
+   if bally < 50 then temp1 = 7 else temp1 = 5  ; NW if top half, SW if bottom
+   goto __SC2_Launch
+
+__SC2_Launch
    ball_state = 0  ; Release ball
    gosub __Set_Ball_Direction_Fast
    ball_speed_timer = FAST_BALL_DURATION
@@ -733,36 +784,41 @@ __Squeeze_Out_P2
 
 
    ;***************************************************************
-   ;  Squeeze bounce - Bounced ball hit wall
-   ;  Launches ball perpendicular to current velocity
+   ;  Squeeze bounced ball - diagonal launch away from wall
    ;***************************************************************
-__Squeeze_Bounce
-   ; Determine primary axis from velocity magnitude
-   ; Check if moving mostly vertical or horizontal
+__Squeeze_Bounced
+   ; Determine which wall
+   if bally < 18 then goto __SB_Top
+   if bally > 77 then goto __SB_Bottom
+   if ballx < 18 then goto __SB_Left
+   if ballx > 142 then goto __SB_Right
+   return  ; Safety fallback
 
-   ; Get absolute values by checking if > 128 (negative)
-   temp2 = ball_xvel
-   if temp2 > 128 then temp2 = 0 - temp2  ; Make positive
-   temp3 = ball_yvel
-   if temp3 > 128 then temp3 = 0 - temp3  ; Make positive
+__SB_Top
+   ; Hit top - bounce down diagonally (SE or SW)
+   if ballx < 80 then temp1 = 3 else temp1 = 5  ; SE if left side, SW if right
+   goto __SB_Launch
 
-   ; Compare magnitudes
-   if temp2 > temp3 then goto __SB_Horizontal
+__SB_Bottom
+   ; Hit bottom - bounce up diagonally (NE or NW)
+   if ballx < 80 then temp1 = 1 else temp1 = 7  ; NE if left side, NW if right
+   goto __SB_Launch
 
-   ; Moving mostly vertical - squeeze horizontal
-   if ball_xvel > 128 then temp1 = 6 : goto __SB_Launch  ; Moving with negative X, squeeze West
-   temp1 = 2 : goto __SB_Launch  ; Moving with positive/zero X, squeeze East
+__SB_Left
+   ; Hit left - bounce right diagonally (NE or SE)
+   if bally < 50 then temp1 = 1 else temp1 = 3  ; NE if top half, SE if bottom
+   goto __SB_Launch
 
-__SB_Horizontal
-   ; Moving mostly horizontal - squeeze vertical
-   if ball_yvel > 128 then temp1 = 0 : goto __SB_Launch  ; Moving with negative Y, squeeze North
-   temp1 = 4 : goto __SB_Launch  ; Moving with positive/zero Y, squeeze South
+__SB_Right
+   ; Hit right - bounce left diagonally (NW or SW)
+   if bally < 50 then temp1 = 7 else temp1 = 5  ; NW if top half, SW if bottom
+   goto __SB_Launch
 
 __SB_Launch
-   ; Launch in determined direction with fast speed
    gosub __Set_Ball_Direction_Fast
    ball_speed_timer = FAST_BALL_DURATION
    return
+
 
 
    bank 3
