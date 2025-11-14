@@ -793,9 +793,9 @@ __P1_Hit
 
    ; Get absolute values for comparison
    temp3 = temp1
-   if temp3 > 128 then temp3 = 256 - temp3  ; abs(dx)
+   if temp3 > 128 then temp3 = 0 - temp3  ; abs(dx)
    temp4 = temp2
-   if temp4 > 128 then temp4 = 256 - temp4  ; abs(dy)
+   if temp4 > 128 then temp4 = 0 - temp4  ; abs(dy)
 
    ; Determine which shield was hit (primary axis wins)
    if temp4 > temp3 then goto __P1_Vertical_Hit
@@ -852,9 +852,9 @@ __P2_Hit
 
    ; Get absolute values for comparison
    temp3 = temp1
-   if temp3 > 128 then temp3 = 256 - temp3  ; abs(dx)
+   if temp3 > 128 then temp3 = 0 - temp3  ; abs(dx)
    temp4 = temp2
-   if temp4 > 128 then temp4 = 256 - temp4  ; abs(dy)
+   if temp4 > 128 then temp4 = 0 - temp4  ; abs(dy)
 
    ; Determine which shield was hit (primary axis wins)
    if temp4 > temp3 then goto __P2_Vertical_Hit
