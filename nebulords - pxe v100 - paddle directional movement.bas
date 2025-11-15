@@ -25,9 +25,10 @@
   ; Each line of data draws one line on screen (no fractional increment)
   PF_FRAC_INC = 0
 
-  ; Configure paddle reading for precise control (0-160 range)
-  PaddleRange0 = 160
-  PaddleRange1 = 160
+  ; Configure paddle reading for precise control (0-128 range)
+  ; 128 divides cleanly by 8 to give 16 directions
+  PaddleRange0 = 128
+  PaddleRange1 = 128
 
   ;***************************************************************
   ;  Constants
@@ -125,13 +126,12 @@ __Main_Loop
   ;***************************************************************
   ;  Read Paddle 0 for Player 1 direction
   ;***************************************************************
-  currentpaddle = 0
-  drawscreen
-  temp_paddle = paddle
+  ; PXE kernel provides direct access to Paddle0 variable
+  temp_paddle = Paddle0
 
-  ; Convert paddle value (0-160) to direction (0-15)
-  ; Divide by 10 to get 16 divisions (160/10 = 16)
-  p1_direction = temp_paddle / 10
+  ; Convert paddle value (0-128) to direction (0-15)
+  ; Divide by 8 to get 16 divisions (128/8 = 16)
+  p1_direction = temp_paddle / 8
   if p1_direction > 15 then p1_direction = 15
 
   ; Set P1 velocity based on direction
@@ -141,11 +141,11 @@ __Main_Loop
   ;***************************************************************
   ;  Read Paddle 1 for Player 2 direction
   ;***************************************************************
-  currentpaddle = 1
-  temp_paddle = paddle
+  ; PXE kernel provides direct access to Paddle1 variable
+  temp_paddle = Paddle1
 
-  ; Convert paddle value (0-160) to direction (0-15)
-  p2_direction = temp_paddle / 10
+  ; Convert paddle value (0-128) to direction (0-15)
+  p2_direction = temp_paddle / 8
   if p2_direction > 15 then p2_direction = 15
 
   ; Set P2 velocity based on direction
@@ -184,6 +184,10 @@ __Main_Loop
   player1x = p2_xpos
   player1y = p2_ypos
 
+  ;***************************************************************
+  ;  Draw the screen and loop
+  ;***************************************************************
+  drawscreen
   goto __Main_Loop
 
 
