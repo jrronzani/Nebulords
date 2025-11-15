@@ -310,3 +310,4 @@ __Update_Level_Display
    if game_level = 2 then sc2 = $02 : return
    if game_level = 1 then sc2 = $01 : return
    return
+
