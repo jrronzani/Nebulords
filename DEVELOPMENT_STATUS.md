@@ -1,8 +1,8 @@
 # 🚀 NEBULORDS PXE - DEVELOPMENT STATUS
 
-**Project Status:** Foundation Complete ✅ Ready for Gameplay Mechanics
-**Current Milestone:** v014 - Graphics & Boundaries Complete
-**Latest Version:** `versions/nebulordsPXE_v014.bas` (uploaded to main branch)
+**Project Status:** Phase 3 Complete ✅ Paddle Sprites Implemented
+**Current Milestone:** v015 - Paddle Sprites with 16-Direction Rotation
+**Latest Version:** `versions/nebulordsPXE_v015.bas` (on branch `claude/add-paddle-sprites-*`)
 
 ---
 
@@ -17,6 +17,9 @@
 ✅ PRECISE collision boundaries (user corrected final pixel alignment in v014)
 ✅ Rainbow gradient playfield colors
 ✅ 8-scanline thick borders (proportional to block width)
+✅ **Rotating paddle sprites (player2/player3) - NEW in v015!**
+✅ **16-direction paddle positioning around ship perimeter - NEW in v015!**
+✅ **7 unique rotation frames for smooth animation - NEW in v015!**
 
 ---
 
@@ -82,18 +85,20 @@ joy1left = Paddle 3 button
 - **v012:** User tweaked visuals - gradient colors, thicker borders, corner positioning
 - **v013:** AI calculated flush boundaries (slightly off)
 - **v014:** User corrected boundaries - PIXEL PERFECT ✅
+- **v015:** Paddle sprites with 16-direction rotation - Phase 3 Complete! ✅
 
 ---
 
 ## Next Development Phases (In Order)
 
-### Phase 3: Paddle Sprites 🎯 **← CURRENT PHASE**
-- Add paddle graphics as separate sprites
-- Rotate paddles around player ship perimeter based on direction
-- May use missiles or additional player sprites
-- Challenge: 16 rotation positions
+### Phase 3: Paddle Sprites ✅ **COMPLETE**
+- ✅ Added paddle graphics as separate sprites (player2/player3)
+- ✅ Rotated paddles around player ship perimeter based on direction
+- ✅ Created 7 unique rotation frames
+- ✅ Implemented 16 rotation positions with doubled Y offsets for PXE
+- Uses inline sprite definitions (batari Basic requirement)
 
-### Phase 4: Thrust Physics & Collisions
+### Phase 4: Thrust Physics & Collisions 🎯 **← NEXT PHASE**
 - Implement thrust-based movement (not instant velocity)
 - Player-on-player collision detection
 - Player-on-playfield collision with hitboxes (larger than sprites)
@@ -174,4 +179,4 @@ joy1left = Paddle 3 button
 
 ---
 
-*Last Updated: Session ending at v014*
+*Last Updated: v015 - Phase 3 Complete (Paddle Sprites)*
