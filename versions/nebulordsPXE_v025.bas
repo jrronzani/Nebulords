@@ -355,8 +355,8 @@ __Main_Loop
   ;***************************************************************
   ;  Update button state tracking for next frame
   ;***************************************************************
-  p1_button_prev = joy0right
-  p2_button_prev = joy0left
+  p1_button_prev = 0 : if joy0right then p1_button_prev = 1
+  p2_button_prev = 0 : if joy0left then p2_button_prev = 1
 
   drawscreen
   goto __Main_Loop
