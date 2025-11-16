@@ -477,7 +477,7 @@ __P1P_1
   %111111
   %011110
 end
-  player2x = p1_xpos + 1 : player2y = p1_ypos + 23
+  player2x = p1_xpos - 1 : player2y = p1_ypos + 24
   return
 
 ; Direction 2: SW (interpolated)
@@ -493,7 +493,7 @@ __P1P_2
   %111111
   %011110
 end
-  player2x = p1_xpos - 2 : player2y = p1_ypos + 18
+  player2x = p1_xpos - 5 : player2y = p1_ypos + 21
   return
 
 ; Direction 3: WSW (interpolated)
@@ -509,7 +509,7 @@ __P1P_3
   %111111
   %011110
 end
-  player2x = p1_xpos - 5 : player2y = p1_ypos + 13
+  player2x = p1_xpos - 8 : player2y = p1_ypos + 15
   return
 
 ; Direction 4: West (MANUAL)
@@ -541,7 +541,7 @@ __P1P_5
   %111111
   %011110
 end
-  player2x = p1_xpos - 7 : player2y = p1_ypos + 3
+  player2x = p1_xpos - 9 : player2y = p1_ypos + 1
   return
 
 ; Direction 6: NW (interpolated)
@@ -557,7 +557,7 @@ __P1P_6
   %111111
   %011110
 end
-  player2x = p1_xpos - 6 : player2y = p1_ypos - 2
+  player2x = p1_xpos - 9 : player2y = p1_ypos - 5
   return
 
 ; Direction 7: NNW (interpolated)
@@ -573,7 +573,7 @@ __P1P_7
   %111111
   %011110
 end
-  player2x = p1_xpos - 1 : player2y = p1_ypos - 7
+  player2x = p1_xpos - 2 : player2y = p1_ypos - 9
   return
 
 ; Direction 8: North (MANUAL)
@@ -605,7 +605,7 @@ __P1P_9
   %111111
   %011110
 end
-  player2x = p1_xpos + 7 : player2y = p1_ypos - 7
+  player2x = p1_xpos + 8 : player2y = p1_ypos - 9
   return
 
 ; Direction 10: NE (interpolated)
@@ -621,7 +621,7 @@ __P1P_10
   %111111
   %011110
 end
-  player2x = p1_xpos + 10 : player2y = p1_ypos - 2
+  player2x = p1_xpos + 13 : player2y = p1_ypos - 5
   return
 
 ; Direction 11: ENE (interpolated)
@@ -637,7 +637,7 @@ __P1P_11
   %111111
   %011110
 end
-  player2x = p1_xpos + 13 : player2y = p1_ypos + 3
+  player2x = p1_xpos + 16 : player2y = p1_ypos + 1
   return
 
 ; Direction 12: East (MANUAL)
@@ -669,7 +669,7 @@ __P1P_13
   %111111
   %011110
 end
-  player2x = p1_xpos + 13 : player2y = p1_ypos + 13
+  player2x = p1_xpos + 16 : player2y = p1_ypos + 15
   return
 
 ; Direction 14: SE (interpolated)
@@ -685,7 +685,7 @@ __P1P_14
   %111111
   %011110
 end
-  player2x = p1_xpos + 10 : player2y = p1_ypos + 18
+  player2x = p1_xpos + 13 : player2y = p1_ypos + 21
   return
 
 ; Direction 15: SSE (interpolated)
@@ -701,7 +701,7 @@ __P1P_15
   %111111
   %011110
 end
-  player2x = p1_xpos + 7 : player2y = p1_ypos + 23
+  player2x = p1_xpos + 9 : player2y = p1_ypos + 24
   return
 
 
@@ -727,7 +727,7 @@ __P2P_0
   %111111
   %011110
 end
-  player3x = p2_xpos + 4 : player3y = p2_ypos + 28
+  player3x = p2_xpos + 3 : player3y = p2_ypos + 24
   return
 
 ; Direction 1: SSW (interpolated)
@@ -743,7 +743,7 @@ __P2P_1
   %111111
   %011110
 end
-  player3x = p2_xpos + 1 : player3y = p2_ypos + 23
+  player3x = p2_xpos - 1 : player3y = p2_ypos + 24
   return
 
 ; Direction 2: SW (interpolated)
@@ -759,7 +759,7 @@ __P2P_2
   %111111
   %011110
 end
-  player3x = p2_xpos - 2 : player3y = p2_ypos + 18
+  player3x = p2_xpos - 5 : player3y = p2_ypos + 21
   return
 
 ; Direction 3: WSW (interpolated)
@@ -775,7 +775,7 @@ __P2P_3
   %111111
   %011110
 end
-  player3x = p2_xpos - 5 : player3y = p2_ypos + 13
+  player3x = p2_xpos - 8 : player3y = p2_ypos + 15
   return
 
 ; Direction 4: West (MANUAL)
@@ -807,7 +807,7 @@ __P2P_5
   %111111
   %011110
 end
-  player3x = p2_xpos - 7 : player3y = p2_ypos + 3
+  player3x = p2_xpos - 9 : player3y = p2_ypos + 1
   return
 
 ; Direction 6: NW (interpolated)
@@ -823,7 +823,7 @@ __P2P_6
   %111111
   %011110
 end
-  player3x = p2_xpos - 6 : player3y = p2_ypos - 2
+  player3x = p2_xpos - 9 : player3y = p2_ypos - 5
   return
 
 ; Direction 7: NNW (interpolated)
@@ -839,7 +839,7 @@ __P2P_7
   %111111
   %011110
 end
-  player3x = p2_xpos - 1 : player3y = p2_ypos - 7
+  player3x = p2_xpos - 2 : player3y = p2_ypos - 9
   return
 
 ; Direction 8: North (MANUAL)
@@ -871,7 +871,7 @@ __P2P_9
   %111111
   %011110
 end
-  player3x = p2_xpos + 7 : player3y = p2_ypos - 7
+  player3x = p2_xpos + 8 : player3y = p2_ypos - 9
   return
 
 ; Direction 10: NE (interpolated)
@@ -887,7 +887,7 @@ __P2P_10
   %111111
   %011110
 end
-  player3x = p2_xpos + 10 : player3y = p2_ypos - 2
+  player3x = p2_xpos + 13 : player3y = p2_ypos - 5
   return
 
 ; Direction 11: ENE (interpolated)
@@ -903,7 +903,7 @@ __P2P_11
   %111111
   %011110
 end
-  player3x = p2_xpos + 13 : player3y = p2_ypos + 3
+  player3x = p2_xpos + 16 : player3y = p2_ypos + 1
   return
 
 ; Direction 12: East (MANUAL)
@@ -935,7 +935,7 @@ __P2P_13
   %111111
   %011110
 end
-  player3x = p2_xpos + 13 : player3y = p2_ypos + 13
+  player3x = p2_xpos + 16 : player3y = p2_ypos + 15
   return
 
 ; Direction 14: SE (interpolated)
@@ -951,7 +951,7 @@ __P2P_14
   %111111
   %011110
 end
-  player3x = p2_xpos + 10 : player3y = p2_ypos + 18
+  player3x = p2_xpos + 13 : player3y = p2_ypos + 21
   return
 
 ; Direction 15: SSE (interpolated)
@@ -967,7 +967,7 @@ __P2P_15
   %111111
   %011110
 end
-  player3x = p2_xpos + 7 : player3y = p2_ypos + 23
+  player3x = p2_xpos + 9 : player3y = p2_ypos + 24
   return
 
 
