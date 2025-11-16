@@ -4,20 +4,23 @@
   ;
   ;  Changes from v014:
   ;  - Added rotating paddle sprites using player2/player3
-  ;  - Created 7 rotation frames for paddle bar (8px wide × 4-8px tall)
+  ;  - Created 7 rotation frames for paddle bar
   ;  - Implemented 16-direction paddle positioning lookup table
-  ;  - Doubled Y offsets from v051 to match PXE's 176-line screen
-  ;  - Paddles now rotate around ship perimeter based on direction
+  ;  - Paddles rotate around ship perimeter based on direction
+  ;  - Fixed: Direction mapping (0=South, 8=North matches paddle dial)
+  ;  - Fixed: Sprite orientation (horizontal bar for N/S, vertical for E/W)
+  ;  - Fixed: Vertical positioning (adjusted Y offsets for proper placement)
   ;
   ;  Technical details:
   ;  - Paddle sprites use player2 (P1) and player3 (P2)
-  ;  - 16 paddle positions around ship center
-  ;  - Y offsets doubled from standard kernel version
-  ;  - X offsets interpolated for 16-direction support
+  ;  - 16 paddle positions: 0=S, 4=W, 8=N, 12=E
+  ;  - Horizontal bar (8px wide) for North/South positions
+  ;  - Vertical bar (8 scanlines tall) for East/West positions
+  ;  - Diagonal bars for intermediate directions
   ;  - Sprite data defined inline per direction (batari Basic requirement)
   ;
   ;  Controls:
-  ;  - Paddle 0/1: Direction (16 positions)
+  ;  - Paddle 0/1: Direction (16 positions, 0=South bottom of dial)
   ;  - Paddle 0 button (joy0right): Hold to move Player 1
   ;  - Paddle 1 button (joy0left): Hold to move Player 2
   ;***************************************************************
@@ -439,13 +442,65 @@ __BV_15
   ;***************************************************************
   ;  Update Player 1 Paddle Position
   ;  temp_dir contains current direction (0-15)
-  ;  Defines sprite inline for each rotation frame
+  ;  Paddle dial: 0=South(bottom), 4=West, 8=North(top), 12=East
+  ;  Sprites: Horizontal bar for N/S, Vertical bar for E/W
   ;***************************************************************
 __Update_P1_Paddle
   on temp_dir goto __P1P_0 __P1P_1 __P1P_2 __P1P_3 __P1P_4 __P1P_5 __P1P_6 __P1P_7 __P1P_8 __P1P_9 __P1P_10 __P1P_11 __P1P_12 __P1P_13 __P1P_14 __P1P_15
 
-; Direction 0: North (vertical)
+; Direction 0: South (bottom) - HORIZONTAL BAR
 __P1P_0
+  player2:
+  %11111111
+  %11111111
+  %11111111
+  %11111111
+end
+  player2x = p1_xpos + 4 : player2y = p1_ypos + 22
+  return
+
+; Direction 1: SSW
+__P1P_1
+  player2:
+  %11110000
+  %11110000
+  %01111000
+  %01111100
+  %00111110
+  %00111110
+  %00011111
+  %00001111
+end
+  player2x = p1_xpos + 0 : player2y = p1_ypos + 18
+  return
+
+; Direction 2: SW (135°)
+__P1P_2
+  player2:
+  %11111000
+  %11111100
+  %01111110
+  %01111110
+  %00111111
+  %00011111
+end
+  player2x = p1_xpos - 3 : player2y = p1_ypos + 12
+  return
+
+; Direction 3: WSW
+__P1P_3
+  player2:
+  %11111100
+  %11111110
+  %11111110
+  %01111111
+  %01111111
+end
+  player2x = p1_xpos - 5 : player2y = p1_ypos + 6
+  return
+
+; Direction 4: West (left) - VERTICAL BAR
+__P1P_4
   player2:
   %00111100
   %00111100
@@ -456,11 +511,36 @@ __P1P_0
   %00111100
   %00111100
 end
-  player2x = p1_xpos + 6 : player2y = p1_ypos - 28
+  player2x = p1_xpos - 8 : player2y = p1_ypos + 0
   return
 
-; Direction 1: NNE (steep)
-__P1P_1
+; Direction 5: WNW
+__P1P_5
+  player2:
+  %01111111
+  %01111111
+  %11111110
+  %11111110
+  %11111100
+end
+  player2x = p1_xpos - 5 : player2y = p1_ypos - 6
+  return
+
+; Direction 6: NW (45°)
+__P1P_6
+  player2:
+  %00011111
+  %00111111
+  %01111110
+  %01111110
+  %11111100
+  %11111000
+end
+  player2x = p1_xpos - 3 : player2y = p1_ypos - 12
+  return
+
+; Direction 7: NNW
+__P1P_7
   player2:
   %00001111
   %00011111
@@ -471,11 +551,37 @@ __P1P_1
   %11110000
   %11110000
 end
-  player2x = p1_xpos + 9 : player2y = p1_ypos - 25
+  player2x = p1_xpos + 0 : player2y = p1_ypos - 18
   return
 
-; Direction 2: NE (45°)
-__P1P_2
+; Direction 8: North (top) - HORIZONTAL BAR
+__P1P_8
+  player2:
+  %11111111
+  %11111111
+  %11111111
+  %11111111
+end
+  player2x = p1_xpos + 4 : player2y = p1_ypos - 22
+  return
+
+; Direction 9: NNE
+__P1P_9
+  player2:
+  %00001111
+  %00011111
+  %00111110
+  %00111110
+  %01111100
+  %01111000
+  %11110000
+  %11110000
+end
+  player2x = p1_xpos + 8 : player2y = p1_ypos - 18
+  return
+
+; Direction 10: NE (45°)
+__P1P_10
   player2:
   %00011111
   %00111111
@@ -484,11 +590,11 @@ __P1P_2
   %11111100
   %11111000
 end
-  player2x = p1_xpos + 13 : player2y = p1_ypos - 22
+  player2x = p1_xpos + 11 : player2y = p1_ypos - 12
   return
 
-; Direction 3: ENE (slight angle)
-__P1P_3
+; Direction 11: ENE
+__P1P_11
   player2:
   %01111111
   %01111111
@@ -496,176 +602,126 @@ __P1P_3
   %11111110
   %11111100
 end
-  player2x = p1_xpos + 15 : player2y = p1_ypos - 15
+  player2x = p1_xpos + 13 : player2y = p1_ypos - 6
   return
 
-; Direction 4: East (horizontal)
-__P1P_4
+; Direction 12: East (right) - VERTICAL BAR
+__P1P_12
   player2:
-  %11111111
-  %11111111
-  %11111111
-  %11111111
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
 end
-  player2x = p1_xpos + 17 : player2y = p1_ypos - 8
+  player2x = p1_xpos + 16 : player2y = p1_ypos + 0
   return
 
-; Direction 5: ESE (slight angle down)
-__P1P_5
+; Direction 13: ESE
+__P1P_13
   player2:
   %11111100
   %11111110
   %11111110
   %01111111
   %01111111
-end
-  player2x = p1_xpos + 15 : player2y = p1_ypos - 1
-  return
-
-; Direction 6: SE (135°)
-__P1P_6
-  player2:
-  %11111000
-  %11111100
-  %01111110
-  %01111110
-  %00111111
-  %00011111
 end
   player2x = p1_xpos + 13 : player2y = p1_ypos + 6
   return
 
-; Direction 7: SSE (steep down)
-__P1P_7
-  player2:
-  %11110000
-  %11110000
-  %01111000
-  %01111100
-  %00111110
-  %00111110
-  %00011111
-  %00001111
-end
-  player2x = p1_xpos + 9 : player2y = p1_ypos + 8
-  return
-
-; Direction 8: South (vertical)
-__P1P_8
-  player2:
-  %00111100
-  %00111100
-  %00111100
-  %00111100
-  %00111100
-  %00111100
-  %00111100
-  %00111100
-end
-  player2x = p1_xpos + 6 : player2y = p1_ypos + 10
-  return
-
-; Direction 9: SSW (steep down-left)
-__P1P_9
-  player2:
-  %11110000
-  %11110000
-  %01111000
-  %01111100
-  %00111110
-  %00111110
-  %00011111
-  %00001111
-end
-  player2x = p1_xpos + 2 : player2y = p1_ypos + 8
-  return
-
-; Direction 10: SW (135°)
-__P1P_10
-  player2:
-  %11111000
-  %11111100
-  %01111110
-  %01111110
-  %00111111
-  %00011111
-end
-  player2x = p1_xpos - 1 : player2y = p1_ypos + 6
-  return
-
-; Direction 11: WSW (slight angle)
-__P1P_11
-  player2:
-  %11111100
-  %11111110
-  %11111110
-  %01111111
-  %01111111
-end
-  player2x = p1_xpos - 3 : player2y = p1_ypos - 1
-  return
-
-; Direction 12: West (horizontal)
-__P1P_12
-  player2:
-  %11111111
-  %11111111
-  %11111111
-  %11111111
-end
-  player2x = p1_xpos - 5 : player2y = p1_ypos - 8
-  return
-
-; Direction 13: WNW (slight angle up)
-__P1P_13
-  player2:
-  %01111111
-  %01111111
-  %11111110
-  %11111110
-  %11111100
-end
-  player2x = p1_xpos - 3 : player2y = p1_ypos - 15
-  return
-
-; Direction 14: NW (45°)
+; Direction 14: SE (135°)
 __P1P_14
   player2:
-  %00011111
-  %00111111
-  %01111110
-  %01111110
-  %11111100
   %11111000
+  %11111100
+  %01111110
+  %01111110
+  %00111111
+  %00011111
 end
-  player2x = p1_xpos - 1 : player2y = p1_ypos - 22
+  player2x = p1_xpos + 11 : player2y = p1_ypos + 12
   return
 
-; Direction 15: NNW (steep up-left)
+; Direction 15: SSE
 __P1P_15
   player2:
-  %00001111
-  %00011111
-  %00111110
-  %00111110
-  %01111100
+  %11110000
+  %11110000
   %01111000
-  %11110000
-  %11110000
+  %01111100
+  %00111110
+  %00111110
+  %00011111
+  %00001111
 end
-  player2x = p1_xpos + 2 : player2y = p1_ypos - 25
+  player2x = p1_xpos + 8 : player2y = p1_ypos + 18
   return
 
 
   ;***************************************************************
   ;  Update Player 2 Paddle Position
   ;  temp_dir contains current direction (0-15)
+  ;  Paddle dial: 0=South(bottom), 4=West, 8=North(top), 12=East
   ;***************************************************************
 __Update_P2_Paddle
   on temp_dir goto __P2P_0 __P2P_1 __P2P_2 __P2P_3 __P2P_4 __P2P_5 __P2P_6 __P2P_7 __P2P_8 __P2P_9 __P2P_10 __P2P_11 __P2P_12 __P2P_13 __P2P_14 __P2P_15
 
-; Direction 0: North
+; Direction 0: South (bottom) - HORIZONTAL BAR
 __P2P_0
+  player3:
+  %11111111
+  %11111111
+  %11111111
+  %11111111
+end
+  player3x = p2_xpos + 4 : player3y = p2_ypos + 22
+  return
+
+; Direction 1: SSW
+__P2P_1
+  player3:
+  %11110000
+  %11110000
+  %01111000
+  %01111100
+  %00111110
+  %00111110
+  %00011111
+  %00001111
+end
+  player3x = p2_xpos + 0 : player3y = p2_ypos + 18
+  return
+
+; Direction 2: SW (135°)
+__P2P_2
+  player3:
+  %11111000
+  %11111100
+  %01111110
+  %01111110
+  %00111111
+  %00011111
+end
+  player3x = p2_xpos - 3 : player3y = p2_ypos + 12
+  return
+
+; Direction 3: WSW
+__P2P_3
+  player3:
+  %11111100
+  %11111110
+  %11111110
+  %01111111
+  %01111111
+end
+  player3x = p2_xpos - 5 : player3y = p2_ypos + 6
+  return
+
+; Direction 4: West (left) - VERTICAL BAR
+__P2P_4
   player3:
   %00111100
   %00111100
@@ -676,11 +732,36 @@ __P2P_0
   %00111100
   %00111100
 end
-  player3x = p2_xpos + 6 : player3y = p2_ypos - 28
+  player3x = p2_xpos - 8 : player3y = p2_ypos + 0
   return
 
-; Direction 1: NNE
-__P2P_1
+; Direction 5: WNW
+__P2P_5
+  player3:
+  %01111111
+  %01111111
+  %11111110
+  %11111110
+  %11111100
+end
+  player3x = p2_xpos - 5 : player3y = p2_ypos - 6
+  return
+
+; Direction 6: NW (45°)
+__P2P_6
+  player3:
+  %00011111
+  %00111111
+  %01111110
+  %01111110
+  %11111100
+  %11111000
+end
+  player3x = p2_xpos - 3 : player3y = p2_ypos - 12
+  return
+
+; Direction 7: NNW
+__P2P_7
   player3:
   %00001111
   %00011111
@@ -691,11 +772,37 @@ __P2P_1
   %11110000
   %11110000
 end
-  player3x = p2_xpos + 9 : player3y = p2_ypos - 25
+  player3x = p2_xpos + 0 : player3y = p2_ypos - 18
   return
 
-; Direction 2: NE
-__P2P_2
+; Direction 8: North (top) - HORIZONTAL BAR
+__P2P_8
+  player3:
+  %11111111
+  %11111111
+  %11111111
+  %11111111
+end
+  player3x = p2_xpos + 4 : player3y = p2_ypos - 22
+  return
+
+; Direction 9: NNE
+__P2P_9
+  player3:
+  %00001111
+  %00011111
+  %00111110
+  %00111110
+  %01111100
+  %01111000
+  %11110000
+  %11110000
+end
+  player3x = p2_xpos + 8 : player3y = p2_ypos - 18
+  return
+
+; Direction 10: NE (45°)
+__P2P_10
   player3:
   %00011111
   %00111111
@@ -704,11 +811,11 @@ __P2P_2
   %11111100
   %11111000
 end
-  player3x = p2_xpos + 13 : player3y = p2_ypos - 22
+  player3x = p2_xpos + 11 : player3y = p2_ypos - 12
   return
 
-; Direction 3: ENE
-__P2P_3
+; Direction 11: ENE
+__P2P_11
   player3:
   %01111111
   %01111111
@@ -716,164 +823,62 @@ __P2P_3
   %11111110
   %11111100
 end
-  player3x = p2_xpos + 15 : player3y = p2_ypos - 15
+  player3x = p2_xpos + 13 : player3y = p2_ypos - 6
   return
 
-; Direction 4: East
-__P2P_4
+; Direction 12: East (right) - VERTICAL BAR
+__P2P_12
   player3:
-  %11111111
-  %11111111
-  %11111111
-  %11111111
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
 end
-  player3x = p2_xpos + 17 : player3y = p2_ypos - 8
+  player3x = p2_xpos + 16 : player3y = p2_ypos + 0
   return
 
-; Direction 5: ESE
-__P2P_5
+; Direction 13: ESE
+__P2P_13
   player3:
   %11111100
   %11111110
   %11111110
   %01111111
   %01111111
-end
-  player3x = p2_xpos + 15 : player3y = p2_ypos - 1
-  return
-
-; Direction 6: SE
-__P2P_6
-  player3:
-  %11111000
-  %11111100
-  %01111110
-  %01111110
-  %00111111
-  %00011111
 end
   player3x = p2_xpos + 13 : player3y = p2_ypos + 6
   return
 
-; Direction 7: SSE
-__P2P_7
-  player3:
-  %11110000
-  %11110000
-  %01111000
-  %01111100
-  %00111110
-  %00111110
-  %00011111
-  %00001111
-end
-  player3x = p2_xpos + 9 : player3y = p2_ypos + 8
-  return
-
-; Direction 8: South
-__P2P_8
-  player3:
-  %00111100
-  %00111100
-  %00111100
-  %00111100
-  %00111100
-  %00111100
-  %00111100
-  %00111100
-end
-  player3x = p2_xpos + 6 : player3y = p2_ypos + 10
-  return
-
-; Direction 9: SSW
-__P2P_9
-  player3:
-  %11110000
-  %11110000
-  %01111000
-  %01111100
-  %00111110
-  %00111110
-  %00011111
-  %00001111
-end
-  player3x = p2_xpos + 2 : player3y = p2_ypos + 8
-  return
-
-; Direction 10: SW
-__P2P_10
-  player3:
-  %11111000
-  %11111100
-  %01111110
-  %01111110
-  %00111111
-  %00011111
-end
-  player3x = p2_xpos - 1 : player3y = p2_ypos + 6
-  return
-
-; Direction 11: WSW
-__P2P_11
-  player3:
-  %11111100
-  %11111110
-  %11111110
-  %01111111
-  %01111111
-end
-  player3x = p2_xpos - 3 : player3y = p2_ypos - 1
-  return
-
-; Direction 12: West
-__P2P_12
-  player3:
-  %11111111
-  %11111111
-  %11111111
-  %11111111
-end
-  player3x = p2_xpos - 5 : player3y = p2_ypos - 8
-  return
-
-; Direction 13: WNW
-__P2P_13
-  player3:
-  %01111111
-  %01111111
-  %11111110
-  %11111110
-  %11111100
-end
-  player3x = p2_xpos - 3 : player3y = p2_ypos - 15
-  return
-
-; Direction 14: NW
+; Direction 14: SE (135°)
 __P2P_14
   player3:
-  %00011111
-  %00111111
-  %01111110
-  %01111110
-  %11111100
   %11111000
+  %11111100
+  %01111110
+  %01111110
+  %00111111
+  %00011111
 end
-  player3x = p2_xpos - 1 : player3y = p2_ypos - 22
+  player3x = p2_xpos + 11 : player3y = p2_ypos + 12
   return
 
-; Direction 15: NNW
+; Direction 15: SSE
 __P2P_15
   player3:
-  %00001111
-  %00011111
-  %00111110
-  %00111110
-  %01111100
+  %11110000
+  %11110000
   %01111000
-  %11110000
-  %11110000
+  %01111100
+  %00111110
+  %00111110
+  %00011111
+  %00001111
 end
-  player3x = p2_xpos + 2 : player3y = p2_ypos - 25
+  player3x = p2_xpos + 8 : player3y = p2_ypos + 18
   return
 
 
