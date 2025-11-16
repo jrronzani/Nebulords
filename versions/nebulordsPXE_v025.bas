@@ -112,13 +112,13 @@ __Game_Init
 
   ; Initialize P1 physics - start stationary
   p1_speed_x = 16 : p1_speed_y = 16
-  p1_frame_x = 1 : p1_frame_y = 1
   p1_dir_x = 0 : p1_dir_y = 0
+  p1_frame_x = p1_speed_x : p1_frame_y = p1_speed_y
 
   ; Initialize P2 physics - start stationary
   p2_speed_x = 16 : p2_speed_y = 16
-  p2_frame_x = 1 : p2_frame_y = 1
   p2_dir_x = 0 : p2_dir_y = 0
+  p2_frame_x = p2_speed_x : p2_frame_y = p2_speed_y
 
   ; Acceleration counter and button tracking
   accel_counter = 0
