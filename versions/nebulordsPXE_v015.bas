@@ -14,6 +14,7 @@
   ;  - 16 paddle positions around ship center
   ;  - Y offsets doubled from standard kernel version
   ;  - X offsets interpolated for 16-direction support
+  ;  - Sprite data defined inline per direction (batari Basic requirement)
   ;
   ;  Controls:
   ;  - Paddle 0/1: Direction (16 positions)
@@ -61,7 +62,6 @@
   ; Temp variables
   dim temp_paddle = k
   dim temp_dir = l
-  dim paddle_frame = var_m  ; Which rotation frame to use
 
   ; Ball
   dim ball_xvel = n
@@ -220,90 +220,7 @@ end
   $72
 end
 
-  ;***************************************************************
-  ;  Paddle sprites - 7 rotation frames
-  ;  Frame 0: Horizontal (E/W)
-  ;  Frame 1: Slight diagonal (22.5°)
-  ;  Frame 2: Diagonal (45°)
-  ;  Frame 3: Steep (67.5°)
-  ;  Frame 4: Vertical (N/S)
-  ;  Frames 5-6: Mirrored versions of 3-1
-  ;***************************************************************
-
-  ; Frame 0: Horizontal bar (8 wide × 4 tall)
-  player2_0:
-  %11111111
-  %11111111
-  %11111111
-  %11111111
-end
-
-  ; Frame 1: 22.5° angle
-  player2_1:
-  %01111111
-  %01111111
-  %11111110
-  %11111110
-  %11111100
-end
-
-  ; Frame 2: 45° diagonal
-  player2_2:
-  %00011111
-  %00111111
-  %01111110
-  %01111110
-  %11111100
-  %11111000
-end
-
-  ; Frame 3: 67.5° steep
-  player2_3:
-  %00001111
-  %00011111
-  %00111110
-  %00111110
-  %01111100
-  %01111000
-  %11110000
-  %11110000
-end
-
-  ; Frame 4: Vertical bar
-  player2_4:
-  %00111100
-  %00111100
-  %00111100
-  %00111100
-  %00111100
-  %00111100
-  %00111100
-  %00111100
-end
-
-  ; Frame 5: 112.5° (mirror of frame 3)
-  player2_5:
-  %11110000
-  %11111000
-  %01111100
-  %01111100
-  %00111110
-  %00111110
-  %00011111
-  %00001111
-end
-
-  ; Frame 6: 135° (mirror of frame 2)
-  player2_6:
-  %11111000
-  %11111100
-  %01111110
-  %01111110
-  %00111111
-  %00011111
-end
-
-  ; Colors for paddles
+  ; Paddle colors
   player2color:
   $9e
   $9e
@@ -522,121 +439,221 @@ __BV_15
   ;***************************************************************
   ;  Update Player 1 Paddle Position
   ;  temp_dir contains current direction (0-15)
-  ;  Positions paddle around ship perimeter with proper rotation
+  ;  Defines sprite inline for each rotation frame
   ;***************************************************************
 __Update_P1_Paddle
   on temp_dir goto __P1P_0 __P1P_1 __P1P_2 __P1P_3 __P1P_4 __P1P_5 __P1P_6 __P1P_7 __P1P_8 __P1P_9 __P1P_10 __P1P_11 __P1P_12 __P1P_13 __P1P_14 __P1P_15
 
-; Direction 0: North (top)
+; Direction 0: North (vertical)
 __P1P_0
-  player2x = p1_xpos + 6
-  player2y = p1_ypos - 28
-  player2pointer = player2_4  ; Vertical frame
+  player2:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  player2x = p1_xpos + 6 : player2y = p1_ypos - 28
   return
 
-; Direction 1: NNE
+; Direction 1: NNE (steep)
 __P1P_1
-  player2x = p1_xpos + 9
-  player2y = p1_ypos - 25
-  player2pointer = player2_3  ; Steep frame
+  player2:
+  %00001111
+  %00011111
+  %00111110
+  %00111110
+  %01111100
+  %01111000
+  %11110000
+  %11110000
+end
+  player2x = p1_xpos + 9 : player2y = p1_ypos - 25
   return
 
-; Direction 2: NE
+; Direction 2: NE (45°)
 __P1P_2
-  player2x = p1_xpos + 13
-  player2y = p1_ypos - 22
-  player2pointer = player2_2  ; 45° frame
+  player2:
+  %00011111
+  %00111111
+  %01111110
+  %01111110
+  %11111100
+  %11111000
+end
+  player2x = p1_xpos + 13 : player2y = p1_ypos - 22
   return
 
-; Direction 3: ENE
+; Direction 3: ENE (slight angle)
 __P1P_3
-  player2x = p1_xpos + 15
-  player2y = p1_ypos - 15
-  player2pointer = player2_1  ; Slight angle frame
+  player2:
+  %01111111
+  %01111111
+  %11111110
+  %11111110
+  %11111100
+end
+  player2x = p1_xpos + 15 : player2y = p1_ypos - 15
   return
 
-; Direction 4: East (right)
+; Direction 4: East (horizontal)
 __P1P_4
-  player2x = p1_xpos + 17
-  player2y = p1_ypos - 8
-  player2pointer = player2_0  ; Horizontal frame
+  player2:
+  %11111111
+  %11111111
+  %11111111
+  %11111111
+end
+  player2x = p1_xpos + 17 : player2y = p1_ypos - 8
   return
 
-; Direction 5: ESE
+; Direction 5: ESE (slight angle down)
 __P1P_5
-  player2x = p1_xpos + 15
-  player2y = p1_ypos - 1
-  player2pointer = player2_1  ; Slight angle (flipped)
+  player2:
+  %11111100
+  %11111110
+  %11111110
+  %01111111
+  %01111111
+end
+  player2x = p1_xpos + 15 : player2y = p1_ypos - 1
   return
 
-; Direction 6: SE
+; Direction 6: SE (135°)
 __P1P_6
-  player2x = p1_xpos + 13
-  player2y = p1_ypos + 6
-  player2pointer = player2_6  ; 135° frame
+  player2:
+  %11111000
+  %11111100
+  %01111110
+  %01111110
+  %00111111
+  %00011111
+end
+  player2x = p1_xpos + 13 : player2y = p1_ypos + 6
   return
 
-; Direction 7: SSE
+; Direction 7: SSE (steep down)
 __P1P_7
-  player2x = p1_xpos + 9
-  player2y = p1_ypos + 8
-  player2pointer = player2_5  ; Steep (mirrored)
+  player2:
+  %11110000
+  %11110000
+  %01111000
+  %01111100
+  %00111110
+  %00111110
+  %00011111
+  %00001111
+end
+  player2x = p1_xpos + 9 : player2y = p1_ypos + 8
   return
 
-; Direction 8: South (bottom)
+; Direction 8: South (vertical)
 __P1P_8
-  player2x = p1_xpos + 6
-  player2y = p1_ypos + 10
-  player2pointer = player2_4  ; Vertical frame
+  player2:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  player2x = p1_xpos + 6 : player2y = p1_ypos + 10
   return
 
-; Direction 9: SSW
+; Direction 9: SSW (steep down-left)
 __P1P_9
-  player2x = p1_xpos + 2
-  player2y = p1_ypos + 8
-  player2pointer = player2_5  ; Steep (mirrored)
+  player2:
+  %11110000
+  %11110000
+  %01111000
+  %01111100
+  %00111110
+  %00111110
+  %00011111
+  %00001111
+end
+  player2x = p1_xpos + 2 : player2y = p1_ypos + 8
   return
 
-; Direction 10: SW
+; Direction 10: SW (135°)
 __P1P_10
-  player2x = p1_xpos - 1
-  player2y = p1_ypos + 6
-  player2pointer = player2_6  ; 135° frame
+  player2:
+  %11111000
+  %11111100
+  %01111110
+  %01111110
+  %00111111
+  %00011111
+end
+  player2x = p1_xpos - 1 : player2y = p1_ypos + 6
   return
 
-; Direction 11: WSW
+; Direction 11: WSW (slight angle)
 __P1P_11
-  player2x = p1_xpos - 3
-  player2y = p1_ypos - 1
-  player2pointer = player2_1  ; Slight angle
+  player2:
+  %11111100
+  %11111110
+  %11111110
+  %01111111
+  %01111111
+end
+  player2x = p1_xpos - 3 : player2y = p1_ypos - 1
   return
 
-; Direction 12: West (left)
+; Direction 12: West (horizontal)
 __P1P_12
-  player2x = p1_xpos - 5
-  player2y = p1_ypos - 8
-  player2pointer = player2_0  ; Horizontal frame
+  player2:
+  %11111111
+  %11111111
+  %11111111
+  %11111111
+end
+  player2x = p1_xpos - 5 : player2y = p1_ypos - 8
   return
 
-; Direction 13: WNW
+; Direction 13: WNW (slight angle up)
 __P1P_13
-  player2x = p1_xpos - 3
-  player2y = p1_ypos - 15
-  player2pointer = player2_1  ; Slight angle
+  player2:
+  %01111111
+  %01111111
+  %11111110
+  %11111110
+  %11111100
+end
+  player2x = p1_xpos - 3 : player2y = p1_ypos - 15
   return
 
-; Direction 14: NW
+; Direction 14: NW (45°)
 __P1P_14
-  player2x = p1_xpos - 1
-  player2y = p1_ypos - 22
-  player2pointer = player2_2  ; 45° frame
+  player2:
+  %00011111
+  %00111111
+  %01111110
+  %01111110
+  %11111100
+  %11111000
+end
+  player2x = p1_xpos - 1 : player2y = p1_ypos - 22
   return
 
-; Direction 15: NNW
+; Direction 15: NNW (steep up-left)
 __P1P_15
-  player2x = p1_xpos + 2
-  player2y = p1_ypos - 25
-  player2pointer = player2_3  ; Steep frame
+  player2:
+  %00001111
+  %00011111
+  %00111110
+  %00111110
+  %01111100
+  %01111000
+  %11110000
+  %11110000
+end
+  player2x = p1_xpos + 2 : player2y = p1_ypos - 25
   return
 
 
@@ -649,114 +666,214 @@ __Update_P2_Paddle
 
 ; Direction 0: North
 __P2P_0
-  player3x = p2_xpos + 6
-  player3y = p2_ypos - 28
-  player3pointer = player2_4
+  player3:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  player3x = p2_xpos + 6 : player3y = p2_ypos - 28
   return
 
 ; Direction 1: NNE
 __P2P_1
-  player3x = p2_xpos + 9
-  player3y = p2_ypos - 25
-  player3pointer = player2_3
+  player3:
+  %00001111
+  %00011111
+  %00111110
+  %00111110
+  %01111100
+  %01111000
+  %11110000
+  %11110000
+end
+  player3x = p2_xpos + 9 : player3y = p2_ypos - 25
   return
 
 ; Direction 2: NE
 __P2P_2
-  player3x = p2_xpos + 13
-  player3y = p2_ypos - 22
-  player3pointer = player2_2
+  player3:
+  %00011111
+  %00111111
+  %01111110
+  %01111110
+  %11111100
+  %11111000
+end
+  player3x = p2_xpos + 13 : player3y = p2_ypos - 22
   return
 
 ; Direction 3: ENE
 __P2P_3
-  player3x = p2_xpos + 15
-  player3y = p2_ypos - 15
-  player3pointer = player2_1
+  player3:
+  %01111111
+  %01111111
+  %11111110
+  %11111110
+  %11111100
+end
+  player3x = p2_xpos + 15 : player3y = p2_ypos - 15
   return
 
 ; Direction 4: East
 __P2P_4
-  player3x = p2_xpos + 17
-  player3y = p2_ypos - 8
-  player3pointer = player2_0
+  player3:
+  %11111111
+  %11111111
+  %11111111
+  %11111111
+end
+  player3x = p2_xpos + 17 : player3y = p2_ypos - 8
   return
 
 ; Direction 5: ESE
 __P2P_5
-  player3x = p2_xpos + 15
-  player3y = p2_ypos - 1
-  player3pointer = player2_1
+  player3:
+  %11111100
+  %11111110
+  %11111110
+  %01111111
+  %01111111
+end
+  player3x = p2_xpos + 15 : player3y = p2_ypos - 1
   return
 
 ; Direction 6: SE
 __P2P_6
-  player3x = p2_xpos + 13
-  player3y = p2_ypos + 6
-  player3pointer = player2_6
+  player3:
+  %11111000
+  %11111100
+  %01111110
+  %01111110
+  %00111111
+  %00011111
+end
+  player3x = p2_xpos + 13 : player3y = p2_ypos + 6
   return
 
 ; Direction 7: SSE
 __P2P_7
-  player3x = p2_xpos + 9
-  player3y = p2_ypos + 8
-  player3pointer = player2_5
+  player3:
+  %11110000
+  %11110000
+  %01111000
+  %01111100
+  %00111110
+  %00111110
+  %00011111
+  %00001111
+end
+  player3x = p2_xpos + 9 : player3y = p2_ypos + 8
   return
 
 ; Direction 8: South
 __P2P_8
-  player3x = p2_xpos + 6
-  player3y = p2_ypos + 10
-  player3pointer = player2_4
+  player3:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  player3x = p2_xpos + 6 : player3y = p2_ypos + 10
   return
 
 ; Direction 9: SSW
 __P2P_9
-  player3x = p2_xpos + 2
-  player3y = p2_ypos + 8
-  player3pointer = player2_5
+  player3:
+  %11110000
+  %11110000
+  %01111000
+  %01111100
+  %00111110
+  %00111110
+  %00011111
+  %00001111
+end
+  player3x = p2_xpos + 2 : player3y = p2_ypos + 8
   return
 
 ; Direction 10: SW
 __P2P_10
-  player3x = p2_xpos - 1
-  player3y = p2_ypos + 6
-  player3pointer = player2_6
+  player3:
+  %11111000
+  %11111100
+  %01111110
+  %01111110
+  %00111111
+  %00011111
+end
+  player3x = p2_xpos - 1 : player3y = p2_ypos + 6
   return
 
 ; Direction 11: WSW
 __P2P_11
-  player3x = p2_xpos - 3
-  player3y = p2_ypos - 1
-  player3pointer = player2_1
+  player3:
+  %11111100
+  %11111110
+  %11111110
+  %01111111
+  %01111111
+end
+  player3x = p2_xpos - 3 : player3y = p2_ypos - 1
   return
 
 ; Direction 12: West
 __P2P_12
-  player3x = p2_xpos - 5
-  player3y = p2_ypos - 8
-  player3pointer = player2_0
+  player3:
+  %11111111
+  %11111111
+  %11111111
+  %11111111
+end
+  player3x = p2_xpos - 5 : player3y = p2_ypos - 8
   return
 
 ; Direction 13: WNW
 __P2P_13
-  player3x = p2_xpos - 3
-  player3y = p2_ypos - 15
-  player3pointer = player2_1
+  player3:
+  %01111111
+  %01111111
+  %11111110
+  %11111110
+  %11111100
+end
+  player3x = p2_xpos - 3 : player3y = p2_ypos - 15
   return
 
 ; Direction 14: NW
 __P2P_14
-  player3x = p2_xpos - 1
-  player3y = p2_ypos - 22
-  player3pointer = player2_2
+  player3:
+  %00011111
+  %00111111
+  %01111110
+  %01111110
+  %11111100
+  %11111000
+end
+  player3x = p2_xpos - 1 : player3y = p2_ypos - 22
   return
 
 ; Direction 15: NNW
 __P2P_15
-  player3x = p2_xpos + 2
-  player3y = p2_ypos - 25
-  player3pointer = player2_3
+  player3:
+  %00001111
+  %00011111
+  %00111110
+  %00111110
+  %01111100
+  %01111000
+  %11110000
+  %11110000
+end
+  player3x = p2_xpos + 2 : player3y = p2_ypos - 25
   return
 
 
