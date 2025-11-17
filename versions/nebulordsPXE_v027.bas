@@ -4,8 +4,9 @@
   ;
   ;  Changes from v026:
   ;  - ADDED custom rectangular hitbox collision detection
-  ;  - Hitboxes extend 2 pixels horizontal, 3 pixels vertical beyond sprite
+  ;  - Hitboxes extend 1 pixel on all sides beyond sprite
   ;  - Creates "invisible force field" around ships
+  ;  - Applied hitbox offset for Player 2 (player1 sprite positioning difference)
   ;  - Player-on-player collisions: bounce/separate on impact
   ;  - Same hitbox system will be used for brick/playfield collisions
   ;  - Collision response: reverse velocities and separate ships
@@ -19,8 +20,9 @@
   ;  - dir_x/y: Movement direction (0=stopped, 1=positive, 255=negative)
   ;
   ;  Collision System:
-  ;  - Rectangular hitboxes: 20×32 pixels (extends 2px horizontal, 3px vertical)
+  ;  - Rectangular hitboxes: 18×28 pixels (extends 1px on all sides)
   ;  - Larger than visible sprite to create "force field" effect
+  ;  - P2 hitbox offset accounts for player1 sprite positioning difference
   ;  - Prevents ships from sinking into each other visually
   ;  - Ships bounce off each other when hitboxes overlap
   ;  - Velocities reversed and ships separated to prevent sticking
@@ -57,10 +59,11 @@
   ;***************************************************************
   const sprite_width = 16        ; Visual sprite width (double-width, 8 bits doubled)
   const sprite_height = 26       ; Visual sprite height (26 scanlines)
-  const hitbox_offset_x = 2      ; Hitbox extends 2 pixels beyond sprite horizontally
-  const hitbox_offset_y = 3      ; Hitbox extends 3 pixels beyond sprite vertically
-  const ship_width = 20          ; Total hitbox width: 16 + 2 + 2 = 20
-  const ship_height = 32         ; Total hitbox height: 26 + 3 + 3 = 32
+  const hitbox_offset_x = 1      ; Hitbox extends 1 pixel beyond sprite horizontally
+  const hitbox_offset_y = 1      ; Hitbox extends 1 pixel beyond sprite vertically
+  const ship_width = 18          ; Total hitbox width: 16 + 1 + 1 = 18
+  const ship_height = 28         ; Total hitbox height: 26 + 1 + 1 = 28
+  const p2_hitbox_offset = 1     ; P2 hitbox X offset due to player1 sprite positioning
 
   ;***************************************************************
   ;  Variable declarations
@@ -584,11 +587,12 @@ __P2_Wall_Bounce
 __Player_Collision
   ; AABB Collision Detection between Player 1 and Player 2
   ; Check if hitboxes overlap on both X and Y axes
+  ; Note: P2 uses adjusted position due to player1 sprite origin offset
 
-  ; X-axis overlap check
-  ; p1_xpos < p2_xpos + ship_width && p1_xpos + ship_width > p2_xpos
-  if p1_xpos >= p2_xpos + ship_width then goto __No_Collision
-  if p1_xpos + ship_width <= p2_xpos then goto __No_Collision
+  ; X-axis overlap check (accounting for P2 hitbox offset)
+  ; p1_xpos < (p2_xpos - p2_hitbox_offset) + ship_width && p1_xpos + ship_width > (p2_xpos - p2_hitbox_offset)
+  if p1_xpos >= p2_xpos - p2_hitbox_offset + ship_width then goto __No_Collision
+  if p1_xpos + ship_width <= p2_xpos - p2_hitbox_offset then goto __No_Collision
 
   ; Y-axis overlap check
   ; p1_ypos < p2_ypos + ship_height && p1_ypos + ship_height > p2_ypos
@@ -955,10 +959,10 @@ __P2P_0
   %111111
   %011110
 end
-  player3x = p2_xpos + 3 : player3y = p2_ypos + 28
+  player3x = p2_xpos + 4 : player3y = p2_ypos + 28
   return
 
-; Direction 1: SSW (calculated from P1 + offset)
+; Direction 1: SSW (same as P1)
 __P2P_1
   player3:
   %011110
@@ -971,10 +975,10 @@ __P2P_1
   %111111
   %011110
 end
-  player3x = p2_xpos - 2 : player3y = p2_ypos + 24
+  player3x = p2_xpos - 1 : player3y = p2_ypos + 24
   return
 
-; Direction 2: SW (calculated from P1 + offset)
+; Direction 2: SW (same as P1)
 __P2P_2
   player3:
   %011110
@@ -987,10 +991,10 @@ __P2P_2
   %111111
   %011110
 end
-  player3x = p2_xpos - 6 : player3y = p2_ypos + 21
+  player3x = p2_xpos - 5 : player3y = p2_ypos + 21
   return
 
-; Direction 3: WSW (calculated from P1 + offset)
+; Direction 3: WSW (same as P1)
 __P2P_3
   player3:
   %011110
@@ -1003,10 +1007,10 @@ __P2P_3
   %111111
   %011110
 end
-  player3x = p2_xpos - 9 : player3y = p2_ypos + 15
+  player3x = p2_xpos - 8 : player3y = p2_ypos + 15
   return
 
-; Direction 4: West (calculated from P1 + offset)
+; Direction 4: West (same as P1)
 __P2P_4
   player3:
   %011110
@@ -1019,10 +1023,10 @@ __P2P_4
   %111111
   %011110
 end
-  player3x = p2_xpos - 9 : player3y = p2_ypos + 8
+  player3x = p2_xpos - 8 : player3y = p2_ypos + 8
   return
 
-; Direction 5: WNW (calculated from P1 + offset)
+; Direction 5: WNW (same as P1)
 __P2P_5
   player3:
   %011110
@@ -1035,7 +1039,7 @@ __P2P_5
   %111111
   %011110
 end
-  player3x = p2_xpos - 9 : player3y = p2_ypos + 1
+  player3x = p2_xpos - 8 : player3y = p2_ypos + 1
   return
 
 ; Direction 6: NW (calculated from P1 + offset)
