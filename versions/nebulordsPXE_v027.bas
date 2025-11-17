@@ -4,8 +4,10 @@
   ;
   ;  Changes from v026:
   ;  - ADDED custom rectangular hitbox collision detection
+  ;  - Hitboxes extend 4 pixels beyond sprite (8 vertical for PXE density)
+  ;  - Creates "invisible force field" around ships
   ;  - Player-on-player collisions: bounce/separate on impact
-  ;  - Hitbox system will be used for brick breaks later
+  ;  - Same hitbox system will be used for brick/playfield collisions
   ;  - Collision response: reverse velocities and separate ships
   ;
   ;  Physics System:
@@ -17,7 +19,9 @@
   ;  - dir_x/y: Movement direction (0=stopped, 1=positive, 255=negative)
   ;
   ;  Collision System:
-  ;  - Rectangular hitboxes for each ship
+  ;  - Rectangular hitboxes: 24×42 pixels (extends 4px horizontal, 8px vertical)
+  ;  - Larger than visible sprite to create "force field" effect
+  ;  - Prevents ships from sinking into each other visually
   ;  - Ships bounce off each other when hitboxes overlap
   ;  - Velocities reversed and ships separated to prevent sticking
   ;
@@ -51,8 +55,12 @@
   ;***************************************************************
   ;  Collision Constants (Hitbox sizes)
   ;***************************************************************
-  const ship_width = 12          ; Ship hitbox width (ships are double-width sprites)
-  const ship_height = 22         ; Ship hitbox height (sprite is 26 lines tall)
+  const sprite_width = 16        ; Visual sprite width (double-width, 8 bits doubled)
+  const sprite_height = 26       ; Visual sprite height (26 scanlines)
+  const hitbox_offset_x = 4      ; Hitbox extends 4 pixels beyond sprite horizontally
+  const hitbox_offset_y = 8      ; Hitbox extends 8 pixels beyond sprite vertically (denser PXE resolution)
+  const ship_width = 24          ; Total hitbox width: 16 + 4 + 4 = 24
+  const ship_height = 42         ; Total hitbox height: 26 + 8 + 8 = 42
 
   ;***************************************************************
   ;  Variable declarations
