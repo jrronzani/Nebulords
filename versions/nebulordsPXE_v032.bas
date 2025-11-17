@@ -881,6 +881,23 @@ __BB2_15  ; NNW
 
 
   ;***************************************************************
+  ;  Brick Hit Detection - Determine which brick was hit and destroy it
+  ;  Uses ball Y position relative to player sprite to detect which brick
+  ;***************************************************************
+__P1_Brick_Hit
+  ; For now, just bounce the ball back - brick destruction to be added
+  ball_xvel = 0 - ball_xvel
+  ball_yvel = 0 - ball_yvel
+  return
+
+__P2_Brick_Hit
+  ; For now, just bounce the ball back - brick destruction to be added
+  ball_xvel = 0 - ball_xvel
+  ball_yvel = 0 - ball_yvel
+  return
+
+
+  ;***************************************************************
   ;  Ball Follow Player - Position ball around paddle based on direction
   ;  Ball positioned just outside paddle sprite radius
   ;***************************************************************
