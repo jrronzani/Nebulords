@@ -422,13 +422,16 @@ __P2_Button_Done
   ;***************************************************************
   ;  Ball/Paddle Collision Detection (only when ball free)
   ;***************************************************************
-  gosub __Check_Paddle_Collisions
+  if collision(ball,player2) then gosub __Check_P1_Paddle
+  if collision(ball,player3) then gosub __Check_P2_Paddle
 
   ;***************************************************************
   ;  Ball/Ship Collision Detection - Brick breaking (skip during invincibility)
   ;***************************************************************
-  if invincibility_timer = 0 then gosub __Check_Brick_Collisions
-  goto __Skip_Ball_Physics
+  if invincibility_timer > 0 then goto __Skip_Ball_Physics
+
+  if collision(ball,player0) then gosub __P1_Brick_Hit
+  if collision(ball,player1) then gosub __P2_Brick_Hit
 
 __Skip_Ball_Physics
 
@@ -817,24 +820,6 @@ __BVS_14  ; NW
   ball_xvel = 255 : ball_yvel = 255 : return
 __BVS_15  ; NNW
   ball_xvel = 255 : ball_yvel = 254 : return
-
-
-  ;***************************************************************
-  ;  Collision wrapper subroutines
-  ;***************************************************************
-__Check_Paddle_Collisions
-  temp_paddle = collision(ball,player2)
-  if temp_paddle then gosub __Check_P1_Paddle
-  temp_paddle = collision(ball,player3)
-  if temp_paddle then gosub __Check_P2_Paddle
-  return
-
-__Check_Brick_Collisions
-  temp_paddle = collision(ball,player0)
-  if temp_paddle then gosub __P1_Brick_Hit
-  temp_paddle = collision(ball,player1)
-  if temp_paddle then gosub __P2_Brick_Hit
-  return
 
 
   ;***************************************************************
