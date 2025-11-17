@@ -129,9 +129,59 @@ if obj1_x < obj2_x + obj2_width && obj1_x + obj1_width > obj2_x then
 
 ## PXE Virtual Sprite Coordinate Offset Bug
 
-**TODO: Document the virtual sprite coordinate offset quirk specific to PXE.**
+**CRITICAL BUG:** Odd-numbered virtual sprites (`player3`, `player5`, `player7`, etc.) in PXE render **2 pixels to the LEFT** of where their X coordinate says they should be.
 
-*This section needs to be filled in with details about the coordinate offset bug that affects virtual sprites (player2-16) in the PXE kernel.*
+### The Problem
+- `player2` (even) - renders at exact coordinate
+- `player3` (odd) - renders 2 pixels LEFT of coordinate
+- Both are virtual sprites with identical positioning code
+- Both use same sprite graphics and offsets from parent ships
+
+### Evidence from Nebulords
+In v038, player 2's paddle hitbox was causing "ghost collisions" - the ball was hitting the paddle 2 pixels to the left of where it visually appeared.
+
+**P1 paddle (player2 - even) hitbox:**
+```basic
+; v038-v041: No offset needed
+if ballx < player2x + 6 && ballx + 2 > player2x
+```
+
+**P2 paddle (player3 - odd) hitbox:**
+```basic
+; v038 (BROKEN): Ghost collisions 2px to the left
+if ballx < player3x + 6 && ballx + 2 > player3x
+
+; v039+ (FIXED): Shift hitbox +2px right to compensate
+if ballx < player3x + 8 && ballx + 2 > player3x + 2
+```
+
+### Workaround
+When working with odd-numbered virtual sprites (player3, player5, player7, etc.):
+1. **Visual positioning:** Use coordinate as-is (the sprite will render 2px left)
+2. **Collision detection:** Add +2 to X coordinate bounds to match visual position
+3. **Alternative:** Add +2 to the sprite's X position to compensate (may affect gameplay positioning)
+
+### Pattern Detection
+```basic
+; Even virtual sprites (player2, player4, player6, ...)
+; Use coordinates directly
+hitbox_left = player2x
+hitbox_right = player2x + width
+
+; Odd virtual sprites (player3, player5, player7, ...)
+; Add +2 offset for collision
+hitbox_left = player3x + 2
+hitbox_right = player3x + width + 2
+```
+
+### Unknown Questions
+- Does this affect ALL odd virtual sprites (player3, 5, 7, 9, 11, 13, 15)?
+- Is it always exactly 2 pixels or does it vary?
+- Does it affect Y coordinates or only X?
+- Is this a known PXE kernel bug or a quirk of our setup?
+
+### Testing Required
+If using player5+ in future versions, test collision detection carefully and apply +2 offset if needed.
 
 ---
 
