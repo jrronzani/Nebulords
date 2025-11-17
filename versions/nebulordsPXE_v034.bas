@@ -129,6 +129,10 @@
   dim p2_score = var3            ; Player 2 score (wins)
   dim invincibility_timer = var4 ; Countdown for invincibility period (180 frames = 3 seconds)
 
+  ; Caught ball direction (stored when ball is caught)
+  dim p1_caught_dir = var5       ; P1 paddle direction when ball was caught (0-15)
+  dim p2_caught_dir = var6       ; P2 paddle direction when ball was caught (0-15)
+
   ;***************************************************************
   ;  Initialize game
   ;***************************************************************
@@ -431,11 +435,12 @@ __P2_Button_Done
 
   ;***************************************************************
   ;  Ball/Ship Collision Detection - Brick breaking (skip during invincibility)
+  ;  TEMPORARILY COMMENTED OUT FOR TESTING
   ;***************************************************************
-  if invincibility_timer > 0 then goto __Skip_Ball_Physics
+  ;if invincibility_timer > 0 then goto __Skip_Ball_Physics
 
-  if collision(ball,player0) then gosub __P1_Brick_Hit
-  if collision(ball,player1) then gosub __P2_Brick_Hit
+  ;if collision(ball,player0) then gosub __P1_Brick_Hit
+  ;if collision(ball,player1) then gosub __P2_Brick_Hit
 
 __Skip_Ball_Physics
 
@@ -847,7 +852,7 @@ __Check_P2_Paddle
   ;***************************************************************
 __Ball_Bounce_P1
   ; Check if button held AND not in cooldown - CATCH
-  if p1_state{0} && !p1_state{1} then ball_state = 1 : p1_catch_timer = 0 : return
+  if p1_state{0} && !p1_state{1} then ball_state = 1 : p1_catch_timer = 0 : p1_caught_dir = p1_direction : return
 
   ; Otherwise BOUNCE
   temp_dir = (temp_dir + 8) & 15
@@ -888,7 +893,7 @@ __BB1_15  ; NNW
 
 __Ball_Bounce_P2
   ; Check if button held AND not in cooldown - CATCH
-  if p2_state{0} && !p2_state{1} then ball_state = 2 : p2_catch_timer = 0 : return
+  if p2_state{0} && !p2_state{1} then ball_state = 2 : p2_catch_timer = 0 : p2_caught_dir = p2_direction : return
 
   ; Otherwise BOUNCE
   temp_dir = (temp_dir + 8) & 15
@@ -975,16 +980,17 @@ __P1_Bottom_Brick
   goto __P1_Brick_Bounce
 
 __P1_Core_Hit
-  ; Player 1 dies - Player 2 wins the round!
-  p2_score = p2_score + 1        ; Award point to Player 2
-  invincibility_timer = invincibility_duration  ; Start 3-second invincibility period
-  player0x = 25 : player0y = 35  ; Reset P1 position
-  p1_bricks = %00001111          ; Restore all P1 bricks
-  p1_direction = 12              ; Reset to default direction
-  p1_speed_x = 16 : p1_speed_y = 16  ; Reset to stopped
-  p1_dir_x = 0 : p1_dir_y = 0
-  ball_state = 0                 ; Free the ball if attached
-  goto __P1_Brick_Bounce         ; Still bounce the ball
+  ; TEMPORARILY COMMENTED OUT FOR TESTING - just bounce instead
+  ;; Player 1 dies - Player 2 wins the round!
+  ;p2_score = p2_score + 1        ; Award point to Player 2
+  ;invincibility_timer = invincibility_duration  ; Start 3-second invincibility period
+  ;player0x = 25 : player0y = 35  ; Reset P1 position
+  ;p1_bricks = %00001111          ; Restore all P1 bricks
+  ;p1_direction = 12              ; Reset to default direction
+  ;p1_speed_x = 16 : p1_speed_y = 16  ; Reset to stopped
+  ;p1_dir_x = 0 : p1_dir_y = 0
+  ;ball_state = 0                 ; Free the ball if attached
+  goto __P1_Brick_Bounce         ; Just bounce the ball
 
 __P1_Brick_Bounce
   ; Bounce the ball back
@@ -1029,16 +1035,17 @@ __P2_Bottom_Brick
   goto __P2_Brick_Bounce
 
 __P2_Core_Hit
-  ; Player 2 dies - Player 1 wins the round!
-  p1_score = p1_score + 1        ; Award point to Player 1
-  invincibility_timer = invincibility_duration  ; Start 3-second invincibility period
-  player1x = 117 : player1y = 35 ; Reset P2 position
-  p2_bricks = %00001111          ; Restore all P2 bricks
-  p2_direction = 4               ; Reset to default direction
-  p2_speed_x = 16 : p2_speed_y = 16  ; Reset to stopped
-  p2_dir_x = 0 : p2_dir_y = 0
-  ball_state = 0                 ; Free the ball if attached
-  goto __P2_Brick_Bounce         ; Still bounce the ball
+  ; TEMPORARILY COMMENTED OUT FOR TESTING - just bounce instead
+  ;; Player 2 dies - Player 1 wins the round!
+  ;p1_score = p1_score + 1        ; Award point to Player 1
+  ;invincibility_timer = invincibility_duration  ; Start 3-second invincibility period
+  ;player1x = 117 : player1y = 35 ; Reset P2 position
+  ;p2_bricks = %00001111          ; Restore all P2 bricks
+  ;p2_direction = 4               ; Reset to default direction
+  ;p2_speed_x = 16 : p2_speed_y = 16  ; Reset to stopped
+  ;p2_dir_x = 0 : p2_dir_y = 0
+  ;ball_state = 0                 ; Free the ball if attached
+  goto __P2_Brick_Bounce         ; Just bounce the ball
 
 __P2_Brick_Bounce
   ; Bounce the ball back
@@ -1052,7 +1059,7 @@ __P2_Brick_Bounce
   ;  Ball positioned just outside paddle sprite radius
   ;***************************************************************
 __Ball_Follow_P1
-  temp_dir = p1_direction
+  temp_dir = p1_caught_dir
   on temp_dir goto __BF1_0 __BF1_1 __BF1_2 __BF1_3 __BF1_4 __BF1_5 __BF1_6 __BF1_7 __BF1_8 __BF1_9 __BF1_10 __BF1_11 __BF1_12 __BF1_13 __BF1_14 __BF1_15
 
 __BF1_0  ; South
@@ -1089,7 +1096,7 @@ __BF1_15  ; SSE
   ballx = player0x + 9 : bally = player0y + 28 : return
 
 __Ball_Follow_P2
-  temp_dir = p2_direction
+  temp_dir = p2_caught_dir
   on temp_dir goto __BF2_0 __BF2_1 __BF2_2 __BF2_3 __BF2_4 __BF2_5 __BF2_6 __BF2_7 __BF2_8 __BF2_9 __BF2_10 __BF2_11 __BF2_12 __BF2_13 __BF2_14 __BF2_15
 
 __BF2_0  ; South
