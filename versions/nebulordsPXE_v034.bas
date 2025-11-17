@@ -421,9 +421,13 @@ __P2_Button_Done
 
   ;***************************************************************
   ;  Ball/Paddle Collision Detection (only when ball free)
+  ;  Using coordinate-based detection since player2/3 are virtual sprites
   ;***************************************************************
-  if collision(ball,player2) then gosub __Check_P1_Paddle
-  if collision(ball,player3) then gosub __Check_P2_Paddle
+  ; Check P1 paddle (player2) - Ball: 2x4, Paddle: 6x9
+  if ballx < player2x + 6 && ballx + 2 > player2x then if bally < player2y + 9 && bally + 4 > player2y then gosub __Check_P1_Paddle
+
+  ; Check P2 paddle (player3)
+  if ballx < player3x + 6 && ballx + 2 > player3x then if bally < player3y + 9 && bally + 4 > player3y then gosub __Check_P2_Paddle
 
   ;***************************************************************
   ;  Ball/Ship Collision Detection - Brick breaking (skip during invincibility)
