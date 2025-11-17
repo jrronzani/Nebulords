@@ -823,13 +823,17 @@ __BVS_15  ; NNW
   ;  Collision wrapper subroutines
   ;***************************************************************
 __Check_Paddle_Collisions
-  if collision(ball,player2) then gosub __Check_P1_Paddle
-  if collision(ball,player3) then gosub __Check_P2_Paddle
+  temp_paddle = collision(ball,player2)
+  if temp_paddle then gosub __Check_P1_Paddle
+  temp_paddle = collision(ball,player3)
+  if temp_paddle then gosub __Check_P2_Paddle
   return
 
 __Check_Brick_Collisions
-  if collision(ball,player0) then gosub __P1_Brick_Hit
-  if collision(ball,player1) then gosub __P2_Brick_Hit
+  temp_paddle = collision(ball,player0)
+  if temp_paddle then gosub __P1_Brick_Hit
+  temp_paddle = collision(ball,player1)
+  if temp_paddle then gosub __P2_Brick_Hit
   return
 
 
