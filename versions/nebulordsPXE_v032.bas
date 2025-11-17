@@ -404,14 +404,14 @@ __P2_Button_Done
   ;***************************************************************
   ;  Ball/Paddle Collision Detection (only when ball free)
   ;***************************************************************
-  if collision(ball, player2) then temp_dir = p1_direction : gosub __Ball_Bounce_P1
-  if collision(ball, player3) then temp_dir = p2_direction : gosub __Ball_Bounce_P2
+  if collision(ball,player2) then gosub __Check_P1_Paddle
+  if collision(ball,player3) then gosub __Check_P2_Paddle
 
   ;***************************************************************
   ;  Ball/Ship Collision Detection - Brick breaking
   ;***************************************************************
-  if collision(ball, player0) then gosub __P1_Brick_Hit
-  if collision(ball, player1) then gosub __P2_Brick_Hit
+  if collision(ball,player0) then gosub __P1_Brick_Hit
+  if collision(ball,player1) then gosub __P2_Brick_Hit
 
 __Skip_Ball_Physics
 
@@ -790,6 +790,20 @@ __BVS_14  ; NW
   ball_xvel = 255 : ball_yvel = 255 : return
 __BVS_15  ; NNW
   ball_xvel = 255 : ball_yvel = 254 : return
+
+
+  ;***************************************************************
+  ;  Helper subroutines for paddle collision
+  ;***************************************************************
+__Check_P1_Paddle
+  temp_dir = p1_direction
+  gosub __Ball_Bounce_P1
+  return
+
+__Check_P2_Paddle
+  temp_dir = p2_direction
+  gosub __Ball_Bounce_P2
+  return
 
 
   ;***************************************************************
