@@ -94,7 +94,7 @@ end
   %11110000
 end
   player1color:
-  $1E  ; Yellow
+  $1E
   $1E
   $1E
   $1E
@@ -107,106 +107,64 @@ end
   %11110000
 end
 
-  player2color:
-  $2E  ; Orange
+  player2-16color:
+  $2E  ; player2 orange
   $2E
   $2E
   $2E
-end
-
-  player3color:
-  $3E  ; Red-Orange
+  $3E  ; player3 red-orange
   $3E
   $3E
   $3E
-end
-
-  player4color:
-  $4E  ; Red
+  $4E  ; player4 red
   $4E
   $4E
   $4E
-end
-
-  player5color:
-  $5E  ; Purple-Red
+  $5E  ; player5 purple-red
   $5E
   $5E
   $5E
-end
-
-  player6color:
-  $6E  ; Purple
+  $6E  ; player6 purple
   $6E
   $6E
   $6E
-end
-
-  player7color:
-  $7E  ; Blue-Purple
+  $7E  ; player7 blue-purple
   $7E
   $7E
   $7E
-end
-
-  player8color:
-  $8E  ; Blue
+  $8E  ; player8 blue
   $8E
   $8E
   $8E
-end
-
-  player9color:
-  $9E  ; Cyan
+  $9E  ; player9 cyan
   $9E
   $9E
   $9E
-end
-
-  player10color:
-  $AE  ; Teal
+  $AE  ; player10 teal
   $AE
   $AE
   $AE
-end
-
-  player11color:
-  $BE  ; Green-Cyan
+  $BE  ; player11 green-cyan
   $BE
   $BE
   $BE
-end
-
-  player12color:
-  $CE  ; Green
+  $CE  ; player12 green
   $CE
   $CE
   $CE
-end
-
-  player13color:
-  $DE  ; Yellow-Green
+  $DE  ; player13 yellow-green
   $DE
   $DE
   $DE
-end
-
-  player14color:
-  $EE  ; Light Green
+  $EE  ; player14 light green
   $EE
   $EE
   $EE
-end
-
-  player15color:
-  $FE  ; Light Yellow
+  $FE  ; player15 light yellow
   $FE
   $FE
   $FE
-end
-
-  player16color:
-  $1C  ; Dark Yellow
+  $1C  ; player16 dark yellow
   $1C
   $1C
   $1C
