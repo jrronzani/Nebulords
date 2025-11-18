@@ -13,12 +13,6 @@
 
   set kernel PXE
 
-  ; Set colors
-  COLUBK = $00  ; Black background
-  COLUPF = $0E  ; White ball
-  COLUP0 = $2E  ; Orange missile0
-  COLUP1 = $4E  ; Red missile1
-
   ; Set all sprites to same X position
   ; Y positions spaced 5 scanlines apart (4px sprite + 1px gap)
   player0x = 80  : player0y = 10
@@ -70,6 +64,12 @@
   missile1x = 80 : missile1y = 120
 
 __Main_Loop
+  ; Set colors every frame
+  COLUBK = $84  ; Dark blue background
+  COLUPF = $0E  ; White ball
+  COLUP0 = $2E  ; Orange player0/missile0
+  COLUP1 = $4E  ; Red player1/missile1
+
   drawscreen
   goto __Main_Loop
 
