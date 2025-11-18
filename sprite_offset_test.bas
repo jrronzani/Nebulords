@@ -13,6 +13,10 @@
 
   set kernel PXE
 
+  ; PXE configuration
+  PF_MODE = $F1
+  DF0FRACINC = 2
+
   ; Set all sprites to same X position
   ; Y positions spaced 5 scanlines apart (4px sprite + 1px gap)
   player0x = 80  : player0y = 10
