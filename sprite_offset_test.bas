@@ -13,17 +13,11 @@
 
   set kernel PXE
 
-  ; Put ball and missiles at bottom for comparison
-  ballheight = 4
-  ballx = 80 : bally = 160
-
-  missile0height = 4
-  missile0x = 80 : missile0y = 165
-  NUSIZ0 = $30  ; Quad width missile for visibility
-
-  missile1height = 4
-  missile1x = 80 : missile1y = 170
-  _NUSIZ1 = $30  ; Quad width missile for visibility
+  ; Set colors
+  COLUBK = $00  ; Black background
+  COLUPF = $0E  ; White ball
+  COLUP0 = $2E  ; Orange missile0
+  COLUP1 = $4E  ; Red missile1
 
   ; Set all sprites to same X position
   ; Y positions spaced 5 scanlines apart (4px sprite + 1px gap)
@@ -45,11 +39,11 @@
   player15x = 80 : player15y = 85
   player16x = 80 : player16y = 90
 
-  ; Enable masking for virtual sprites to prevent wrap
-  NUSIZ0 = $00
-  _NUSIZ1 = $00
-  NUSIZ2 = $40
-  NUSIZ3 = $40
+  ; Configure sprite sizes - normal single sprites with masking for virtual
+  NUSIZ0 = $30   ; player0 normal + missile0 quad width
+  _NUSIZ1 = $30  ; player1 normal + missile1 quad width
+  NUSIZ2 = $40   ; player2 with masking
+  NUSIZ3 = $40   ; player3 with masking
   NUSIZ4 = $40
   NUSIZ5 = $40
   NUSIZ6 = $40
@@ -63,6 +57,17 @@
   NUSIZ14 = $40
   NUSIZ15 = $40
   NUSIZ16 = $40
+
+  ; Put ball at bottom (4 pixels wide for visibility)
+  ballheight = 4
+  ballx = 80 : bally = 100
+
+  ; Put missiles at bottom (quad width via NUSIZ above)
+  missile0height = 4
+  missile0x = 80 : missile0y = 110
+
+  missile1height = 4
+  missile1x = 80 : missile1y = 120
 
 __Main_Loop
   drawscreen
