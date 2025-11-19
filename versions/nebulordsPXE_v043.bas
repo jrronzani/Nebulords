@@ -2,12 +2,14 @@
   ;  NEBULORDS PXE - Version 043
   ;  Warlords-style Space Combat with Paddle Controls
   ;
-  ;  Changes from v041:
-  ;  - ENABLE: Ship/ball collision detection for brick breaking
-  ;  - ADD: Top brick destroyed sprite animation (state 14)
-  ;  - System tests brick hitboxes and destroys bricks on hit
+  ;  Changes from v042:
+  ;  - FIX: Correct Y coordinate brick hitboxes (Y axis inverted, origin bottom-left)
+  ;  - FIX: Push ball away after brick bounce to prevent sticking
+  ;  - FIX: Destroyed brick hitboxes now disabled (ball passes through)
+  ;  - ENABLE: Core hit detection destroys player sprite and paddle
+  ;  - All brick types (top/left/right/bottom) have working hitboxes
   ;
-  ;  Changes from v040:
+  ;  Changes from v041:
   ;  - CRITICAL FIX: Removed double rotation bug in deflections
   ;  - Deflections now correctly match paddle direction
   ;  - FIX: South ball position lowered additional 4px (final adjustment)
@@ -920,41 +922,53 @@ __P1_Brick_Hit
   goto __P1_Top_Brick
 
 __P1_Top_Brick
-  ; Check if brick intact - if not, CORE HIT!
-  if !p1_bricks{0} then goto __P1_Core_Hit
+  ; Check if brick already destroyed - if so, let ball pass through
+  if !p1_bricks{0} then return
+  ; Brick intact - destroy it and bounce
   p1_bricks{0} = 0
+  ; Check if all bricks destroyed (core exposed)
+  if p1_bricks = 0 then goto __P1_Core_Hit
   goto __P1_Brick_Bounce
 
 __P1_Middle_Brick
   ; Determine left vs right based on X position
   ; Left brick: ballx < player0x + 8 (left half of sprite)
   if ballx < player0x + 8 then goto __P1_Left_Brick
-  ; Right brick - check if destroyed (core hit)
-  if !p1_bricks{2} then goto __P1_Core_Hit
+  ; Right brick - check if already destroyed
+  if !p1_bricks{2} then return
+  ; Brick intact - destroy it and bounce
   p1_bricks{2} = 0
+  ; Check if all bricks destroyed (core exposed)
+  if p1_bricks = 0 then goto __P1_Core_Hit
   goto __P1_Brick_Bounce
 __P1_Left_Brick
-  if !p1_bricks{1} then goto __P1_Core_Hit
+  if !p1_bricks{1} then return
   p1_bricks{1} = 0
+  if p1_bricks = 0 then goto __P1_Core_Hit
   goto __P1_Brick_Bounce
 
 __P1_Bottom_Brick
-  if !p1_bricks{3} then goto __P1_Core_Hit
+  if !p1_bricks{3} then return
   p1_bricks{3} = 0
+  if p1_bricks = 0 then goto __P1_Core_Hit
   goto __P1_Brick_Bounce
 
 __P1_Core_Hit
-  ; TEMPORARILY COMMENTED OUT FOR TESTING - just bounce instead
-  ;; Player 1 dies - Player 2 wins the round!
-  ;p2_score = p2_score + 1        ; Award point to Player 2
-  ;invincibility_timer = invincibility_duration  ; Start 3-second invincibility period
-  ;player0x = 25 : player0y = 35  ; Reset P1 position
-  ;p1_bricks = %00001111          ; Restore all P1 bricks
-  ;p1_direction = 12              ; Reset to default direction
-  ;p1_speed_x = 16 : p1_speed_y = 16  ; Reset to stopped
-  ;p1_dir_x = 0 : p1_dir_y = 0
-  ;ball_state = 0                 ; Free the ball if attached
-  goto __P1_Brick_Bounce         ; Just bounce the ball
+  ; Player 1 dies - Player 2 wins the round!
+  p2_score = p2_score + 1        ; Award point to Player 2
+  ; Destroy P1 ship sprite (player0)
+  player0x = 0 : player0y = 0
+  ; Destroy P1 paddle (player2)
+  player2x = 0 : player2y = 0
+  ; Start invincibility period before respawn
+  invincibility_timer = invincibility_duration
+  ; Reset P1 ship position (will be invisible during invincibility)
+  p1_bricks = %00001111          ; Restore all P1 bricks
+  p1_direction = 12              ; Reset to default direction
+  p1_speed_x = 16 : p1_speed_y = 16  ; Reset to stopped
+  p1_dir_x = 0 : p1_dir_y = 0
+  ball_state = 0                 ; Free the ball if attached
+  return
 
 __P1_Brick_Bounce
   ; Bounce the ball back
@@ -980,41 +994,53 @@ __P2_Brick_Hit
   goto __P2_Top_Brick
 
 __P2_Top_Brick
-  ; Check if brick intact - if not, CORE HIT!
-  if !p2_bricks{0} then goto __P2_Core_Hit
+  ; Check if brick already destroyed - if so, let ball pass through
+  if !p2_bricks{0} then return
+  ; Brick intact - destroy it and bounce
   p2_bricks{0} = 0
+  ; Check if all bricks destroyed (core exposed)
+  if p2_bricks = 0 then goto __P2_Core_Hit
   goto __P2_Brick_Bounce
 
 __P2_Middle_Brick
   ; Determine left vs right based on X position
   ; Left brick: ballx < player1x + 8 (left half of sprite)
   if ballx < player1x + 8 then goto __P2_Left_Brick
-  ; Right brick - check if destroyed (core hit)
-  if !p2_bricks{2} then goto __P2_Core_Hit
+  ; Right brick - check if already destroyed
+  if !p2_bricks{2} then return
+  ; Brick intact - destroy it and bounce
   p2_bricks{2} = 0
+  ; Check if all bricks destroyed (core exposed)
+  if p2_bricks = 0 then goto __P2_Core_Hit
   goto __P2_Brick_Bounce
 __P2_Left_Brick
-  if !p2_bricks{1} then goto __P2_Core_Hit
+  if !p2_bricks{1} then return
   p2_bricks{1} = 0
+  if p2_bricks = 0 then goto __P2_Core_Hit
   goto __P2_Brick_Bounce
 
 __P2_Bottom_Brick
-  if !p2_bricks{3} then goto __P2_Core_Hit
+  if !p2_bricks{3} then return
   p2_bricks{3} = 0
+  if p2_bricks = 0 then goto __P2_Core_Hit
   goto __P2_Brick_Bounce
 
 __P2_Core_Hit
-  ; TEMPORARILY COMMENTED OUT FOR TESTING - just bounce instead
-  ;; Player 2 dies - Player 1 wins the round!
-  ;p1_score = p1_score + 1        ; Award point to Player 1
-  ;invincibility_timer = invincibility_duration  ; Start 3-second invincibility period
-  ;player1x = 117 : player1y = 35 ; Reset P2 position
-  ;p2_bricks = %00001111          ; Restore all P2 bricks
-  ;p2_direction = 4               ; Reset to default direction
-  ;p2_speed_x = 16 : p2_speed_y = 16  ; Reset to stopped
-  ;p2_dir_x = 0 : p2_dir_y = 0
-  ;ball_state = 0                 ; Free the ball if attached
-  goto __P2_Brick_Bounce         ; Just bounce the ball
+  ; Player 2 dies - Player 1 wins the round!
+  p1_score = p1_score + 1        ; Award point to Player 1
+  ; Destroy P2 ship sprite (player1)
+  player1x = 0 : player1y = 0
+  ; Destroy P2 paddle (player3)
+  player3x = 0 : player3y = 0
+  ; Start invincibility period before respawn
+  invincibility_timer = invincibility_duration
+  ; Reset P2 ship position (will be invisible during invincibility)
+  p2_bricks = %00001111          ; Restore all P2 bricks
+  p2_direction = 4               ; Reset to default direction
+  p2_speed_x = 16 : p2_speed_y = 16  ; Reset to stopped
+  p2_dir_x = 0 : p2_dir_y = 0
+  ball_state = 0                 ; Free the ball if attached
+  return
 
 __P2_Brick_Bounce
   ; Bounce the ball back
@@ -1842,20 +1868,113 @@ __P1S_14
 end
   return
 
-; Other states - for now, use default sprite (state 15)
+; State 13: Left brick destroyed (%1101)
+__P1S_13
+  player0:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000011  ; Upper connector
+  %11000011
+  %11001011  ; Left brick gone, right intact
+  %11001011
+  %11001011
+  %11001011
+  %11001011
+  %11001011
+  %11001011
+  %11001011
+  %11000011  ; Lower connector
+  %11000011
+  %00111100  ; Bottom brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 11: Right brick destroyed (%1011)
+__P1S_11
+  player0:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000011  ; Upper connector
+  %11000011
+  %11010011  ; Left intact, right brick gone
+  %11010011
+  %11010011
+  %11010011
+  %11010011
+  %11010011
+  %11010011
+  %11010011
+  %11000011  ; Lower connector
+  %11000011
+  %00111100  ; Bottom brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 7: Bottom brick destroyed (%0111)
+__P1S_7
+  player0:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000011  ; Upper connector
+  %11000011
+  %11011011  ; Middle section intact
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11000011  ; Lower connector
+  %11000011
+  %00000000  ; Bottom brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; Other states fall through to default sprite (state 15) for now
 __P1S_1
 __P1S_2
 __P1S_3
 __P1S_4
 __P1S_5
 __P1S_6
-__P1S_7
 __P1S_8
 __P1S_9
 __P1S_10
-__P1S_11
 __P1S_12
-__P1S_13
   goto __P1S_15
 
 
@@ -1961,19 +2080,113 @@ end
   return
 
 ; Other states - use default for now
+; State 13: Left brick destroyed (%1101)
+__P2S_13
+  player1:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000011  ; Upper connector
+  %11000011
+  %11001011  ; Left brick gone, right intact
+  %11001011
+  %11001011
+  %11001011
+  %11001011
+  %11001011
+  %11001011
+  %11001011
+  %11000011  ; Lower connector
+  %11000011
+  %00111100  ; Bottom brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 11: Right brick destroyed (%1011)
+__P2S_11
+  player1:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000011  ; Upper connector
+  %11000011
+  %11010011  ; Left intact, right brick gone
+  %11010011
+  %11010011
+  %11010011
+  %11010011
+  %11010011
+  %11010011
+  %11010011
+  %11000011  ; Lower connector
+  %11000011
+  %00111100  ; Bottom brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 7: Bottom brick destroyed (%0111)
+__P2S_7
+  player1:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000011  ; Upper connector
+  %11000011
+  %11011011  ; Middle section intact
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11000011  ; Lower connector
+  %11000011
+  %00000000  ; Bottom brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; Other states fall through to default sprite (state 15) for now
 __P2S_1
 __P2S_2
 __P2S_3
 __P2S_4
 __P2S_5
 __P2S_6
-__P2S_7
 __P2S_8
 __P2S_9
 __P2S_10
-__P2S_11
 __P2S_12
-__P2S_13
   goto __P2S_15
 
 
