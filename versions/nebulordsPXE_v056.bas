@@ -3,9 +3,10 @@
   ;  Warlords-style Space Combat with Paddle Controls
   ;
   ;  Changes from v055:
-  ;  - FIX: Brick hitboxes expanded +1 pixel in all directions to prevent ball pass-through
-  ;  - FIX: P1 paddle hitbox shifted +2 pixels right for proper alignment
-  ;  - Side bricks now have larger detection zones for more reliable collision
+  ;  - FIX: Replaced hardware collision with coordinate-based AABB for bricks
+  ;  - FIX: Ball no longer passes through sprites (hardware collision missed fast balls)
+  ;  - FIX: P1 paddle hitbox shifted +4 pixels right for proper alignment
+  ;  - Ship hitboxes expanded +2px margin for reliable detection
   ;
   ;  Changes from v048:
   ;  - FIX: Players only die when CORE is struck, not when all 4 bricks destroyed
@@ -506,8 +507,8 @@ __P2_Button_Done
   ;***************************************************************
   if ball_state > 0 then goto __Skip_Paddle_Collision  ; Skip if ball is attached
 
-  ; Check P1 paddle (player2) - Ball: 2x4, Paddle: 6x9, Hitbox shifted +2px right for alignment
-  if ballx < player2x + 9 && ballx + 2 > player2x + 1 then if bally < player2y + 10 && bally + 4 > player2y - 1 then gosub __Check_P1_Paddle
+  ; Check P1 paddle (player2) - Ball: 2x4, Paddle: 6x9, Hitbox shifted +4px right for alignment
+  if ballx < player2x + 11 && ballx + 2 > player2x + 3 then if bally < player2y + 10 && bally + 4 > player2y - 1 then gosub __Check_P1_Paddle
 
   ; Check P2 paddle (player3) - hitbox shifted +2px right and expanded
   if ballx < player3x + 9 && ballx + 2 > player3x + 1 then if bally < player3y + 10 && bally + 4 > player3y - 1 then gosub __Check_P2_Paddle
@@ -516,17 +517,15 @@ __Skip_Paddle_Collision
 
   ;***************************************************************
   ;  Ball/Ship Collision Detection - Brick breaking
-  ;  Skip during invincibility or if player is off-screen
-  ;  NOTE: ship_collision_cooldown was causing cross-player brick contamination bug
-  ;        and has been permanently removed (see v052 for details)
+  ;  Using coordinate-based AABB collision (hardware collision misses fast balls)
+  ;  Ship sprite: 16x26, Ball: 2x4, Hitbox expanded +2px each side
   ;***************************************************************
   if invincibility_timer > 0 then goto __Skip_Ball_Physics
 
-  ; Only check collision if player is on-screen (Y < 100)
-  ; Check P1 first - if hit, skip P2 check this frame
-  if player0y < 100 then if collision(ball,player0) then gosub __P1_Brick_Hit : goto __Skip_Ball_Physics
-  ; Only check P2 if P1 wasn't hit
-  if player1y < 100 then if collision(ball,player1) then gosub __P2_Brick_Hit
+  ; P1 coordinate collision: expanded hitbox (ship 16x26 + 2px margin)
+  if player0y < 100 then if ballx < player0x + 18 && ballx + 2 > player0x - 2 then if bally < player0y + 28 && bally + 4 > player0y - 2 then gosub __P1_Brick_Hit : goto __Skip_Ball_Physics
+  ; P2 coordinate collision (shifted +2px for player1 sprite offset)
+  if player1y < 100 then if ballx < player1x + 20 && ballx + 2 > player1x then if bally < player1y + 28 && bally + 4 > player1y - 2 then gosub __P2_Brick_Hit
 
 __Skip_Ball_Physics
 
