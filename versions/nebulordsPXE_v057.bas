@@ -1012,8 +1012,9 @@ __P1_Middle_Area
   ; X determines left or right side
   if ballx + 2 <= player0x + 7 then goto __P1_Left_Area
   if ballx >= player0x + 8 then goto __P1_Right_Area
-  ; Ball is in center X - check if core exposed (both side bricks or top+bottom destroyed)
-  if p1_bricks{2} = 0 || p1_bricks{1} = 0 then goto __P1_Core_Hit
+  ; Ball is in center X - check if core exposed (either side brick destroyed)
+  if !p1_bricks{2} then goto __P1_Core_Hit
+  if !p1_bricks{1} then goto __P1_Core_Hit
   return
 
 __P1_Left_Area
@@ -1088,7 +1089,8 @@ __P2_Middle_Area
   if ballx + 2 <= player1x + 9 then goto __P2_Left_Area
   if ballx >= player1x + 10 then goto __P2_Right_Area
   ; Ball is in center X - check if core exposed (either side brick destroyed)
-  if p2_bricks{2} = 0 || p2_bricks{1} = 0 then goto __P2_Core_Hit
+  if !p2_bricks{2} then goto __P2_Core_Hit
+  if !p2_bricks{1} then goto __P2_Core_Hit
   return
 
 __P2_Left_Area
