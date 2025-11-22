@@ -1551,14 +1551,30 @@ __Award_P2_Win
 
 __Draw_Scores
   ; Draw score blocks in playfield corners
-  ; P1 (blue): Top-left rows 0-7, grows right from column 1
-  ; P2 (purple): Top-right rows 0-7, grows left from column 38
-  ; P3 (orange): Bottom-left, grows right from column 1
-  ; P4 (green): Bottom-right, grows left from column 38
+  ; Each win = vertical block (4 rows tall), spaced 2 columns apart
 
-  ; Clear previous scores (rows 2-5 for visibility, leave edges for border)
-  temp1 = 2 : temp2 = 1
-  ; TODO: Implement pfpixel drawing logic
+  ; P1 (top-left): Rows 2-5, start column 2, grow right
+  temp1 = 0
+__Draw_P1_Loop
+  if temp1 >= p1_wins then goto __Draw_P2
+  temp2 = 2 + (temp1 * 2)  ; Column: 2, 4, 6, 8, 10 (for wins 0-4)
+  pfpixel temp2 2 on : pfpixel temp2 3 on : pfpixel temp2 4 on : pfpixel temp2 5 on
+  temp1 = temp1 + 1
+  goto __Draw_P1_Loop
+
+__Draw_P2
+  ; P2 (top-right): Rows 2-5, start column 37, grow left
+  temp1 = 0
+__Draw_P2_Loop
+  if temp1 >= p2_wins then goto __Draw_Scores_Done
+  temp2 = 37 - (temp1 * 2)  ; Column: 37, 35, 33, 31, 29 (for wins 0-4)
+  pfpixel temp2 2 on : pfpixel temp2 3 on : pfpixel temp2 4 on : pfpixel temp2 5 on
+  temp1 = temp1 + 1
+  goto __Draw_P2_Loop
+
+  ; TODO: Add P3 and P4 when needed (currently 2-player game)
+
+__Draw_Scores_Done
   return
 
 __Game_Over
