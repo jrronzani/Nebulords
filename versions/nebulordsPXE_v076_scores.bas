@@ -3951,6 +3951,10 @@ end
   $7e
 end
   return
+
+; Skip over data tables (they're data, not executable code!)
+  goto __Skip_Data_Tables
+
 ; Lookup tables for 128-position paddle control
 ; Generated from 32 manual positions with linear interpolation
 
@@ -4131,3 +4135,6 @@ end
   $66
   $66
 end
+
+__Skip_Data_Tables
+  ; Data tables end - execution continues here
