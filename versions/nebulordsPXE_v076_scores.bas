@@ -4050,8 +4050,6 @@ end
 end
   return
 
-  $66
-end
 
 __Skip_Data_Tables
   ; Data tables end - execution continues here
