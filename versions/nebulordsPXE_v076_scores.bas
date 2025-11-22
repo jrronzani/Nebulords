@@ -456,8 +456,8 @@ __P2_Button_Done
   ;  Ball physics - FIRST (before ship moves, same moment in time)
   ;  Now uses lookup tables for smooth 128-position control!
   ;***************************************************************
-  if ball_state = 1 then ballx = player0x + p1_ball_x[p1_direction] : bally = player0y + p1_ball_y[p1_direction] : goto __Skip_Ball_Physics
-  if ball_state = 2 then ballx = player1x + p2_ball_x[p2_direction] : bally = player1y + p2_ball_y[p2_direction] : goto __Skip_Ball_Physics
+  if ball_state = 1 then temp1 = p1_ball_x[p1_direction] : temp2 = p1_ball_y[p1_direction] : ballx = player0x + temp1 : bally = player0y + temp2 : goto __Skip_Ball_Physics
+  if ball_state = 2 then temp1 = p2_ball_x[p2_direction] : temp2 = p2_ball_y[p2_direction] : ballx = player1x + temp1 : bally = player1y + temp2 : goto __Skip_Ball_Physics
 
   ;***************************************************************
   ;  Ball/Ship Collision Detection - Brick breaking
@@ -570,8 +570,10 @@ __Skip_Ball_Physics
   %111111
   %011110
 end
-  player2x = player0x + p1_paddle_x[p1_direction]
-  player2y = player0y + p1_paddle_y[p1_direction]
+  temp1 = p1_paddle_x[p1_direction]
+  temp2 = p1_paddle_y[p1_direction]
+  player2x = player0x + temp1
+  player2y = player0y + temp2
 
   ; P2 Paddle - Use lookup tables
   player3:
@@ -585,8 +587,10 @@ end
   %111111
   %011110
 end
-  player3x = player1x + p2_paddle_x[p2_direction]
-  player3y = player1y + p2_paddle_y[p2_direction]
+  temp1 = p2_paddle_x[p2_direction]
+  temp2 = p2_paddle_y[p2_direction]
+  player3x = player1x + temp1
+  player3y = player1y + temp2
 
   ;***************************************************************
   ;  Update ship sprites based on brick destruction state
