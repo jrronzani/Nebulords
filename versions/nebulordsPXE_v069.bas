@@ -204,7 +204,11 @@
   ; Caught ball direction (stored when ball is caught)
   dim p1_caught_dir = var5       ; P1 paddle direction when ball was caught (0-15)
   dim p2_caught_dir = var6       ; P2 paddle direction when ball was caught (0-15)
-  ; var7, var8, var9 now free for future use
+
+  ; Temporary variables for score display
+  dim score_x = var7            ; X position for score drawing
+  dim score_y = var8            ; Y position for score drawing
+  dim score_count = var9        ; Counter for score drawing
 
   ;***************************************************************
   ;  Initialize game
@@ -1421,54 +1425,45 @@ __Round_Reset
   ;  P3: rows 166-169 (orange), P4: rows 170-173 (green)
   ;***************************************************************
 __Draw_Scores
-  ; Draw P1 score blocks (each win = one 2x4 block in blue area)
-  ; P1 area is Y=158-161
-  temp1 = p1_score
-  temp2 = 2  ; X position
-  temp3 = 158  ; Y position
-  temp4 = 0  ; Counter
+  ; Draw P1 score blocks (each win = one 2x2 block in blue area Y=158-161)
+  score_x = 2
+  score_y = 158
+  score_count = 0
 __P1_Score_Loop
-  if temp4 >= temp1 then goto __Draw_P2_Score
-  ; Draw a 2x4 block
-  pfpixel temp2 temp3 on
-  temp5 = temp2 + 1
-  pfpixel temp5 temp3 on
-  temp6 = temp3 + 1
-  pfpixel temp2 temp6 on
-  pfpixel temp5 temp6 on
-  temp6 = temp3 + 2
-  pfpixel temp2 temp6 on
-  pfpixel temp5 temp6 on
-  temp6 = temp3 + 3
-  pfpixel temp2 temp6 on
-  pfpixel temp5 temp6 on
-  temp4 = temp4 + 1
-  temp2 = temp2 + 3  ; Space between blocks
+  if score_count >= p1_score then goto __Draw_P2_Score
+  ; Draw a 2x2 block
+  pfpixel score_x score_y on
+  score_x = score_x + 1
+  pfpixel score_x score_y on
+  score_y = score_y + 1
+  pfpixel score_x score_y on
+  score_x = score_x - 1
+  pfpixel score_x score_y on
+  ; Move to next block position
+  score_x = score_x + 3
+  score_y = 158
+  score_count = score_count + 1
   goto __P1_Score_Loop
 
 __Draw_P2_Score
   ; Draw P2 score blocks in purple area (Y=162-165)
-  temp1 = p2_score
-  temp2 = 2  ; X position
-  temp3 = 162  ; Y position
-  temp4 = 0  ; Counter
+  score_x = 2
+  score_y = 162
+  score_count = 0
 __P2_Score_Loop
-  if temp4 >= temp1 then return
-  ; Draw a 2x4 block
-  pfpixel temp2 temp3 on
-  temp5 = temp2 + 1
-  pfpixel temp5 temp3 on
-  temp6 = temp3 + 1
-  pfpixel temp2 temp6 on
-  pfpixel temp5 temp6 on
-  temp6 = temp3 + 2
-  pfpixel temp2 temp6 on
-  pfpixel temp5 temp6 on
-  temp6 = temp3 + 3
-  pfpixel temp2 temp6 on
-  pfpixel temp5 temp6 on
-  temp4 = temp4 + 1
-  temp2 = temp2 + 3  ; Space between blocks
+  if score_count >= p2_score then return
+  ; Draw a 2x2 block
+  pfpixel score_x score_y on
+  score_x = score_x + 1
+  pfpixel score_x score_y on
+  score_y = score_y + 1
+  pfpixel score_x score_y on
+  score_x = score_x - 1
+  pfpixel score_x score_y on
+  ; Move to next block position
+  score_x = score_x + 3
+  score_y = 162
+  score_count = score_count + 1
   goto __P2_Score_Loop
 
 
