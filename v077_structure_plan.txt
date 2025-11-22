@@ -1,0 +1,63 @@
+NEBULORDS v077 CODE ORGANIZATION PLAN
+=====================================
+
+SECTION 1: HEADER & SETUP
+  - Kernel setup (PXE)
+  - Constants (physics, collision, etc.)
+
+SECTION 2: VARIABLES
+  - All dim statements
+  - Score system (using built-in score variable)
+
+SECTION 3: COORDINATE REFERENCE DATA
+  - Comment-documented coordinates for easy editing
+  - P1 Paddle positions (all 32 X/Y offsets)
+  - P1 Ball follow positions (all 32 X/Y offsets)
+  - P2 Paddle positions (all 32 X/Y offsets)
+  - P2 Ball follow positions (all 32 X/Y offsets)
+
+SECTION 4: INITIALIZATION
+  - Color setup
+  - Initial positions
+  - Playfield setup
+
+SECTION 5: MAIN GAME LOOP
+  - Paddle reading
+  - Button handling
+  - Ball physics
+  - Collision detection
+  - Movement
+  - Sprite updates
+  - Drawscreen
+
+SECTION 6: PADDLE POSITIONING SUBROUTINES
+  - __Update_P1_Paddle (all 32 positions)
+  - __Update_P2_Paddle (all 32 positions)
+
+SECTION 7: BALL FOLLOW SUBROUTINES
+  - __Ball_Follow_P1 (all 32 positions)
+  - __Ball_Follow_P2 (all 32 positions)
+
+SECTION 8: SHIP SPRITE SUBROUTINES
+  - __Update_P1_Ship_Sprite (all 16 brick states)
+  - __Update_P2_Ship_Sprite (all 16 brick states)
+  - Ship color definitions
+
+SECTION 9: SCORE SYSTEM
+  - __Award_P1_Point (BCD math)
+  - __Award_P2_Point (BCD math)
+
+SECTION 10: OTHER SUBROUTINES
+  - Ball velocity
+  - Collision detection
+  - Round reset
+  - Playfield setup
+
+SECTION 11: SCORE COLORS
+  - scorecolors definitions for P1/P2
+
+Benefits:
+- Coordinates grouped together (easy to edit/copy)
+- Graphics grouped together (easy to modify sprites)
+- Clear section headers
+- Similar code for P1/P2 in same areas
