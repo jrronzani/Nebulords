@@ -1296,17 +1296,17 @@ __Ball_Follow_P1
   on temp_dir goto __BF1_0 __BF1_1 __BF1_2 __BF1_3 __BF1_4 __BF1_5 __BF1_6 __BF1_7 __BF1_8 __BF1_9 __BF1_10 __BF1_11 __BF1_12 __BF1_13 __BF1_14 __BF1_15 __BF1_16 __BF1_17 __BF1_18 __BF1_19 __BF1_20 __BF1_21 __BF1_22 __BF1_23 __BF1_24 __BF1_25 __BF1_26 __BF1_27 __BF1_28 __BF1_29 __BF1_30 __BF1_31
 
 __BF1_0  ; Position 0: paddle (+4, +28)
-  ballx = player0x + 10 : bally = player0y + 39 : return
+  ballx = player0x + 10 : bally = player0y + 40 : return
 __BF1_1  ; Position 1: paddle (+2, +26)
   ballx = player0x + 6 : bally = player0y + 36 : return
 __BF1_2  ; Position 2: paddle (-1, +24)
-  ballx = player0x + 1 : bally = player0y + 34 : return
+  ballx = player0x + 0 : bally = player0y + 34 : return
 __BF1_3  ; Position 3: paddle (-3, +22)
-  ballx = player0x - 3 : bally = player0y + 31 : return
+  ballx = player0x - 4 : bally = player0y + 30 : return
 __BF1_4  ; Position 4: paddle (-5, +21)
-  ballx = player0x - 3 : bally = player0y + 29 : return
+  ballx = player0x - 5 : bally = player0y + 29 : return
 __BF1_5  ; Position 5: paddle (-6, +18)
-  ballx = player0x - 5 : bally = player0y + 25 : return
+  ballx = player0x - 7 : bally = player0y + 24 : return
 __BF1_6  ; Position 6: paddle (-8, +15)
   ballx = player0x - 7 : bally = player0y + 21 : return
 __BF1_7  ; Position 7: paddle (-8, +12)
@@ -1320,25 +1320,25 @@ __BF1_10  ; Position 10: paddle (-8, +1)
 __BF1_11  ; Position 11: paddle (-6, -2)
   ballx = player0x - 5 : bally = player0y - 3 : return
 __BF1_12  ; Position 12: paddle (-5, -5)
-  ballx = player0x - 3 : bally = player0y - 7 : return
+  ballx = player0x - 3 : bally = player0y - 8 : return
 __BF1_13  ; Position 13: paddle (-4, -7)
-  ballx = player0x - 5 : bally = player0y - 10 : return
+  ballx = player0x - 4 : bally = player0y - 12 : return
 __BF1_14  ; Position 14: paddle (-2, -9)
-  ballx = player0x - 2 : bally = player0y - 13 : return
+  ballx = player0x - 2 : bally = player0y - 15 : return
 __BF1_15  ; Position 15: paddle (+1, -10)
-  ballx = player0x + 2 : bally = player0y - 14 : return
+  ballx = player0x + 3 : bally = player0y - 16 : return
 __BF1_16  ; Position 16: paddle (+4, -11)
-  ballx = player0x + 6 : bally = player0y - 17 : return
+  ballx = player0x + 8 : bally = player0y - 18 : return
 __BF1_17  ; Position 17: paddle (+6, -10)
-  ballx = player0x + 9 : bally = player0y - 14 : return
+  ballx = player0x + 11 : bally = player0y - 15 : return
 __BF1_18  ; Position 18: paddle (+8, -9)
-  ballx = player0x + 11 : bally = player0y - 13 : return
+  ballx = player0x + 13 : bally = player0y - 13 : return
 __BF1_19  ; Position 19: paddle (+10, -7)
-  ballx = player0x + 14 : bally = player0y - 10 : return
+  ballx = player0x + 17 : bally = player0y - 11 : return
 __BF1_20  ; Position 20: paddle (+13, -5)
-  ballx = player0x + 21 : bally = player0y - 7 : return
+  ballx = player0x + 20 : bally = player0y - 7 : return
 __BF1_21  ; Position 21: paddle (+14, -2)
-  ballx = player0x + 23 : bally = player0y - 3 : return
+  ballx = player0x + 22 : bally = player0y - 3 : return
 __BF1_22  ; Position 22: paddle (+16, +1)
   ballx = player0x + 26 : bally = player0y + 1 : return
 __BF1_23  ; Position 23: paddle (+16, +4)
@@ -1350,32 +1350,32 @@ __BF1_25  ; Position 25: paddle (+16, +12)
 __BF1_26  ; Position 26: paddle (+16, +15)
   ballx = player0x + 26 : bally = player0y + 21 : return
 __BF1_27  ; Position 27: paddle (+14, +18)
-  ballx = player0x + 23 : bally = player0y + 25 : return
+  ballx = player0x + 22 : bally = player0y + 25 : return
 __BF1_28  ; Position 28: paddle (+13, +21)
-  ballx = player0x + 21 : bally = player0y + 29 : return
+  ballx = player0x + 20 : bally = player0y + 29 : return
 __BF1_29  ; Position 29: paddle (+11, +22)
-  ballx = player0x + 15 : bally = player0y + 31 : return
+  ballx = player0x + 15 : bally = player0y + 32 : return
 __BF1_30  ; Position 30: paddle (+9, +24)
-  ballx = player0x + 13 : bally = player0y + 34 : return
+  ballx = player0x + 13 : bally = player0y + 35 : return
 __BF1_31  ; Position 31: paddle (+6, +26)
-  ballx = player0x + 9 : bally = player0y + 36 : return
+  ballx = player0x + 8 : bally = player0y + 37 : return
 
 __Ball_Follow_P2
   temp_dir = p2_direction
   on temp_dir goto __BF2_0 __BF2_1 __BF2_2 __BF2_3 __BF2_4 __BF2_5 __BF2_6 __BF2_7 __BF2_8 __BF2_9 __BF2_10 __BF2_11 __BF2_12 __BF2_13 __BF2_14 __BF2_15 __BF2_16 __BF2_17 __BF2_18 __BF2_19 __BF2_20 __BF2_21 __BF2_22 __BF2_23 __BF2_24 __BF2_25 __BF2_26 __BF2_27 __BF2_28 __BF2_29 __BF2_30 __BF2_31
 
 __BF2_0  ; Position 0: paddle (+4, +28)
-  ballx = player1x + 10 : bally = player1y + 39 : return
+  ballx = player1x + 10 : bally = player1y + 40 : return
 __BF2_1  ; Position 1: paddle (+2, +26)
   ballx = player1x + 6 : bally = player1y + 36 : return
 __BF2_2  ; Position 2: paddle (-1, +24)
-  ballx = player1x + 1 : bally = player1y + 34 : return
+  ballx = player1x + 0 : bally = player1y + 34 : return
 __BF2_3  ; Position 3: paddle (-3, +22)
-  ballx = player1x - 3 : bally = player1y + 31 : return
+  ballx = player1x - 4 : bally = player1y + 30 : return
 __BF2_4  ; Position 4: paddle (-5, +21)
-  ballx = player1x - 3 : bally = player1y + 29 : return
+  ballx = player1x - 5 : bally = player1y + 29 : return
 __BF2_5  ; Position 5: paddle (-6, +18)
-  ballx = player1x - 5 : bally = player1y + 25 : return
+  ballx = player1x - 7 : bally = player1y + 24 : return
 __BF2_6  ; Position 6: paddle (-8, +15)
   ballx = player1x - 7 : bally = player1y + 21 : return
 __BF2_7  ; Position 7: paddle (-8, +12)
@@ -1389,25 +1389,25 @@ __BF2_10  ; Position 10: paddle (-8, +1)
 __BF2_11  ; Position 11: paddle (-6, -2)
   ballx = player1x - 5 : bally = player1y - 3 : return
 __BF2_12  ; Position 12: paddle (-5, -5)
-  ballx = player1x - 3 : bally = player1y - 7 : return
+  ballx = player1x - 3 : bally = player1y - 8 : return
 __BF2_13  ; Position 13: paddle (-4, -7)
-  ballx = player1x - 5 : bally = player1y - 10 : return
+  ballx = player1x - 4 : bally = player1y - 12 : return
 __BF2_14  ; Position 14: paddle (-2, -9)
-  ballx = player1x - 2 : bally = player1y - 13 : return
+  ballx = player1x - 2 : bally = player1y - 15 : return
 __BF2_15  ; Position 15: paddle (+1, -10)
-  ballx = player1x + 2 : bally = player1y - 14 : return
+  ballx = player1x + 3 : bally = player1y - 16 : return
 __BF2_16  ; Position 16: paddle (+4, -11)
-  ballx = player1x + 6 : bally = player1y - 17 : return
+  ballx = player1x + 8 : bally = player1y - 18 : return
 __BF2_17  ; Position 17: paddle (+6, -10)
-  ballx = player1x + 9 : bally = player1y - 14 : return
+  ballx = player1x + 11 : bally = player1y - 15 : return
 __BF2_18  ; Position 18: paddle (+8, -9)
-  ballx = player1x + 11 : bally = player1y - 13 : return
+  ballx = player1x + 13 : bally = player1y - 13 : return
 __BF2_19  ; Position 19: paddle (+10, -7)
-  ballx = player1x + 14 : bally = player1y - 10 : return
+  ballx = player1x + 17 : bally = player1y - 11 : return
 __BF2_20  ; Position 20: paddle (+13, -5)
-  ballx = player1x + 21 : bally = player1y - 7 : return
+  ballx = player1x + 20 : bally = player1y - 7 : return
 __BF2_21  ; Position 21: paddle (+14, -2)
-  ballx = player1x + 23 : bally = player1y - 3 : return
+  ballx = player1x + 22 : bally = player1y - 3 : return
 __BF2_22  ; Position 22: paddle (+16, +1)
   ballx = player1x + 26 : bally = player1y + 1 : return
 __BF2_23  ; Position 23: paddle (+16, +4)
@@ -1419,15 +1419,15 @@ __BF2_25  ; Position 25: paddle (+16, +12)
 __BF2_26  ; Position 26: paddle (+16, +15)
   ballx = player1x + 26 : bally = player1y + 21 : return
 __BF2_27  ; Position 27: paddle (+14, +18)
-  ballx = player1x + 23 : bally = player1y + 25 : return
+  ballx = player1x + 22 : bally = player1y + 25 : return
 __BF2_28  ; Position 28: paddle (+13, +21)
-  ballx = player1x + 21 : bally = player1y + 29 : return
+  ballx = player1x + 20 : bally = player1y + 29 : return
 __BF2_29  ; Position 29: paddle (+11, +22)
-  ballx = player1x + 15 : bally = player1y + 31 : return
+  ballx = player1x + 15 : bally = player1y + 32 : return
 __BF2_30  ; Position 30: paddle (+9, +24)
-  ballx = player1x + 13 : bally = player1y + 34 : return
+  ballx = player1x + 13 : bally = player1y + 35 : return
 __BF2_31  ; Position 31: paddle (+6, +26)
-  ballx = player1x + 9 : bally = player1y + 36 : return
+  ballx = player1x + 8 : bally = player1y + 37 : return
 
 
   ;***************************************************************
@@ -1563,15 +1563,15 @@ __Award_P2_Point
   ;  Pos 24: X+16 Y+8   |  Pos 25: X+16 Y+12  |  Pos 26: X+16 Y+15  |  Pos 27: X+14 Y+18
   ;  Pos 28: X+13 Y+21  |  Pos 29: X+11 Y+22  |  Pos 30: X+9  Y+24  |  Pos 31: X+6  Y+26
   ;
-  ;  P1 BALL FOLLOW OFFSETS (relative to player0x/player0y):
-  ;  Pos  0: X+10 Y+39  |  Pos  1: X+6  Y+36  |  Pos  2: X+1  Y+34  |  Pos  3: X-3  Y+31
-  ;  Pos  4: X-3  Y+29  |  Pos  5: X-5  Y+25  |  Pos  6: X-7  Y+21  |  Pos  7: X-7  Y+17
+  ;  P1 BALL FOLLOW OFFSETS (relative to player0x/player0y) - SMOOTHED:
+  ;  Pos  0: X+10 Y+40  |  Pos  1: X+6  Y+36  |  Pos  2: X+0  Y+34  |  Pos  3: X-4  Y+30
+  ;  Pos  4: X-5  Y+29  |  Pos  5: X-7  Y+24  |  Pos  6: X-7  Y+21  |  Pos  7: X-7  Y+17
   ;  Pos  8: X-7  Y+11  |  Pos  9: X-7  Y+6   |  Pos 10: X-7  Y+1   |  Pos 11: X-5  Y-3
-  ;  Pos 12: X-3  Y-7   |  Pos 13: X-5  Y-10  |  Pos 14: X-2  Y-13  |  Pos 15: X+2  Y-14
-  ;  Pos 16: X+6  Y-17  |  Pos 17: X+9  Y-14  |  Pos 18: X+11 Y-13  |  Pos 19: X+14 Y-10
-  ;  Pos 20: X+21 Y-7   |  Pos 21: X+23 Y-3   |  Pos 22: X+26 Y+1   |  Pos 23: X+26 Y+6
-  ;  Pos 24: X+26 Y+11  |  Pos 25: X+26 Y+17  |  Pos 26: X+26 Y+21  |  Pos 27: X+23 Y+25
-  ;  Pos 28: X+21 Y+29  |  Pos 29: X+15 Y+31  |  Pos 30: X+13 Y+34  |  Pos 31: X+9  Y+36
+  ;  Pos 12: X-3  Y-8   |  Pos 13: X-4  Y-12  |  Pos 14: X-2  Y-15  |  Pos 15: X+3  Y-16
+  ;  Pos 16: X+8  Y-18  |  Pos 17: X+11 Y-15  |  Pos 18: X+13 Y-13  |  Pos 19: X+17 Y-11
+  ;  Pos 20: X+20 Y-7   |  Pos 21: X+22 Y-3   |  Pos 22: X+26 Y+1   |  Pos 23: X+26 Y+6
+  ;  Pos 24: X+26 Y+11  |  Pos 25: X+26 Y+17  |  Pos 26: X+26 Y+21  |  Pos 27: X+22 Y+25
+  ;  Pos 28: X+20 Y+29  |  Pos 29: X+15 Y+32  |  Pos 30: X+13 Y+35  |  Pos 31: X+8  Y+37
   ;
   ;  P2 PADDLE OFFSETS (relative to player1x/player1y):
   ;  Same as P1 - just copy P1 section and replace player0 with player1
