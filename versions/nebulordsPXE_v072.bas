@@ -1266,23 +1266,23 @@ __BF1_2  ; Position 2: paddle (-1, +24)
 __BF1_3  ; Position 3: paddle (-3, +22)
   ballx = player0x - 3 : bally = player0y + 31 : return
 __BF1_4  ; Position 4: paddle (-5, +21)
-  ballx = player0x - 6 : bally = player0y + 29 : return
+  ballx = player0x - 8 : bally = player0y + 29 : return
 __BF1_5  ; Position 5: paddle (-6, +18)
-  ballx = player0x - 8 : bally = player0y + 25 : return
+  ballx = player0x - 10 : bally = player0y + 25 : return
 __BF1_6  ; Position 6: paddle (-8, +15)
-  ballx = player0x - 11 : bally = player0y + 21 : return
+  ballx = player0x - 13 : bally = player0y + 21 : return
 __BF1_7  ; Position 7: paddle (-8, +12)
-  ballx = player0x - 11 : bally = player0y + 17 : return
+  ballx = player0x - 14 : bally = player0y + 17 : return
 __BF1_8  ; Position 8: paddle (-8, +8)
-  ballx = player0x - 11 : bally = player0y + 11 : return
+  ballx = player0x - 14 : bally = player0y + 11 : return
 __BF1_9  ; Position 9: paddle (-8, +4)
-  ballx = player0x - 11 : bally = player0y + 6 : return
+  ballx = player0x - 14 : bally = player0y + 6 : return
 __BF1_10  ; Position 10: paddle (-8, +1)
-  ballx = player0x - 11 : bally = player0y + 1 : return
+  ballx = player0x - 14 : bally = player0y + 1 : return
 __BF1_11  ; Position 11: paddle (-6, -2)
-  ballx = player0x - 8 : bally = player0y - 3 : return
+  ballx = player0x - 10 : bally = player0y - 3 : return
 __BF1_12  ; Position 12: paddle (-5, -5)
-  ballx = player0x - 7 : bally = player0y - 7 : return
+  ballx = player0x - 9 : bally = player0y - 7 : return
 __BF1_13  ; Position 13: paddle (-4, -7)
   ballx = player0x - 5 : bally = player0y - 10 : return
 __BF1_14  ; Position 14: paddle (-2, -9)
@@ -1298,23 +1298,23 @@ __BF1_18  ; Position 18: paddle (+8, -9)
 __BF1_19  ; Position 19: paddle (+10, -7)
   ballx = player0x + 14 : bally = player0y - 10 : return
 __BF1_20  ; Position 20: paddle (+13, -5)
-  ballx = player0x + 18 : bally = player0y - 7 : return
+  ballx = player0x + 20 : bally = player0y - 7 : return
 __BF1_21  ; Position 21: paddle (+14, -2)
-  ballx = player0x + 20 : bally = player0y - 3 : return
+  ballx = player0x + 22 : bally = player0y - 3 : return
 __BF1_22  ; Position 22: paddle (+16, +1)
-  ballx = player0x + 22 : bally = player0y + 1 : return
+  ballx = player0x + 25 : bally = player0y + 1 : return
 __BF1_23  ; Position 23: paddle (+16, +4)
-  ballx = player0x + 22 : bally = player0y + 6 : return
+  ballx = player0x + 25 : bally = player0y + 6 : return
 __BF1_24  ; Position 24: paddle (+16, +8)
-  ballx = player0x + 22 : bally = player0y + 11 : return
+  ballx = player0x + 25 : bally = player0y + 11 : return
 __BF1_25  ; Position 25: paddle (+16, +12)
-  ballx = player0x + 22 : bally = player0y + 17 : return
+  ballx = player0x + 25 : bally = player0y + 17 : return
 __BF1_26  ; Position 26: paddle (+16, +15)
-  ballx = player0x + 22 : bally = player0y + 21 : return
+  ballx = player0x + 25 : bally = player0y + 21 : return
 __BF1_27  ; Position 27: paddle (+14, +18)
-  ballx = player0x + 20 : bally = player0y + 25 : return
+  ballx = player0x + 22 : bally = player0y + 25 : return
 __BF1_28  ; Position 28: paddle (+13, +21)
-  ballx = player0x + 18 : bally = player0y + 29 : return
+  ballx = player0x + 20 : bally = player0y + 29 : return
 __BF1_29  ; Position 29: paddle (+11, +22)
   ballx = player0x + 15 : bally = player0y + 31 : return
 __BF1_30  ; Position 30: paddle (+9, +24)
@@ -1335,23 +1335,23 @@ __BF2_2  ; Position 2: paddle (-1, +24)
 __BF2_3  ; Position 3: paddle (-3, +22)
   ballx = player1x - 3 : bally = player1y + 31 : return
 __BF2_4  ; Position 4: paddle (-5, +21)
-  ballx = player1x - 6 : bally = player1y + 29 : return
+  ballx = player1x - 8 : bally = player1y + 29 : return
 __BF2_5  ; Position 5: paddle (-6, +18)
-  ballx = player1x - 8 : bally = player1y + 25 : return
+  ballx = player1x - 10 : bally = player1y + 25 : return
 __BF2_6  ; Position 6: paddle (-8, +15)
-  ballx = player1x - 11 : bally = player1y + 21 : return
+  ballx = player1x - 13 : bally = player1y + 21 : return
 __BF2_7  ; Position 7: paddle (-8, +12)
-  ballx = player1x - 11 : bally = player1y + 17 : return
+  ballx = player1x - 14 : bally = player1y + 17 : return
 __BF2_8  ; Position 8: paddle (-8, +8)
-  ballx = player1x - 11 : bally = player1y + 11 : return
+  ballx = player1x - 14 : bally = player1y + 11 : return
 __BF2_9  ; Position 9: paddle (-8, +4)
-  ballx = player1x - 11 : bally = player1y + 6 : return
+  ballx = player1x - 14 : bally = player1y + 6 : return
 __BF2_10  ; Position 10: paddle (-8, +1)
-  ballx = player1x - 11 : bally = player1y + 1 : return
+  ballx = player1x - 14 : bally = player1y + 1 : return
 __BF2_11  ; Position 11: paddle (-6, -2)
-  ballx = player1x - 8 : bally = player1y - 3 : return
+  ballx = player1x - 10 : bally = player1y - 3 : return
 __BF2_12  ; Position 12: paddle (-5, -5)
-  ballx = player1x - 7 : bally = player1y - 7 : return
+  ballx = player1x - 9 : bally = player1y - 7 : return
 __BF2_13  ; Position 13: paddle (-4, -7)
   ballx = player1x - 5 : bally = player1y - 10 : return
 __BF2_14  ; Position 14: paddle (-2, -9)
@@ -1367,23 +1367,23 @@ __BF2_18  ; Position 18: paddle (+8, -9)
 __BF2_19  ; Position 19: paddle (+10, -7)
   ballx = player1x + 14 : bally = player1y - 10 : return
 __BF2_20  ; Position 20: paddle (+13, -5)
-  ballx = player1x + 18 : bally = player1y - 7 : return
+  ballx = player1x + 20 : bally = player1y - 7 : return
 __BF2_21  ; Position 21: paddle (+14, -2)
-  ballx = player1x + 20 : bally = player1y - 3 : return
+  ballx = player1x + 22 : bally = player1y - 3 : return
 __BF2_22  ; Position 22: paddle (+16, +1)
-  ballx = player1x + 22 : bally = player1y + 1 : return
+  ballx = player1x + 25 : bally = player1y + 1 : return
 __BF2_23  ; Position 23: paddle (+16, +4)
-  ballx = player1x + 22 : bally = player1y + 6 : return
+  ballx = player1x + 25 : bally = player1y + 6 : return
 __BF2_24  ; Position 24: paddle (+16, +8)
-  ballx = player1x + 22 : bally = player1y + 11 : return
+  ballx = player1x + 25 : bally = player1y + 11 : return
 __BF2_25  ; Position 25: paddle (+16, +12)
-  ballx = player1x + 22 : bally = player1y + 17 : return
+  ballx = player1x + 25 : bally = player1y + 17 : return
 __BF2_26  ; Position 26: paddle (+16, +15)
-  ballx = player1x + 22 : bally = player1y + 21 : return
+  ballx = player1x + 25 : bally = player1y + 21 : return
 __BF2_27  ; Position 27: paddle (+14, +18)
-  ballx = player1x + 20 : bally = player1y + 25 : return
+  ballx = player1x + 22 : bally = player1y + 25 : return
 __BF2_28  ; Position 28: paddle (+13, +21)
-  ballx = player1x + 18 : bally = player1y + 29 : return
+  ballx = player1x + 20 : bally = player1y + 29 : return
 __BF2_29  ; Position 29: paddle (+11, +22)
   ballx = player1x + 15 : bally = player1y + 31 : return
 __BF2_30  ; Position 30: paddle (+9, +24)
