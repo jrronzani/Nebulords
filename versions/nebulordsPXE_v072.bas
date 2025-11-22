@@ -1257,139 +1257,139 @@ __Ball_Follow_P1
   temp_dir = p1_direction
   on temp_dir goto __BF1_0 __BF1_1 __BF1_2 __BF1_3 __BF1_4 __BF1_5 __BF1_6 __BF1_7 __BF1_8 __BF1_9 __BF1_10 __BF1_11 __BF1_12 __BF1_13 __BF1_14 __BF1_15 __BF1_16 __BF1_17 __BF1_18 __BF1_19 __BF1_20 __BF1_21 __BF1_22 __BF1_23 __BF1_24 __BF1_25 __BF1_26 __BF1_27 __BF1_28 __BF1_29 __BF1_30 __BF1_31
 
-__BF1_0  ; South - paddle at (+4, +28), adjusted offset (+6, +11) - lowered 7px total
+__BF1_0  ; Position 0: paddle (+4, +28)
   ballx = player0x + 10 : bally = player0y + 39 : return
-__BF1_1  ; SSW - paddle at (-1, +24), adjusted offset (+3, +7) - lowered 3px
-  ballx = player0x + 2 : bally = player0y + 31 : return
-__BF1_2  ; SW - paddle at (-5, +21), adjusted offset (0, +6) - lowered 2px
-  ballx = player0x - 5 : bally = player0y + 27 : return
-__BF1_3  ; WSW - paddle at (-8, +15), adjusted offset (0, +3) - lowered 1px
-  ballx = player0x - 8 : bally = player0y + 18 : return
-__BF1_4  ; West - paddle at (-8, +8), adjusted offset (0, 0)
-  ballx = player0x - 8 : bally = player0y + 8 : return
-__BF1_5  ; WNW - paddle at (-8, +1), adjusted offset (0, -2)
-  ballx = player0x - 8 : bally = player0y - 1 : return
-__BF1_6  ; NW - paddle at (-5, -5), adjusted offset (0, -4)
-  ballx = player0x - 5 : bally = player0y - 9 : return
-__BF1_7  ; NNW - paddle at (-2, -9), adjusted offset (+3, -4)
-  ballx = player0x + 1 : bally = player0y - 13 : return
-__BF1_8  ; North - paddle at (+4, -11), adjusted offset (+6, -4)
-  ballx = player0x + 10 : bally = player0y - 15 : return
-__BF1_9  ; NNE - paddle at (+8, -9), adjusted offset (+8, -4)
-  ballx = player0x + 16 : bally = player0y - 13 : return
-__BF1_10  ; NE - paddle at (+13, -5), adjusted offset (+10, -4)
-  ballx = player0x + 23 : bally = player0y - 9 : return
-__BF1_11  ; ENE - paddle at (+16, +1), adjusted offset (+11, -2)
-  ballx = player0x + 27 : bally = player0y - 1 : return
-__BF1_12  ; East - paddle at (+16, +8), adjusted offset (+11, 0)
-  ballx = player0x + 27 : bally = player0y + 8 : return
-__BF1_13  ; ESE - paddle at (+16, +15), adjusted offset (+11, +3) - lowered 1px
-  ballx = player0x + 27 : bally = player0y + 18 : return
-__BF1_14  ; SE - paddle at (+13, +21), adjusted offset (+10, +6) - lowered 2px
-  ballx = player0x + 23 : bally = player0y + 27 : return
-__BF1_15  ; SSE - paddle at (+9, +24), adjusted offset (+8, +7) - lowered 3px
-  ballx = player0x + 17 : bally = player0y + 31 : return
-__BF1_16
-  ballx = player0x + 13 : bally = player0y + 35 : return
-__BF1_17
-  ballx = player0x + 6 : bally = player0y + 35 : return
-__BF1_18
-  ballx = player0x - 1 : bally = player0y + 29 : return
-__BF1_19
-  ballx = player0x - 6 : bally = player0y + 22 : return
-__BF1_20
-  ballx = player0x - 8 : bally = player0y + 13 : return
-__BF1_21
-  ballx = player0x - 8 : bally = player0y + 3 : return
-__BF1_22
-  ballx = player0x - 6 : bally = player0y - 5 : return
-__BF1_23
-  ballx = player0x - 2 : bally = player0y - 11 : return
-__BF1_24
-  ballx = player0x + 5 : bally = player0y - 14 : return
-__BF1_25
-  ballx = player0x + 13 : bally = player0y - 14 : return
-__BF1_26
-  ballx = player0x + 19 : bally = player0y - 11 : return
-__BF1_27
-  ballx = player0x + 25 : bally = player0y - 5 : return
-__BF1_28
-  ballx = player0x + 27 : bally = player0y + 3 : return
-__BF1_29
-  ballx = player0x + 27 : bally = player0y + 13 : return
-__BF1_30
-  ballx = player0x + 25 : bally = player0y + 22 : return
-__BF1_31
-  ballx = player0x + 20 : bally = player0y + 29 : return
+__BF1_1  ; Position 1: paddle (+2, +26)
+  ballx = player0x + 6 : bally = player0y + 36 : return
+__BF1_2  ; Position 2: paddle (-1, +24)
+  ballx = player0x + 1 : bally = player0y + 34 : return
+__BF1_3  ; Position 3: paddle (-3, +22)
+  ballx = player0x - 3 : bally = player0y + 31 : return
+__BF1_4  ; Position 4: paddle (-5, +21)
+  ballx = player0x - 6 : bally = player0y + 29 : return
+__BF1_5  ; Position 5: paddle (-6, +18)
+  ballx = player0x - 8 : bally = player0y + 25 : return
+__BF1_6  ; Position 6: paddle (-8, +15)
+  ballx = player0x - 11 : bally = player0y + 21 : return
+__BF1_7  ; Position 7: paddle (-8, +12)
+  ballx = player0x - 11 : bally = player0y + 17 : return
+__BF1_8  ; Position 8: paddle (-8, +8)
+  ballx = player0x - 11 : bally = player0y + 11 : return
+__BF1_9  ; Position 9: paddle (-8, +4)
+  ballx = player0x - 11 : bally = player0y + 6 : return
+__BF1_10  ; Position 10: paddle (-8, +1)
+  ballx = player0x - 11 : bally = player0y + 1 : return
+__BF1_11  ; Position 11: paddle (-6, -2)
+  ballx = player0x - 8 : bally = player0y - 3 : return
+__BF1_12  ; Position 12: paddle (-5, -5)
+  ballx = player0x - 7 : bally = player0y - 7 : return
+__BF1_13  ; Position 13: paddle (-4, -7)
+  ballx = player0x - 5 : bally = player0y - 10 : return
+__BF1_14  ; Position 14: paddle (-2, -9)
+  ballx = player0x - 2 : bally = player0y - 13 : return
+__BF1_15  ; Position 15: paddle (+1, -10)
+  ballx = player0x + 2 : bally = player0y - 14 : return
+__BF1_16  ; Position 16: paddle (+4, -11)
+  ballx = player0x + 6 : bally = player0y - 15 : return
+__BF1_17  ; Position 17: paddle (+6, -10)
+  ballx = player0x + 9 : bally = player0y - 14 : return
+__BF1_18  ; Position 18: paddle (+8, -9)
+  ballx = player0x + 11 : bally = player0y - 13 : return
+__BF1_19  ; Position 19: paddle (+10, -7)
+  ballx = player0x + 14 : bally = player0y - 10 : return
+__BF1_20  ; Position 20: paddle (+13, -5)
+  ballx = player0x + 18 : bally = player0y - 7 : return
+__BF1_21  ; Position 21: paddle (+14, -2)
+  ballx = player0x + 20 : bally = player0y - 3 : return
+__BF1_22  ; Position 22: paddle (+16, +1)
+  ballx = player0x + 22 : bally = player0y + 1 : return
+__BF1_23  ; Position 23: paddle (+16, +4)
+  ballx = player0x + 22 : bally = player0y + 6 : return
+__BF1_24  ; Position 24: paddle (+16, +8)
+  ballx = player0x + 22 : bally = player0y + 11 : return
+__BF1_25  ; Position 25: paddle (+16, +12)
+  ballx = player0x + 22 : bally = player0y + 17 : return
+__BF1_26  ; Position 26: paddle (+16, +15)
+  ballx = player0x + 22 : bally = player0y + 21 : return
+__BF1_27  ; Position 27: paddle (+14, +18)
+  ballx = player0x + 20 : bally = player0y + 25 : return
+__BF1_28  ; Position 28: paddle (+13, +21)
+  ballx = player0x + 18 : bally = player0y + 29 : return
+__BF1_29  ; Position 29: paddle (+11, +22)
+  ballx = player0x + 15 : bally = player0y + 31 : return
+__BF1_30  ; Position 30: paddle (+9, +24)
+  ballx = player0x + 13 : bally = player0y + 34 : return
+__BF1_31  ; Position 31: paddle (+6, +26)
+  ballx = player0x + 9 : bally = player0y + 36 : return
 
 __Ball_Follow_P2
   temp_dir = p2_direction
   on temp_dir goto __BF2_0 __BF2_1 __BF2_2 __BF2_3 __BF2_4 __BF2_5 __BF2_6 __BF2_7 __BF2_8 __BF2_9 __BF2_10 __BF2_11 __BF2_12 __BF2_13 __BF2_14 __BF2_15 __BF2_16 __BF2_17 __BF2_18 __BF2_19 __BF2_20 __BF2_21 __BF2_22 __BF2_23 __BF2_24 __BF2_25 __BF2_26 __BF2_27 __BF2_28 __BF2_29 __BF2_30 __BF2_31
 
-__BF2_0  ; South - paddle at (+4, +28), adjusted offset (+6, +11) - lowered 7px total
+__BF2_0  ; Position 0: paddle (+4, +28)
   ballx = player1x + 10 : bally = player1y + 39 : return
-__BF2_1  ; SSW - paddle at (-1, +24), adjusted offset (+3, +7) - lowered 3px
-  ballx = player1x + 2 : bally = player1y + 31 : return
-__BF2_2  ; SW - paddle at (-5, +21), adjusted offset (0, +6) - lowered 2px
-  ballx = player1x - 5 : bally = player1y + 27 : return
-__BF2_3  ; WSW - paddle at (-8, +15), adjusted offset (0, +3) - lowered 1px
-  ballx = player1x - 8 : bally = player1y + 18 : return
-__BF2_4  ; West - paddle at (-8, +8), adjusted offset (0, 0)
-  ballx = player1x - 8 : bally = player1y + 8 : return
-__BF2_5  ; WNW - paddle at (-8, +1), adjusted offset (0, -2)
-  ballx = player1x - 8 : bally = player1y - 1 : return
-__BF2_6  ; NW - paddle at (-5, -5), adjusted offset (0, -4)
-  ballx = player1x - 5 : bally = player1y - 9 : return
-__BF2_7  ; NNW - paddle at (-2, -9), adjusted offset (+3, -4)
-  ballx = player1x + 1 : bally = player1y - 13 : return
-__BF2_8  ; North - paddle at (+4, -11), adjusted offset (+6, -4)
-  ballx = player1x + 10 : bally = player1y - 15 : return
-__BF2_9  ; NNE - paddle at (+8, -9), adjusted offset (+8, -4)
-  ballx = player1x + 16 : bally = player1y - 13 : return
-__BF2_10  ; NE - paddle at (+13, -5), adjusted offset (+10, -4)
-  ballx = player1x + 23 : bally = player1y - 9 : return
-__BF2_11  ; ENE - paddle at (+16, +1), adjusted offset (+11, -2)
-  ballx = player1x + 27 : bally = player1y - 1 : return
-__BF2_12  ; East - paddle at (+16, +8), adjusted offset (+11, 0)
-  ballx = player1x + 27 : bally = player1y + 8 : return
-__BF2_13  ; ESE - paddle at (+16, +15), adjusted offset (+11, +3) - lowered 1px
-  ballx = player1x + 27 : bally = player1y + 18 : return
-__BF2_14  ; SE - paddle at (+13, +21), adjusted offset (+10, +6) - lowered 2px
-  ballx = player1x + 23 : bally = player1y + 27 : return
-__BF2_15  ; SSE - paddle at (+9, +24), adjusted offset (+8, +7) - lowered 3px
-  ballx = player1x + 17 : bally = player1y + 31 : return
-__BF2_16
-  ballx = player1x + 13 : bally = player1y + 35 : return
-__BF2_17
-  ballx = player1x + 6 : bally = player1y + 35 : return
-__BF2_18
-  ballx = player1x - 1 : bally = player1y + 29 : return
-__BF2_19
-  ballx = player1x - 6 : bally = player1y + 22 : return
-__BF2_20
-  ballx = player1x - 8 : bally = player1y + 13 : return
-__BF2_21
-  ballx = player1x - 8 : bally = player1y + 3 : return
-__BF2_22
-  ballx = player1x - 6 : bally = player1y - 5 : return
-__BF2_23
-  ballx = player1x - 2 : bally = player1y - 11 : return
-__BF2_24
-  ballx = player1x + 5 : bally = player1y - 14 : return
-__BF2_25
-  ballx = player1x + 13 : bally = player1y - 14 : return
-__BF2_26
-  ballx = player1x + 19 : bally = player1y - 11 : return
-__BF2_27
-  ballx = player1x + 25 : bally = player1y - 5 : return
-__BF2_28
-  ballx = player1x + 27 : bally = player1y + 3 : return
-__BF2_29
-  ballx = player1x + 27 : bally = player1y + 13 : return
-__BF2_30
-  ballx = player1x + 25 : bally = player1y + 22 : return
-__BF2_31
-  ballx = player1x + 20 : bally = player1y + 29 : return
+__BF2_1  ; Position 1: paddle (+2, +26)
+  ballx = player1x + 6 : bally = player1y + 36 : return
+__BF2_2  ; Position 2: paddle (-1, +24)
+  ballx = player1x + 1 : bally = player1y + 34 : return
+__BF2_3  ; Position 3: paddle (-3, +22)
+  ballx = player1x - 3 : bally = player1y + 31 : return
+__BF2_4  ; Position 4: paddle (-5, +21)
+  ballx = player1x - 6 : bally = player1y + 29 : return
+__BF2_5  ; Position 5: paddle (-6, +18)
+  ballx = player1x - 8 : bally = player1y + 25 : return
+__BF2_6  ; Position 6: paddle (-8, +15)
+  ballx = player1x - 11 : bally = player1y + 21 : return
+__BF2_7  ; Position 7: paddle (-8, +12)
+  ballx = player1x - 11 : bally = player1y + 17 : return
+__BF2_8  ; Position 8: paddle (-8, +8)
+  ballx = player1x - 11 : bally = player1y + 11 : return
+__BF2_9  ; Position 9: paddle (-8, +4)
+  ballx = player1x - 11 : bally = player1y + 6 : return
+__BF2_10  ; Position 10: paddle (-8, +1)
+  ballx = player1x - 11 : bally = player1y + 1 : return
+__BF2_11  ; Position 11: paddle (-6, -2)
+  ballx = player1x - 8 : bally = player1y - 3 : return
+__BF2_12  ; Position 12: paddle (-5, -5)
+  ballx = player1x - 7 : bally = player1y - 7 : return
+__BF2_13  ; Position 13: paddle (-4, -7)
+  ballx = player1x - 5 : bally = player1y - 10 : return
+__BF2_14  ; Position 14: paddle (-2, -9)
+  ballx = player1x - 2 : bally = player1y - 13 : return
+__BF2_15  ; Position 15: paddle (+1, -10)
+  ballx = player1x + 2 : bally = player1y - 14 : return
+__BF2_16  ; Position 16: paddle (+4, -11)
+  ballx = player1x + 6 : bally = player1y - 15 : return
+__BF2_17  ; Position 17: paddle (+6, -10)
+  ballx = player1x + 9 : bally = player1y - 14 : return
+__BF2_18  ; Position 18: paddle (+8, -9)
+  ballx = player1x + 11 : bally = player1y - 13 : return
+__BF2_19  ; Position 19: paddle (+10, -7)
+  ballx = player1x + 14 : bally = player1y - 10 : return
+__BF2_20  ; Position 20: paddle (+13, -5)
+  ballx = player1x + 18 : bally = player1y - 7 : return
+__BF2_21  ; Position 21: paddle (+14, -2)
+  ballx = player1x + 20 : bally = player1y - 3 : return
+__BF2_22  ; Position 22: paddle (+16, +1)
+  ballx = player1x + 22 : bally = player1y + 1 : return
+__BF2_23  ; Position 23: paddle (+16, +4)
+  ballx = player1x + 22 : bally = player1y + 6 : return
+__BF2_24  ; Position 24: paddle (+16, +8)
+  ballx = player1x + 22 : bally = player1y + 11 : return
+__BF2_25  ; Position 25: paddle (+16, +12)
+  ballx = player1x + 22 : bally = player1y + 17 : return
+__BF2_26  ; Position 26: paddle (+16, +15)
+  ballx = player1x + 22 : bally = player1y + 21 : return
+__BF2_27  ; Position 27: paddle (+14, +18)
+  ballx = player1x + 20 : bally = player1y + 25 : return
+__BF2_28  ; Position 28: paddle (+13, +21)
+  ballx = player1x + 18 : bally = player1y + 29 : return
+__BF2_29  ; Position 29: paddle (+11, +22)
+  ballx = player1x + 15 : bally = player1y + 31 : return
+__BF2_30  ; Position 30: paddle (+9, +24)
+  ballx = player1x + 13 : bally = player1y + 34 : return
+__BF2_31  ; Position 31: paddle (+6, +26)
+  ballx = player1x + 9 : bally = player1y + 36 : return
 
 
   ;***************************************************************
@@ -1558,8 +1558,24 @@ end
   player2x = player0x + 4 : player2y = player0y + 28
   return
 
-; Direction 1: SSW (interpolated)
+; Direction 1: Midpoint 0→1
 __P1P_1
+  player2:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player2x = player0x + 2 : player2y = player0y + 26
+  return
+
+; Direction 2: Original position
+__P1P_2
   player2:
   %011110
   %111111
@@ -1574,8 +1590,24 @@ end
   player2x = player0x - 1 : player2y = player0y + 24
   return
 
-; Direction 2: SW (interpolated)
-__P1P_2
+; Direction 3: Midpoint 2→4
+__P1P_3
+  player2:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player2x = player0x - 3 : player2y = player0y + 22
+  return
+
+; Direction 4: Original position
+__P1P_4
   player2:
   %011110
   %111111
@@ -1590,8 +1622,24 @@ end
   player2x = player0x - 5 : player2y = player0y + 21
   return
 
-; Direction 3: WSW (interpolated)
-__P1P_3
+; Direction 5: Midpoint 4→6
+__P1P_5
+  player2:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player2x = player0x - 6 : player2y = player0y + 18
+  return
+
+; Direction 6: Original position
+__P1P_6
   player2:
   %011110
   %111111
@@ -1606,8 +1654,24 @@ end
   player2x = player0x - 8 : player2y = player0y + 15
   return
 
-; Direction 4: West (MANUAL)
-__P1P_4
+; Direction 7: Midpoint 6→8
+__P1P_7
+  player2:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player2x = player0x - 8 : player2y = player0y + 12
+  return
+
+; Direction 8: Original position (West)
+__P1P_8
   player2:
   %011110
   %111111
@@ -1622,8 +1686,24 @@ end
   player2x = player0x - 8 : player2y = player0y + 8
   return
 
-; Direction 5: WNW (interpolated)
-__P1P_5
+; Direction 9: Midpoint 8→10
+__P1P_9
+  player2:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player2x = player0x - 8 : player2y = player0y + 4
+  return
+
+; Direction 10: Original position
+__P1P_10
   player2:
   %011110
   %111111
@@ -1638,8 +1718,24 @@ end
   player2x = player0x - 8 : player2y = player0y + 1
   return
 
-; Direction 6: NW (interpolated)
-__P1P_6
+; Direction 11: Midpoint 10→12
+__P1P_11
+  player2:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player2x = player0x - 6 : player2y = player0y - 2
+  return
+
+; Direction 12: Original position
+__P1P_12
   player2:
   %011110
   %111111
@@ -1654,8 +1750,24 @@ end
   player2x = player0x - 5 : player2y = player0y - 5
   return
 
-; Direction 7: NNW (interpolated)
-__P1P_7
+; Direction 13: Midpoint 12→14
+__P1P_13
+  player2:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player2x = player0x - 4 : player2y = player0y - 7
+  return
+
+; Direction 14: Original position
+__P1P_14
   player2:
   %011110
   %111111
@@ -1670,248 +1782,8 @@ end
   player2x = player0x - 2 : player2y = player0y - 9
   return
 
-; Direction 8: North (MANUAL)
-__P1P_8
-  player2:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player2x = player0x + 4 : player2y = player0y - 11
-  return
-
-; Direction 9: NNE (interpolated)
-__P1P_9
-  player2:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player2x = player0x + 8 : player2y = player0y - 9
-  return
-
-; Direction 10: NE (interpolated)
-__P1P_10
-  player2:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player2x = player0x + 13 : player2y = player0y - 5
-  return
-
-; Direction 11: ENE (interpolated)
-__P1P_11
-  player2:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player2x = player0x + 16 : player2y = player0y + 1
-  return
-
-; Direction 12: East (MANUAL)
-__P1P_12
-  player2:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player2x = player0x + 16 : player2y = player0y + 8
-  return
-
-; Direction 13: ESE (interpolated)
-__P1P_13
-  player2:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player2x = player0x + 16 : player2y = player0y + 15
-  return
-
-; Direction 14: SE (interpolated)
-__P1P_14
-  player2:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player2x = player0x + 13 : player2y = player0y + 21
-  return
-
-; Direction 15: SSE (interpolated)
+; Direction 15: Midpoint 14→16
 __P1P_15
-  player2:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player2x = player0x + 9 : player2y = player0y + 24
-  return
-
-; Dir 16-31: Midpoint positions (use same sprite as previous even direction)
-__P1P_16
-  player2:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player2x = player0x + 6 : player2y = player0y + 26
-  return
-__P1P_17
-  player2:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player2x = player0x + 1 : player2y = player0y + 26
-  return
-__P1P_18
-  player2:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player2x = player0x - 3 : player2y = player0y + 22
-  return
-__P1P_19
-  player2:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player2x = player0x - 6 : player2y = player0y + 18
-  return
-__P1P_20
-  player2:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player2x = player0x - 8 : player2y = player0y + 11
-  return
-__P1P_21
-  player2:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player2x = player0x - 8 : player2y = player0y + 4
-  return
-__P1P_22
-  player2:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player2x = player0x - 6 : player2y = player0y - 2
-  return
-__P1P_23
-  player2:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player2x = player0x - 3 : player2y = player0y - 7
-  return
-__P1P_24
   player2:
   %011110
   %111111
@@ -1925,7 +1797,24 @@ __P1P_24
 end
   player2x = player0x + 1 : player2y = player0y - 10
   return
-__P1P_25
+
+; Direction 16: Original position (North)
+__P1P_16
+  player2:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player2x = player0x + 4 : player2y = player0y - 11
+  return
+; Direction 17: Midpoint 16→18
+__P1P_17
   player2:
   %011110
   %111111
@@ -1939,7 +1828,23 @@ __P1P_25
 end
   player2x = player0x + 6 : player2y = player0y - 10
   return
-__P1P_26
+; Direction 18: Original position
+__P1P_18
+  player2:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player2x = player0x + 8 : player2y = player0y - 9
+  return
+; Direction 19: Midpoint 18→20
+__P1P_19
   player2:
   %011110
   %111111
@@ -1953,7 +1858,23 @@ __P1P_26
 end
   player2x = player0x + 10 : player2y = player0y - 7
   return
-__P1P_27
+; Direction 20: Original position
+__P1P_20
+  player2:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player2x = player0x + 13 : player2y = player0y - 5
+  return
+; Direction 21: Midpoint 20→22
+__P1P_21
   player2:
   %011110
   %111111
@@ -1967,7 +1888,23 @@ __P1P_27
 end
   player2x = player0x + 14 : player2y = player0y - 2
   return
-__P1P_28
+; Direction 22: Original position
+__P1P_22
+  player2:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player2x = player0x + 16 : player2y = player0y + 1
+  return
+; Direction 23: Midpoint 22→24
+__P1P_23
   player2:
   %011110
   %111111
@@ -1981,7 +1918,8 @@ __P1P_28
 end
   player2x = player0x + 16 : player2y = player0y + 4
   return
-__P1P_29
+; Direction 24: Original position (East)
+__P1P_24
   player2:
   %011110
   %111111
@@ -1993,9 +1931,40 @@ __P1P_29
   %111111
   %011110
 end
-  player2x = player0x + 16 : player2y = player0y + 11
+  player2x = player0x + 16 : player2y = player0y + 8
   return
-__P1P_30
+; Direction 25: Midpoint 24→26
+__P1P_25
+  player2:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player2x = player0x + 16 : player2y = player0y + 12
+  return
+; Direction 26: Original position
+__P1P_26
+  player2:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player2x = player0x + 16 : player2y = player0y + 15
+  return
+; Direction 27: Midpoint 26→28
+__P1P_27
   player2:
   %011110
   %111111
@@ -2009,7 +1978,23 @@ __P1P_30
 end
   player2x = player0x + 14 : player2y = player0y + 18
   return
-__P1P_31
+; Direction 28: Original position
+__P1P_28
+  player2:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player2x = player0x + 13 : player2y = player0y + 21
+  return
+; Direction 29: Midpoint 28→30
+__P1P_29
   player2:
   %011110
   %111111
@@ -2022,6 +2007,36 @@ __P1P_31
   %011110
 end
   player2x = player0x + 11 : player2y = player0y + 22
+  return
+; Direction 30: Original position
+__P1P_30
+  player2:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player2x = player0x + 9 : player2y = player0y + 24
+  return
+; Direction 31: Midpoint 30→0
+__P1P_31
+  player2:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player2x = player0x + 6 : player2y = player0y + 26
   return
 
 
@@ -2050,8 +2065,24 @@ end
   player3x = player1x + 4 : player3y = player1y + 28
   return
 
-; Direction 1: SSW (same as P1)
+; Direction 1: Midpoint 0→2
 __P2P_1
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x + 2 : player3y = player1y + 26
+  return
+
+; Direction 2: Original position
+__P2P_2
   player3:
   %011110
   %111111
@@ -2066,8 +2097,24 @@ end
   player3x = player1x - 1 : player3y = player1y + 24
   return
 
-; Direction 2: SW (same as P1)
-__P2P_2
+; Direction 3: Midpoint 2→4
+__P2P_3
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x - 3 : player3y = player1y + 22
+  return
+
+; Direction 4: Original position
+__P2P_4
   player3:
   %011110
   %111111
@@ -2082,8 +2129,24 @@ end
   player3x = player1x - 5 : player3y = player1y + 21
   return
 
-; Direction 3: WSW (same as P1)
-__P2P_3
+; Direction 5: Midpoint 4→6
+__P2P_5
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x - 6 : player3y = player1y + 18
+  return
+
+; Direction 6: Original position
+__P2P_6
   player3:
   %011110
   %111111
@@ -2098,8 +2161,24 @@ end
   player3x = player1x - 8 : player3y = player1y + 15
   return
 
-; Direction 4: West (same as P1)
-__P2P_4
+; Direction 7: Midpoint 6→8
+__P2P_7
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x - 8 : player3y = player1y + 12
+  return
+
+; Direction 8: Original position (West)
+__P2P_8
   player3:
   %011110
   %111111
@@ -2114,8 +2193,24 @@ end
   player3x = player1x - 8 : player3y = player1y + 8
   return
 
-; Direction 5: WNW (same as P1)
-__P2P_5
+; Direction 9: Midpoint 8→10
+__P2P_9
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x - 8 : player3y = player1y + 4
+  return
+
+; Direction 10: Original position
+__P2P_10
   player3:
   %011110
   %111111
@@ -2130,216 +2225,8 @@ end
   player3x = player1x - 8 : player3y = player1y + 1
   return
 
-; Direction 6: NW (calculated from P1 + offset)
-__P2P_6
-  player3:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player3x = player1x - 6 : player3y = player1y - 5
-  return
-
-; Direction 7: NNW (calculated from P1 + offset)
-__P2P_7
-  player3:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player3x = player1x - 3 : player3y = player1y - 9
-  return
-
-; Direction 8: North (calculated from P1 + offset)
-__P2P_8
-  player3:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player3x = player1x + 3 : player3y = player1y - 11
-  return
-
-; Direction 9: NNE (calculated from P1 + offset)
-__P2P_9
-  player3:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player3x = player1x + 7 : player3y = player1y - 9
-  return
-
-; Direction 10: NE (calculated from P1 + offset)
-__P2P_10
-  player3:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player3x = player1x + 12 : player3y = player1y - 5
-  return
-
-; Direction 11: ENE (calculated from P1 + offset)
+; Direction 11: Midpoint 10→12
 __P2P_11
-  player3:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player3x = player1x + 15 : player3y = player1y + 1
-  return
-
-; Direction 12: East (calculated from P1 + offset)
-__P2P_12
-  player3:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player3x = player1x + 15 : player3y = player1y + 8
-  return
-
-; Direction 13: ESE (calculated from P1 + offset)
-__P2P_13
-  player3:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player3x = player1x + 15 : player3y = player1y + 15
-  return
-
-; Direction 14: SE (calculated from P1 + offset)
-__P2P_14
-  player3:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player3x = player1x + 12 : player3y = player1y + 21
-  return
-
-; Direction 15: SSE (calculated from P1 + offset)
-__P2P_15
-  player3:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player3x = player1x + 8 : player3y = player1y + 24
-  return
-
-; Dir 16-31: Midpoint positions for P2
-__P2P_16
-  player3:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player3x = player1x + 6 : player3y = player1y + 26
-  return
-__P2P_17
-  goto __P2P_16
-__P2P_18
-  player3:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player3x = player1x - 3 : player3y = player1y + 22
-  return
-__P2P_19
-  goto __P2P_18
-__P2P_20
-  player3:
-  %011110
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %111111
-  %011110
-end
-  player3x = player1x - 8 : player3y = player1y + 11
-  return
-__P2P_21
-  goto __P2P_20
-__P2P_22
   player3:
   %011110
   %111111
@@ -2353,9 +2240,57 @@ __P2P_22
 end
   player3x = player1x - 6 : player3y = player1y - 2
   return
-__P2P_23
-  goto __P2P_22
-__P2P_24
+
+; Direction 12: Original position
+__P2P_12
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x - 5 : player3y = player1y - 5
+  return
+
+; Direction 13: Midpoint 12→14
+__P2P_13
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x - 4 : player3y = player1y - 7
+  return
+
+; Direction 14: Original position
+__P2P_14
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x - 2 : player3y = player1y - 9
+  return
+
+; Direction 15: Midpoint 14→16
+__P2P_15
   player3:
   %011110
   %111111
@@ -2369,9 +2304,54 @@ __P2P_24
 end
   player3x = player1x + 1 : player3y = player1y - 10
   return
-__P2P_25
-  goto __P2P_24
-__P2P_26
+
+; Direction 16: Original position (North)
+__P2P_16
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x + 4 : player3y = player1y - 11
+  return
+; Direction 17: Midpoint 16→18
+__P2P_17
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x + 6 : player3y = player1y - 10
+  return
+; Direction 18: Original position
+__P2P_18
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x + 8 : player3y = player1y - 9
+  return
+; Direction 19: Midpoint 18→20
+__P2P_19
   player3:
   %011110
   %111111
@@ -2385,9 +2365,53 @@ __P2P_26
 end
   player3x = player1x + 10 : player3y = player1y - 7
   return
-__P2P_27
-  goto __P2P_26
-__P2P_28
+; Direction 20: Original position
+__P2P_20
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x + 13 : player3y = player1y - 5
+  return
+; Direction 21: Midpoint 20→22
+__P2P_21
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x + 14 : player3y = player1y - 2
+  return
+; Direction 22: Original position
+__P2P_22
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x + 16 : player3y = player1y + 1
+  return
+; Direction 23: Midpoint 22→24
+__P2P_23
   player3:
   %011110
   %111111
@@ -2401,9 +2425,53 @@ __P2P_28
 end
   player3x = player1x + 16 : player3y = player1y + 4
   return
-__P2P_29
-  goto __P2P_28
-__P2P_30
+; Direction 24: Original position (East)
+__P2P_24
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x + 16 : player3y = player1y + 8
+  return
+; Direction 25: Midpoint 24→26
+__P2P_25
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x + 16 : player3y = player1y + 12
+  return
+; Direction 26: Original position
+__P2P_26
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x + 16 : player3y = player1y + 15
+  return
+; Direction 27: Midpoint 26→28
+__P2P_27
   player3:
   %011110
   %111111
@@ -2417,8 +2485,66 @@ __P2P_30
 end
   player3x = player1x + 14 : player3y = player1y + 18
   return
+; Direction 28: Original position
+__P2P_28
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x + 13 : player3y = player1y + 21
+  return
+; Direction 29: Midpoint 28→30
+__P2P_29
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x + 11 : player3y = player1y + 22
+  return
+; Direction 30: Original position
+__P2P_30
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x + 9 : player3y = player1y + 24
+  return
+; Direction 31: Midpoint 30→0
 __P2P_31
-  goto __P2P_30
+  player3:
+  %011110
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %111111
+  %011110
+end
+  player3x = player1x + 6 : player3y = player1y + 26
+  return
 
 
   ;***************************************************************
