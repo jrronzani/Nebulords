@@ -1254,7 +1254,7 @@ __P2_Brick_Bounce
   ;  Ball positioned just outside paddle sprite radius
   ;***************************************************************
 __Ball_Follow_P1
-  temp_dir = p1_direction
+  temp_dir = p1_direction / 2
   on temp_dir goto __BF1_0 __BF1_1 __BF1_2 __BF1_3 __BF1_4 __BF1_5 __BF1_6 __BF1_7 __BF1_8 __BF1_9 __BF1_10 __BF1_11 __BF1_12 __BF1_13 __BF1_14 __BF1_15
 
 __BF1_0  ; South - paddle at (+4, +28), adjusted offset (+6, +11) - lowered 7px total
@@ -1291,7 +1291,7 @@ __BF1_15  ; SSE - paddle at (+9, +24), adjusted offset (+8, +7) - lowered 3px
   ballx = player0x + 17 : bally = player0y + 31 : return
 
 __Ball_Follow_P2
-  temp_dir = p2_direction
+  temp_dir = p2_direction / 2
   on temp_dir goto __BF2_0 __BF2_1 __BF2_2 __BF2_3 __BF2_4 __BF2_5 __BF2_6 __BF2_7 __BF2_8 __BF2_9 __BF2_10 __BF2_11 __BF2_12 __BF2_13 __BF2_14 __BF2_15
 
 __BF2_0  ; South - paddle at (+4, +28), adjusted offset (+6, +11) - lowered 7px total
