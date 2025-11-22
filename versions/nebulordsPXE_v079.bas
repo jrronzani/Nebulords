@@ -127,6 +127,7 @@
   ;  PXE Kernel Setup
   ;***************************************************************
   set kernel PXE
+  const pfscore = 1              ; Enable score display
 
   ; Set Playfield to full 40 pixel width
   PF_MODE = $fd
