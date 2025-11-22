@@ -160,7 +160,7 @@
   ;***************************************************************
 
 ; P1 Paddle position offsets (add to player0x/player0y)
-data p1_paddle_x
+   data _p1_paddle_x
   4, 4, 3, 2, 2, 1, 0, 0, -1, -2, -2, -2, -3, -4, -4, -4
   -5, -5, -6, -6, -6, -6, -7, -8, -8, -8, -8, -8, -8, -8, -8, -8
   -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -7, -6, -6, -6, -6, -5
@@ -171,7 +171,7 @@ data p1_paddle_x
   13, 12, 12, 12, 11, 10, 10, 10, 9, 8, 8, 7, 6, 6, 5, 4
 end
 
-data p1_paddle_y
+   data _p1_paddle_y
   28, 28, 27, 26, 26, 26, 25, 24, 24, 24, 23, 22, 22, 22, 22, 21
   21, 20, 20, 19, 18, 17, 16, 16, 15, 14, 14, 13, 12, 11, 10, 9
   8, 7, 6, 5, 4, 3, 2, 2, 1, 0, 0, -1, -2, -3, -4, -4
@@ -183,7 +183,7 @@ data p1_paddle_y
 end
 
 ; P1 Ball follow position offsets (add to player0x/player0y)
-data p1_ball_x
+   data _p1_ball_x
   10, 9, 8, 7, 6, 5, 4, 2, 1, 0, -1, -2, -3, -3, -3, -3
   -3, -4, -4, -4, -5, -6, -6, -6, -7, -7, -7, -7, -7, -7, -7, -7
   -7, -7, -7, -7, -7, -7, -7, -7, -7, -6, -6, -6, -5, -4, -4, -4
@@ -194,7 +194,7 @@ data p1_ball_x
   21, 20, 18, 16, 15, 14, 14, 14, 13, 12, 11, 10, 9, 9, 10, 10
 end
 
-data p1_ball_y
+   data _p1_ball_y
   39, 38, 38, 37, 36, 36, 35, 34, 34, 33, 32, 32, 31, 30, 30, 30
   29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 14, 12
   11, 10, 8, 7, 6, 5, 4, 2, 1, 0, -1, -2, -3, -4, -5, -6
@@ -206,7 +206,7 @@ data p1_ball_y
 end
 
 ; P2 Paddle position offsets (add to player1x/player1y)
-data p2_paddle_x
+   data _p2_paddle_x
   4, 4, 3, 2, 2, 1, 0, 0, -1, -2, -2, -2, -3, -4, -4, -4
   -5, -5, -6, -6, -6, -6, -7, -8, -8, -8, -8, -8, -8, -8, -8, -8
   -8, -8, -8, -8, -8, -8, -8, -8, -8, -8, -7, -6, -6, -6, -6, -5
@@ -217,7 +217,7 @@ data p2_paddle_x
   13, 12, 12, 12, 11, 10, 10, 10, 9, 8, 8, 7, 6, 6, 5, 4
 end
 
-data p2_paddle_y
+   data _p2_paddle_y
   28, 28, 27, 26, 26, 26, 25, 24, 24, 24, 23, 22, 22, 22, 22, 21
   21, 20, 20, 19, 18, 17, 16, 16, 15, 14, 14, 13, 12, 11, 10, 9
   8, 7, 6, 5, 4, 3, 2, 2, 1, 0, 0, -1, -2, -3, -4, -4
@@ -229,7 +229,7 @@ data p2_paddle_y
 end
 
 ; P2 Ball follow position offsets (add to player1x/player1y)
-data p2_ball_x
+   data _p2_ball_x
   10, 9, 8, 7, 6, 5, 4, 2, 1, 0, -1, -2, -3, -3, -3, -3
   -3, -4, -4, -4, -5, -6, -6, -6, -7, -7, -7, -7, -7, -7, -7, -7
   -7, -7, -7, -7, -7, -7, -7, -7, -7, -6, -6, -6, -5, -4, -4, -4
@@ -240,7 +240,7 @@ data p2_ball_x
   21, 20, 18, 16, 15, 14, 14, 14, 13, 12, 11, 10, 9, 9, 10, 10
 end
 
-data p2_ball_y
+   data _p2_ball_y
   39, 38, 38, 37, 36, 36, 35, 34, 34, 33, 32, 32, 31, 30, 30, 30
   29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 14, 12
   11, 10, 8, 7, 6, 5, 4, 2, 1, 0, -1, -2, -3, -4, -5, -6
@@ -554,8 +554,8 @@ __P2_Button_Done
   ;  Ball physics - FIRST (before ship moves, same moment in time)
   ;  Now uses lookup tables for smooth 128-position control!
   ;***************************************************************
-  if ball_state = 1 then temp1 = p1_ball_x[p1_direction] : temp2 = p1_ball_y[p1_direction] : ballx = player0x + temp1 : bally = player0y + temp2 : goto __Skip_Ball_Physics
-  if ball_state = 2 then temp1 = p2_ball_x[p2_direction] : temp2 = p2_ball_y[p2_direction] : ballx = player1x + temp1 : bally = player1y + temp2 : goto __Skip_Ball_Physics
+  if ball_state = 1 then temp1 = _p1_ball_x[p1_direction] : temp2 = _p1_ball_y[p1_direction] : ballx = player0x + temp1 : bally = player0y + temp2 : goto __Skip_Ball_Physics
+  if ball_state = 2 then temp1 = _p2_ball_x[p2_direction] : temp2 = _p2_ball_y[p2_direction] : ballx = player1x + temp1 : bally = player1y + temp2 : goto __Skip_Ball_Physics
 
   ;***************************************************************
   ;  Ball/Ship Collision Detection - Brick breaking
@@ -668,8 +668,8 @@ __Skip_Ball_Physics
   %111111
   %011110
 end
-  temp1 = p1_paddle_x[p1_direction]
-  temp2 = p1_paddle_y[p1_direction]
+  temp1 = _p1_paddle_x[p1_direction]
+  temp2 = _p1_paddle_y[p1_direction]
   player2x = player0x + temp1
   player2y = player0y + temp2
 
@@ -685,8 +685,8 @@ end
   %111111
   %011110
 end
-  temp1 = p2_paddle_x[p2_direction]
-  temp2 = p2_paddle_y[p2_direction]
+  temp1 = _p2_paddle_x[p2_direction]
+  temp2 = _p2_paddle_y[p2_direction]
   player3x = player1x + temp1
   player3y = player1y + temp2
 
