@@ -1550,31 +1550,20 @@ __Award_P2_Win
   return
 
 __Draw_Scores
-  ; Draw score blocks in playfield corners
-  ; Each win = vertical block (4 rows tall), spaced 2 columns apart
+  ; Draw score blocks in playfield corners (unrolled for efficiency)
+  ; P1 (top-left): Rows 2-5, columns 2,4,6,8,10
+  if p1_wins > 0 then pfpixel 2 2 on : pfpixel 2 3 on : pfpixel 2 4 on : pfpixel 2 5 on
+  if p1_wins > 1 then pfpixel 4 2 on : pfpixel 4 3 on : pfpixel 4 4 on : pfpixel 4 5 on
+  if p1_wins > 2 then pfpixel 6 2 on : pfpixel 6 3 on : pfpixel 6 4 on : pfpixel 6 5 on
+  if p1_wins > 3 then pfpixel 8 2 on : pfpixel 8 3 on : pfpixel 8 4 on : pfpixel 8 5 on
+  if p1_wins > 4 then pfpixel 10 2 on : pfpixel 10 3 on : pfpixel 10 4 on : pfpixel 10 5 on
 
-  ; P1 (top-left): Rows 2-5, start column 2, grow right
-  temp1 = 0
-__Draw_P1_Loop
-  if temp1 >= p1_wins then goto __Draw_P2
-  temp2 = 2 + (temp1 * 2)  ; Column: 2, 4, 6, 8, 10 (for wins 0-4)
-  pfpixel temp2 2 on : pfpixel temp2 3 on : pfpixel temp2 4 on : pfpixel temp2 5 on
-  temp1 = temp1 + 1
-  goto __Draw_P1_Loop
-
-__Draw_P2
-  ; P2 (top-right): Rows 2-5, start column 37, grow left
-  temp1 = 0
-__Draw_P2_Loop
-  if temp1 >= p2_wins then goto __Draw_Scores_Done
-  temp2 = 37 - (temp1 * 2)  ; Column: 37, 35, 33, 31, 29 (for wins 0-4)
-  pfpixel temp2 2 on : pfpixel temp2 3 on : pfpixel temp2 4 on : pfpixel temp2 5 on
-  temp1 = temp1 + 1
-  goto __Draw_P2_Loop
-
-  ; TODO: Add P3 and P4 when needed (currently 2-player game)
-
-__Draw_Scores_Done
+  ; P2 (top-right): Rows 2-5, columns 37,35,33,31,29
+  if p2_wins > 0 then pfpixel 37 2 on : pfpixel 37 3 on : pfpixel 37 4 on : pfpixel 37 5 on
+  if p2_wins > 1 then pfpixel 35 2 on : pfpixel 35 3 on : pfpixel 35 4 on : pfpixel 35 5 on
+  if p2_wins > 2 then pfpixel 33 2 on : pfpixel 33 3 on : pfpixel 33 4 on : pfpixel 33 5 on
+  if p2_wins > 3 then pfpixel 31 2 on : pfpixel 31 3 on : pfpixel 31 4 on : pfpixel 31 5 on
+  if p2_wins > 4 then pfpixel 29 2 on : pfpixel 29 3 on : pfpixel 29 4 on : pfpixel 29 5 on
   return
 
 __Game_Over
