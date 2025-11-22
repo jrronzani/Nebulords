@@ -1421,47 +1421,53 @@ __Round_Reset
   ;  P3: rows 166-169 (orange), P4: rows 170-173 (green)
   ;***************************************************************
 __Draw_Scores
-  ; Clear score area first
-  temp1 = 2
-  temp2 = 158
-__Clear_Score_Loop
-  if temp2 > 173 then goto __Draw_P1_Score
-  pfpixel temp1 temp2 off : pfpixel temp1+1 temp2 off : pfpixel temp1+2 temp2 off
-  pfpixel temp1+3 temp2 off : pfpixel temp1+4 temp2 off : pfpixel temp1+5 temp2 off
-  pfpixel temp1+6 temp2 off : pfpixel temp1+7 temp2 off : pfpixel temp1+8 temp2 off
-  pfpixel temp1+9 temp2 off : pfpixel temp1+10 temp2 off
-  temp2 = temp2 + 1
-  goto __Clear_Score_Loop
-
-__Draw_P1_Score
-  ; Draw P1 score blocks (each win = one 2-pixel wide block)
+  ; Draw P1 score blocks (each win = one 2x4 block in blue area)
+  ; P1 area is Y=158-161
   temp1 = p1_score
   temp2 = 2  ; X position
-  temp3 = 158  ; Y position (P1 area)
+  temp3 = 158  ; Y position
+  temp4 = 0  ; Counter
 __P1_Score_Loop
-  if temp1 = 0 then goto __Draw_P2_Score
+  if temp4 >= temp1 then goto __Draw_P2_Score
   ; Draw a 2x4 block
-  pfpixel temp2 temp3 on : pfpixel temp2+1 temp3 on
-  pfpixel temp2 temp3+1 on : pfpixel temp2+1 temp3+1 on
-  pfpixel temp2 temp3+2 on : pfpixel temp2+1 temp3+2 on
-  pfpixel temp2 temp3+3 on : pfpixel temp2+1 temp3+3 on
-  temp1 = temp1 - 1
+  pfpixel temp2 temp3 on
+  temp5 = temp2 + 1
+  pfpixel temp5 temp3 on
+  temp6 = temp3 + 1
+  pfpixel temp2 temp6 on
+  pfpixel temp5 temp6 on
+  temp6 = temp3 + 2
+  pfpixel temp2 temp6 on
+  pfpixel temp5 temp6 on
+  temp6 = temp3 + 3
+  pfpixel temp2 temp6 on
+  pfpixel temp5 temp6 on
+  temp4 = temp4 + 1
   temp2 = temp2 + 3  ; Space between blocks
   goto __P1_Score_Loop
 
 __Draw_P2_Score
-  ; Draw P2 score blocks
+  ; Draw P2 score blocks in purple area (Y=162-165)
   temp1 = p2_score
   temp2 = 2  ; X position
-  temp3 = 162  ; Y position (P2 area)
+  temp3 = 162  ; Y position
+  temp4 = 0  ; Counter
 __P2_Score_Loop
-  if temp1 = 0 then return
+  if temp4 >= temp1 then return
   ; Draw a 2x4 block
-  pfpixel temp2 temp3 on : pfpixel temp2+1 temp3 on
-  pfpixel temp2 temp3+1 on : pfpixel temp2+1 temp3+1 on
-  pfpixel temp2 temp3+2 on : pfpixel temp2+1 temp3+2 on
-  pfpixel temp2 temp3+3 on : pfpixel temp2+1 temp3+3 on
-  temp1 = temp1 - 1
+  pfpixel temp2 temp3 on
+  temp5 = temp2 + 1
+  pfpixel temp5 temp3 on
+  temp6 = temp3 + 1
+  pfpixel temp2 temp6 on
+  pfpixel temp5 temp6 on
+  temp6 = temp3 + 2
+  pfpixel temp2 temp6 on
+  pfpixel temp5 temp6 on
+  temp6 = temp3 + 3
+  pfpixel temp2 temp6 on
+  pfpixel temp5 temp6 on
+  temp4 = temp4 + 1
   temp2 = temp2 + 3  ; Space between blocks
   goto __P2_Score_Loop
 
