@@ -10,13 +10,38 @@
   dim score_byte1 = score+1
   dim score_byte2 = score
 
+  player0:
+  %11111111
+  %11111111
+  %11111111
+  %11111111
+  %11111111
+  %11111111
+  %11111111
+  %11111111
+end
+
+  scorecolors:
+  $F4
+  $F6
+  $F8
+  $FA
+  $FC
+  $FE
+  $FC
+  $FA
+end
+
 __Game_Init
   COLUBK = $00
   COLUPF = $0E
+  COLUP0 = $46
 
-  score_byte0 = $00
-  score_byte1 = $00
-  score_byte2 = $00
+  player0x = 70 : player0y = 80
+
+  score_byte0 = $03
+  score_byte1 = $25
+  score_byte2 = $70
 
   drawscreen
   goto __Main_Loop
@@ -30,14 +55,3 @@ __Main_Loop
 
   drawscreen
   goto __Main_Loop
-
-  scorecolors:
-  $F4
-  $F6
-  $F8
-  $FA
-  $FC
-  $FE
-  $FC
-  $FA
-end
