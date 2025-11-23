@@ -1538,32 +1538,20 @@ __Round_Reset
 __Award_P1_Win
   ; P2 died - P1 wins the round
   p1_wins = p1_wins + 1
-  if p1_wins = 5 then goto __Game_Over  ; First to 5 wins
-  gosub __Draw_Scores
+  if p1_wins = 3 then goto __Game_Over  ; First to 3 wins
+  ; gosub __Draw_Scores  ; DISABLED - causing assembly errors
   return
 
 __Award_P2_Win
   ; P1 died - P2 wins the round
   p2_wins = p2_wins + 1
-  if p2_wins = 5 then goto __Game_Over  ; First to 5 wins
-  gosub __Draw_Scores
+  if p2_wins = 3 then goto __Game_Over  ; First to 3 wins
+  ; gosub __Draw_Scores  ; DISABLED - causing assembly errors
   return
 
 __Draw_Scores
-  ; Draw score blocks in playfield corners (unrolled for efficiency)
-  ; P1 (top-left): Rows 2-5, columns 2,4,6,8,10
-  if p1_wins > 0 then pfpixel 2 2 on : pfpixel 2 3 on : pfpixel 2 4 on : pfpixel 2 5 on
-  if p1_wins > 1 then pfpixel 4 2 on : pfpixel 4 3 on : pfpixel 4 4 on : pfpixel 4 5 on
-  if p1_wins > 2 then pfpixel 6 2 on : pfpixel 6 3 on : pfpixel 6 4 on : pfpixel 6 5 on
-  if p1_wins > 3 then pfpixel 8 2 on : pfpixel 8 3 on : pfpixel 8 4 on : pfpixel 8 5 on
-  if p1_wins > 4 then pfpixel 10 2 on : pfpixel 10 3 on : pfpixel 10 4 on : pfpixel 10 5 on
-
-  ; P2 (top-right): Rows 2-5, columns 37,35,33,31,29
-  if p2_wins > 0 then pfpixel 37 2 on : pfpixel 37 3 on : pfpixel 37 4 on : pfpixel 37 5 on
-  if p2_wins > 1 then pfpixel 35 2 on : pfpixel 35 3 on : pfpixel 35 4 on : pfpixel 35 5 on
-  if p2_wins > 2 then pfpixel 33 2 on : pfpixel 33 3 on : pfpixel 33 4 on : pfpixel 33 5 on
-  if p2_wins > 3 then pfpixel 31 2 on : pfpixel 31 3 on : pfpixel 31 4 on : pfpixel 31 5 on
-  if p2_wins > 4 then pfpixel 29 2 on : pfpixel 29 3 on : pfpixel 29 4 on : pfpixel 29 5 on
+  ; DISABLED - pfpixel causing label mismatch errors
+  ; Will implement alternative score display method
   return
 
 __Game_Over
