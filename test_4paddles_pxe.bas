@@ -142,16 +142,9 @@ __Main_Loop
 
   ;***************************************************************
   ;  Read Paddle 2 - TESTING IF THIS EXISTS IN PXE
-  ;  Based on standard kernel docs, should work after drawscreen
   ;***************************************************************
   ; METHOD 1: Try direct read like Paddle0/Paddle1
-  ; temp_paddle = Paddle2
-  ; if temp_paddle < 136 then player2x = temp_paddle
-
-  ; METHOD 2: Try currentpaddle approach (if PXE supports it)
-  currentpaddle = 2
-  drawscreen  ; Paddle gets read during drawscreen
-  temp_paddle = paddle
+  temp_paddle = Paddle2
   if temp_paddle < 136 then player2x = temp_paddle
 
   ; Button test: move up when pressed
@@ -162,13 +155,7 @@ __Main_Loop
   ;  Read Paddle 3 - TESTING IF THIS EXISTS IN PXE
   ;***************************************************************
   ; METHOD 1: Try direct read
-  ; temp_paddle = Paddle3
-  ; if temp_paddle < 136 then player3x = temp_paddle
-
-  ; METHOD 2: Try currentpaddle approach
-  currentpaddle = 3
-  drawscreen  ; Paddle gets read during drawscreen
-  temp_paddle = paddle
+  temp_paddle = Paddle3
   if temp_paddle < 136 then player3x = temp_paddle
 
   ; Button test: move up when pressed
