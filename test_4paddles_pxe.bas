@@ -56,8 +56,6 @@ __Game_Init
   COLUPF = $0E
   COLUP0 = $46
   COLUP1 = $86
-  COLUP2 = $26
-  COLUP3 = $C6
 
   player0x = 70 : player0y = 20
   player1x = 70 : player1y = 60
@@ -75,10 +73,14 @@ __Main_Loop
   temp_paddle = Paddle1
   if temp_paddle < 136 then player1x = temp_paddle
 
-  temp_paddle = Paddle2
+  currentpaddle = 2
+  drawscreen
+  temp_paddle = paddle
   if temp_paddle < 136 then player2x = temp_paddle
 
-  temp_paddle = Paddle3
+  currentpaddle = 3
+  drawscreen
+  temp_paddle = paddle
   if temp_paddle < 136 then player3x = temp_paddle
 
   if joy0right then player0y = player0y - 1
