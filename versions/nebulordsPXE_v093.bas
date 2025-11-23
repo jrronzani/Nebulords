@@ -719,10 +719,46 @@ __P2_Button_Down
 __P2_Button_Done
 
   ;***************************************************************
+  ;  Read Paddle 2 for Player 3 direction
+  ;***************************************************************
+  temp_paddle = Paddle2
+  p3_direction = temp_paddle / 4
+  if p3_direction >= 32 then p3_direction = 0
+
+  ;***************************************************************
+  ;  Read Paddle 3 for Player 4 direction
+  ;***************************************************************
+  temp_paddle = Paddle3
+  p4_direction = temp_paddle / 4
+  if p4_direction >= 32 then p4_direction = 0
+
+  ; P3 button tracking
+  if joy1right then goto __P3_Button_Down
+  ; Button released - launch if ball attached
+  if p3_state{0} && ball_state = 3 then gosub __P3_Launch_Ball
+  p3_state{0} = 0
+  goto __P3_Button_Done
+__P3_Button_Down
+  p3_state{0} = 1
+__P3_Button_Done
+
+  ; P4 button tracking
+  if joy1left then goto __P4_Button_Down
+  ; Button released - launch if ball attached
+  if p4_state{0} && ball_state = 4 then gosub __P4_Launch_Ball
+  p4_state{0} = 0
+  goto __P4_Button_Done
+__P4_Button_Down
+  p4_state{0} = 1
+__P4_Button_Done
+
+  ;***************************************************************
   ;  Ball physics - FIRST (before ship moves, same moment in time)
   ;***************************************************************
   if ball_state = 1 then gosub __Ball_Follow_P1 : goto __Skip_Ball_Physics
   if ball_state = 2 then gosub __Ball_Follow_P2 : goto __Skip_Ball_Physics
+  if ball_state = 3 then gosub __Ball_Follow_P3 : goto __Skip_Ball_Physics
+  if ball_state = 4 then gosub __Ball_Follow_P4 : goto __Skip_Ball_Physics
 
   ;***************************************************************
   ;  Ball/Ship Collision Detection - Brick breaking
@@ -736,7 +772,11 @@ __P2_Button_Done
   ; P1 coordinate collision: exact sprite bounds (16x26) - using inclusive bounds
   if player0y < 200 then if (bally + 4) >= player0y && bally <= (player0y + 26) then if (ballx + 2) >= player0x && ballx <= (player0x + 16) then gosub __P1_Brick_Hit : goto __Skip_Brick_Collision
   ; P2 coordinate collision (shifted +2px for player1 sprite offset) - using inclusive bounds
-  if player1y < 200 then if (bally + 4) >= player1y && bally <= (player1y + 26) then if (ballx + 2) >= (player1x + 2) && ballx <= (player1x + 18) then gosub __P2_Brick_Hit
+  if player1y < 200 then if (bally + 4) >= player1y && bally <= (player1y + 26) then if (ballx + 2) >= (player1x + 2) && ballx <= (player1x + 18) then gosub __P2_Brick_Hit : goto __Skip_Brick_Collision
+  ; P3 coordinate collision: exact sprite bounds (16x26)
+  if player4y < 200 then if (bally + 4) >= player4y && bally <= (player4y + 26) then if (ballx + 2) >= player4x && ballx <= (player4x + 16) then gosub __P3_Brick_Hit : goto __Skip_Brick_Collision
+  ; P4 coordinate collision (shifted +2px for player5 sprite offset)
+  if player5y < 200 then if (bally + 4) >= player5y && bally <= (player5y + 26) then if (ballx + 2) >= (player5x + 2) && ballx <= (player5x + 18) then gosub __P4_Brick_Hit
 
 __Skip_Brick_Collision
 
@@ -761,6 +801,12 @@ __Skip_Brick_Collision
   ; Check P2 paddle (player3)
   if ballx < player3x + 9 && ballx + 2 > player3x + 1 then if bally < player3y + 10 && bally + 4 > player3y - 1 then gosub __Check_P2_Paddle
 
+  ; Check P3 paddle (player6)
+  if ballx < player6x + 11 && ballx + 2 > player6x + 3 then if bally < player6y + 10 && bally + 4 > player6y - 1 then gosub __Check_P3_Paddle
+
+  ; Check P4 paddle (player7)
+  if ballx < player7x + 9 && ballx + 2 > player7x + 1 then if bally < player7y + 10 && bally + 4 > player7y - 1 then gosub __Check_P4_Paddle
+
 __Skip_Paddle_Collision
 
 __Skip_Ball_Physics
@@ -779,15 +825,25 @@ __Skip_Ball_Physics
   ; Player 2: Paddle 1 button is joy0left
   if joy0left && accel_counter = 0 then temp_dir = p2_direction : gosub __P2_Thrust
 
+  ; Player 3: Paddle 2 button is joy1right
+  if joy1right && accel_counter = 0 then temp_dir = p3_direction : gosub __P3_Thrust
+
+  ; Player 4: Paddle 3 button is joy1left
+  if joy1left && accel_counter = 0 then temp_dir = p4_direction : gosub __P4_Thrust
+
   ; Apply frame-based movement (drift with momentum)
   gosub __P1_Apply_Movement
   gosub __P2_Apply_Movement
+  gosub __P3_Apply_Movement
+  gosub __P4_Apply_Movement
 
   ;***************************************************************
   ;  Wall Bounce for Players
   ;***************************************************************
   gosub __P1_Wall_Bounce
   gosub __P2_Wall_Bounce
+  gosub __P3_Wall_Bounce
+  gosub __P4_Wall_Bounce
 
   ;***************************************************************
   ;  Player-on-Player Collision Detection
@@ -809,6 +865,14 @@ __Skip_Ball_Physics
   if ball_state = 2 then p2_catch_timer = p2_catch_timer + 1
   if ball_state = 2 && p2_catch_timer >= auto_launch_time then gosub __P2_Auto_Launch
 
+  ; P3 catch timer and auto-launch
+  if ball_state = 3 then p3_catch_timer = p3_catch_timer + 1
+  if ball_state = 3 && p3_catch_timer >= auto_launch_time then gosub __P3_Auto_Launch
+
+  ; P4 catch timer and auto-launch
+  if ball_state = 4 then p4_catch_timer = p4_catch_timer + 1
+  if ball_state = 4 && p4_catch_timer >= auto_launch_time then gosub __P4_Auto_Launch
+
   ; P1 cooldown timer
   if p1_state{1} then p1_catch_timer = p1_catch_timer - 1
   if p1_catch_timer = 0 then p1_state{1} = 0
@@ -816,6 +880,14 @@ __Skip_Ball_Physics
   ; P2 cooldown timer
   if p2_state{1} then p2_catch_timer = p2_catch_timer - 1
   if p2_catch_timer = 0 then p2_state{1} = 0
+
+  ; P3 cooldown timer
+  if p3_state{1} then p3_catch_timer = p3_catch_timer - 1
+  if p3_catch_timer = 0 then p3_state{1} = 0
+
+  ; P4 cooldown timer
+  if p4_state{1} then p4_catch_timer = p4_catch_timer - 1
+  if p4_catch_timer = 0 then p4_state{1} = 0
 
   ; Invincibility timer - countdown and reset round when expires
   if invincibility_timer > 0 then invincibility_timer = invincibility_timer - 1
@@ -831,11 +903,19 @@ __Skip_Ball_Physics
   temp_dir = p2_direction
   gosub __Update_P2_Paddle
 
+  temp_dir = p3_direction
+  gosub __Update_P3_Paddle
+
+  temp_dir = p4_direction
+  gosub __Update_P4_Paddle
+
   ;***************************************************************
   ;  Update ship sprites based on brick destruction state
   ;***************************************************************
   gosub __Update_P1_Ship_Sprite
   gosub __Update_P2_Ship_Sprite
+  gosub __Update_P3_Ship_Sprite
+  gosub __Update_P4_Ship_Sprite
 
   ; Draw score display in bottom playfield area
   ; Score displays automatically at top via built-in PXE score system!
@@ -1541,6 +1621,18 @@ __Ball_Follow_P2
   bally = player1y + _ball_y_offsets[temp_dir]
   return
 
+__Ball_Follow_P3
+  temp_dir = p3_direction
+  ballx = player4x + _ball_x_offsets[temp_dir]
+  bally = player4y + _ball_y_offsets[temp_dir]
+  return
+
+__Ball_Follow_P4
+  temp_dir = p4_direction
+  ballx = player5x + _ball_x_offsets[temp_dir]
+  bally = player5y + _ball_y_offsets[temp_dir]
+  return
+
 __P1_Launch_Ball
   ball_state = 0  ; Detach from P1
   temp_dir = p1_direction  ; Use paddle direction
@@ -1551,6 +1643,20 @@ __P1_Launch_Ball
 __P2_Launch_Ball
   ball_state = 0  ; Detach from P2
   temp_dir = p2_direction  ; Use paddle direction
+  gosub __Set_Ball_Velocity  ; Set to FAST velocity
+  ball_speed_timer = fast_ball_duration  ; Start fast mode timer
+  return
+
+__P3_Launch_Ball
+  ball_state = 0  ; Detach from P3
+  temp_dir = p3_direction  ; Use paddle direction
+  gosub __Set_Ball_Velocity  ; Set to FAST velocity
+  ball_speed_timer = fast_ball_duration  ; Start fast mode timer
+  return
+
+__P4_Launch_Ball
+  ball_state = 0  ; Detach from P4
+  temp_dir = p4_direction  ; Use paddle direction
   gosub __Set_Ball_Velocity  ; Set to FAST velocity
   ball_speed_timer = fast_ball_duration  ; Start fast mode timer
   return
@@ -2836,6 +2942,1045 @@ __P2S_1
   %00000000
 end
   return
+
+__Update_P3_Ship_Sprite
+  ; p3_bricks contains 4 bits representing brick state
+  temp_dir = p3_bricks & %00001111
+  on temp_dir goto __P3S_0 __P3S_1 __P3S_2 __P3S_3 __P3S_4 __P3S_5 __P3S_6 __P3S_7 __P3S_8 __P3S_9 __P3S_10 __P3S_11 __P3S_12 __P3S_13 __P3S_14 __P3S_15
+
+; State 0: All bricks destroyed - core still visible
+__P3S_0
+  player4:
+  %00000000  ; Top brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000  ; Upper connector (both sides gone)
+  %00000000
+  %00011000  ; Core visible (both left/right destroyed)
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00000000  ; Lower connector (both sides gone)
+  %00000000
+  %00000000  ; Bottom brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 15: All bricks intact (default)
+__P3S_15
+  player4:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000011
+  %11000011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11000011
+  %11000011
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 14: Top brick destroyed (%1110)
+__P3S_14
+  player4:
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %11000011
+  %11000011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11000011
+  %11000011
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; Other states - use default for now
+; State 13: Right brick destroyed (%1101)
+__P3S_13
+  player4:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000000  ; Upper connector (right side gone)
+  %11000000
+  %11011000  ; Left intact, right brick gone
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11000000  ; Lower connector (right side gone)
+  %11000000
+  %00111100  ; Bottom brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 11: Left brick destroyed (%1011)
+__P3S_11
+  player4:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00000011  ; Upper connector (left side gone)
+  %00000011
+  %00011011  ; Left brick gone, right intact
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00000011  ; Lower connector (left side gone)
+  %00000011
+  %00111100  ; Bottom brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 7: Bottom brick destroyed (%0111)
+__P3S_7
+  player4:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000011  ; Upper connector
+  %11000011
+  %11011011  ; Middle section intact
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11000011  ; Lower connector
+  %11000011
+  %00000000  ; Bottom brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; Multi-brick destroyed states
+; State 12: Left AND bottom intact (%1100 - top/right destroyed)
+__P3S_12
+  player4:
+  %00000000  ; Top brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %11000000  ; Upper connector (left gone)
+  %11000000
+  %11011000  ; Left destroyed, right intact
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11000000  ; Lower connector (left gone)
+  %11000000
+  %00111100  ; Bottom brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 10: Right AND bottom intact (%1010 - top/left destroyed)
+__P3S_10
+  player4:
+  %00000000  ; Top brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000011  ; Upper connector (right gone)
+  %00000011
+  %00011011  ; Left intact, right destroyed
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00000011  ; Lower connector (right gone)
+  %00000011
+  %00111100  ; Bottom brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 9: Top AND bottom intact (%1001 - left/right destroyed)
+__P3S_9
+  player4:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00000000  ; Upper connector (both sides gone)
+  %00000000
+  %00011000  ; Both left/right destroyed (core only)
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00000000  ; Lower connector (both sides gone)
+  %00000000
+  %00111100  ; Bottom brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 8: Only bottom intact (%1000 - top/left/right destroyed)
+__P3S_8
+  player4:
+  %00000000  ; Top brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000  ; Upper connector (all gone)
+  %00000000
+  %00011000  ; Core only
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00000000  ; Lower connector (all gone)
+  %00000000
+  %00111100  ; Bottom brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 6: Left AND right intact (%0110 - top/bottom destroyed)
+__P3S_6
+  player4:
+  %00000000  ; Top brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %11000011  ; Upper connector
+  %11000011
+  %11011011  ; Both left/right intact
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11000011  ; Lower connector
+  %11000011
+  %00000000  ; Bottom brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 5: Top AND left intact (%0101 - right/bottom destroyed)
+__P3S_5
+  player4:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000000  ; Upper connector (left gone)
+  %11000000
+  %11011000  ; Left destroyed, right intact
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11000000  ; Lower connector (left gone)
+  %11000000
+  %00000000  ; Bottom brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 4: Only left intact (%0100 - top/right/bottom destroyed)
+__P3S_4
+  player4:
+  %00000000  ; Top brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %11000000  ; Upper connector (left gone)
+  %11000000
+  %11011000  ; Left destroyed, right intact
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11000000  ; Lower connector (left gone)
+  %11000000
+  %00000000  ; Bottom brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 3: Top AND right intact (%0011 - left/bottom destroyed)
+__P3S_3
+  player4:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00000011  ; Upper connector (right gone)
+  %00000011
+  %00011011  ; Left intact, right destroyed
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00000011  ; Lower connector (right gone)
+  %00000011
+  %00000000  ; Bottom brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 2: Only right intact (%0010 - top/left/bottom destroyed)
+__P3S_2
+  player4:
+  %00000000  ; Top brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000011  ; Upper connector (right gone)
+  %00000011
+  %00011011  ; Left intact, right destroyed
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00000011  ; Lower connector (right gone)
+  %00000011
+  %00000000  ; Bottom brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 1: Only top intact (%0001 - left/right/bottom destroyed)
+__P3S_1
+  player4:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00000000  ; Upper connector (both sides gone)
+  %00000000
+  %00011000  ; Core only (both left/right destroyed)
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00000000  ; Lower connector (both sides gone)
+  %00000000
+  %00000000  ; Bottom brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+__Update_P4_Ship_Sprite
+  ; p4_bricks contains 4 bits representing brick state
+  temp_dir = p4_bricks & %00001111
+  on temp_dir goto __P4S_0 __P4S_1 __P4S_2 __P4S_3 __P4S_4 __P4S_5 __P4S_6 __P4S_7 __P4S_8 __P4S_9 __P4S_10 __P4S_11 __P4S_12 __P4S_13 __P4S_14 __P4S_15
+
+; State 0: All bricks destroyed - core still visible
+__P4S_0
+  player5:
+  %00000000  ; Top brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000  ; Upper connector (both sides gone)
+  %00000000
+  %00011000  ; Core visible (both left/right destroyed)
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00000000  ; Lower connector (both sides gone)
+  %00000000
+  %00000000  ; Bottom brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 15: All bricks intact (default)
+__P4S_15
+  player5:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000011
+  %11000011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11000011
+  %11000011
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 14: Top brick destroyed (%1110)
+__P4S_14
+  player5:
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %11000011
+  %11000011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11000011
+  %11000011
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; Other states - use default for now
+; State 13: Right brick destroyed (%1101)
+__P4S_13
+  player5:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000000  ; Upper connector (right side gone)
+  %11000000
+  %11011000  ; Left intact, right brick gone
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11000000  ; Lower connector (right side gone)
+  %11000000
+  %00111100  ; Bottom brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 11: Left brick destroyed (%1011)
+__P4S_11
+  player5:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00000011  ; Upper connector (left side gone)
+  %00000011
+  %00011011  ; Left brick gone, right intact
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00000011  ; Lower connector (left side gone)
+  %00000011
+  %00111100  ; Bottom brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 7: Bottom brick destroyed (%0111)
+__P4S_7
+  player5:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000011  ; Upper connector
+  %11000011
+  %11011011  ; Middle section intact
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11000011  ; Lower connector
+  %11000011
+  %00000000  ; Bottom brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; Multi-brick destroyed states
+; State 12: Left AND bottom intact (%1100 - top/right destroyed)
+__P4S_12
+  player5:
+  %00000000  ; Top brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %11000000  ; Upper connector (left gone)
+  %11000000
+  %11011000  ; Left destroyed, right intact
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11000000  ; Lower connector (left gone)
+  %11000000
+  %00111100  ; Bottom brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 10: Right AND bottom intact (%1010 - top/left destroyed)
+__P4S_10
+  player5:
+  %00000000  ; Top brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000011  ; Upper connector (right gone)
+  %00000011
+  %00011011  ; Left intact, right destroyed
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00000011  ; Lower connector (right gone)
+  %00000011
+  %00111100  ; Bottom brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 9: Top AND bottom intact (%1001 - left/right destroyed)
+__P4S_9
+  player5:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00000000  ; Upper connector (both sides gone)
+  %00000000
+  %00011000  ; Both left/right destroyed (core only)
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00000000  ; Lower connector (both sides gone)
+  %00000000
+  %00111100  ; Bottom brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 8: Only bottom intact (%1000 - top/left/right destroyed)
+__P4S_8
+  player5:
+  %00000000  ; Top brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000  ; Upper connector (all gone)
+  %00000000
+  %00011000  ; Core only
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00000000  ; Lower connector (all gone)
+  %00000000
+  %00111100  ; Bottom brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 6: Left AND right intact (%0110 - top/bottom destroyed)
+__P4S_6
+  player5:
+  %00000000  ; Top brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %11000011  ; Upper connector
+  %11000011
+  %11011011  ; Both left/right intact
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11000011  ; Lower connector
+  %11000011
+  %00000000  ; Bottom brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 5: Top AND left intact (%0101 - right/bottom destroyed)
+__P4S_5
+  player5:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000000  ; Upper connector (left gone)
+  %11000000
+  %11011000  ; Left destroyed, right intact
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11000000  ; Lower connector (left gone)
+  %11000000
+  %00000000  ; Bottom brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 4: Only left intact (%0100 - top/right/bottom destroyed)
+__P4S_4
+  player5:
+  %00000000  ; Top brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %11000000  ; Upper connector (left gone)
+  %11000000
+  %11011000  ; Left destroyed, right intact
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11000000  ; Lower connector (left gone)
+  %11000000
+  %00000000  ; Bottom brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 3: Top AND right intact (%0011 - left/bottom destroyed)
+__P4S_3
+  player5:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00000011  ; Upper connector (right gone)
+  %00000011
+  %00011011  ; Left intact, right destroyed
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00000011  ; Lower connector (right gone)
+  %00000011
+  %00000000  ; Bottom brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 2: Only right intact (%0010 - top/left/bottom destroyed)
+__P4S_2
+  player5:
+  %00000000  ; Top brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000011  ; Upper connector (right gone)
+  %00000011
+  %00011011  ; Left intact, right destroyed
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00000011  ; Lower connector (right gone)
+  %00000011
+  %00000000  ; Bottom brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 1: Only top intact (%0001 - left/right/bottom destroyed)
+__P4S_1
+  player5:
+  %00111100  ; Top brick intact
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00000000  ; Upper connector (both sides gone)
+  %00000000
+  %00011000  ; Core only (both left/right destroyed)
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00000000  ; Lower connector (both sides gone)
+  %00000000
+  %00000000  ; Bottom brick destroyed
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
 
 
   ;***************************************************************
