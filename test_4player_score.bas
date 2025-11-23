@@ -9,6 +9,7 @@
   dim score_byte0 = score+2
   dim score_byte1 = score+1
   dim score_byte2 = score
+  dim button_held = a
 
   player0:
   %11111111
@@ -39,19 +40,22 @@ __Game_Init
 
   player0x = 70 : player0y = 80
 
-  score_byte0 = $03
-  score_byte1 = $25
-  score_byte2 = $70
+  score_byte2 = $00
+  score_byte1 = $00
+  score_byte0 = $00
+  button_held = 0
 
   drawscreen
   goto __Main_Loop
 
 __Main_Loop
 
-  if joy0right then score_byte0 = (score_byte0 + 1) & $0F
-  if joy0left then score_byte1 = (score_byte1 + $10) & $F0 | (score_byte1 & $0F)
-  if joy1right then score_byte1 = (score_byte1 & $F0) | ((score_byte1 + 1) & $0F)
-  if joy1left then score_byte2 = (score_byte2 + $10) & $F0 | (score_byte2 & $0F)
+  if joy0right && !button_held then score_byte2 = (score_byte2 & $F0) | ((score_byte2 + 1) & $0F) : button_held = 1
+  if joy0left && !button_held then score_byte2 = (score_byte2 + $10) & $F0 | (score_byte2 & $0F) : button_held = 1
+  if joy1right && !button_held then score_byte1 = (score_byte1 & $F0) | ((score_byte1 + 1) & $0F) : button_held = 1
+  if joy1left && !button_held then score_byte1 = (score_byte1 + $10) & $F0 | (score_byte1 & $0F) : button_held = 1
+
+  if !joy0right && !joy0left && !joy1right && !joy1left then button_held = 0
 
   drawscreen
   goto __Main_Loop
