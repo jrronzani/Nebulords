@@ -1598,7 +1598,8 @@ __Award_P2_Point
 __Update_P1_Paddle
   on temp_dir goto __P1P_0 __P1P_1 __P1P_2 __P1P_3 __P1P_4 __P1P_5 __P1P_6 __P1P_7 __P1P_8 __P1P_9 __P1P_10 __P1P_11 __P1P_12 __P1P_13 __P1P_14 __P1P_15 __P1P_16 __P1P_17 __P1P_18 __P1P_19 __P1P_20 __P1P_21 __P1P_22 __P1P_23 __P1P_24 __P1P_25 __P1P_26 __P1P_27 __P1P_28 __P1P_29 __P1P_30 __P1P_31
 
-; Global Player 2 sprite (paddle for Player 1)
+; Direction 0: South (MANUAL) - Single sprite definition for all positions
+__P1P_0
   player2:
   %011110
   %111111
@@ -1610,9 +1611,6 @@ __Update_P1_Paddle
   %111111
   %011110
 end
-
-; Direction 0: South (MANUAL)
-__P1P_0
   player2x = player0x + 4 : player2y = player0y + 28
   return
 
@@ -1766,7 +1764,8 @@ __P1P_31
 __Update_P2_Paddle
   on temp_dir goto __P2P_0 __P2P_1 __P2P_2 __P2P_3 __P2P_4 __P2P_5 __P2P_6 __P2P_7 __P2P_8 __P2P_9 __P2P_10 __P2P_11 __P2P_12 __P2P_13 __P2P_14 __P2P_15 __P2P_16 __P2P_17 __P2P_18 __P2P_19 __P2P_20 __P2P_21 __P2P_22 __P2P_23 __P2P_24 __P2P_25 __P2P_26 __P2P_27 __P2P_28 __P2P_29 __P2P_30 __P2P_31
 
-; Global Player 3 sprite (paddle for Player 2)
+; Direction 0: South (MANUAL) - Single sprite definition for all positions
+__P2P_0
   player3:
   %011110
   %111111
@@ -1778,9 +1777,6 @@ __Update_P2_Paddle
   %111111
   %011110
 end
-
-; Direction 0: South (MANUAL)
-__P2P_0
   player3x = player1x + 4 : player3y = player1y + 28
   return
 
