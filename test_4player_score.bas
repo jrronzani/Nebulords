@@ -1,5 +1,8 @@
   set kernel PXE
 
+  const pfscore = 1
+  const font = hex
+
   PF_MODE = $fd
   PF_FRAC_INC = 0
 
@@ -24,74 +27,13 @@ __Main_Loop
   drawscreen
   goto __Main_Loop
 
-; Digit 0 - Blank
   scorecolors:
-  $00
-  $00
-  $00
-  $00
-  $00
-  $00
-  $00
-  $00
-end
-
-; Digit 1 - P1 (Blue)
-  scorecolors:
-  $4E
-  $4C
-  $4A
-  $4A
-  $48
-  $48
-  $46
-  $46
-end
-
-; Digit 2 - P2 (Purple)
-  scorecolors:
-  $8E
-  $8C
-  $8A
-  $8A
-  $88
-  $88
-  $86
-  $86
-end
-
-; Digit 3 - P3 (Orange)
-  scorecolors:
-  $2E
-  $2C
-  $2A
-  $2A
-  $28
-  $28
-  $26
-  $26
-end
-
-; Digit 4 - P4 (Green)
-  scorecolors:
-  $CE
-  $CC
-  $CA
-  $CA
-  $C8
-  $C8
-  $C6
-  $C6
-end
-
-; Digit 5 - Blank
-  scorecolors:
-  $00
-  $00
-  $00
-  $00
-  $00
-  $00
-  $00
-  $00
+  $0E
+  $0C
+  $0A
+  $0A
+  $08
+  $08
+  $06
+  $06
 end
