@@ -50,12 +50,10 @@ __Game_Init
 
 __Main_Loop
 
-  if joy0up && !button_held then score_byte2 = (score_byte2 & $F0) | ((score_byte2 + 1) & $0F) : button_held = 1
-  if joy0down && !button_held then score_byte2 = (score_byte2 + $10) & $F0 | (score_byte2 & $0F) : button_held = 1
-  if joy0left && !button_held then score_byte1 = (score_byte1 + $10) & $F0 | (score_byte1 & $0F) : button_held = 1
-  if joy0right && !button_held then score_byte1 = (score_byte1 & $F0) | ((score_byte1 + 1) & $0F) : button_held = 1
-
-  if !joy0up && !joy0down && !joy0left && !joy0right then button_held = 0
+  if joy0up then score_byte2 = (score_byte2 & $F0) | ((score_byte2 + 1) & $0F)
+  if joy0down then score_byte2 = (score_byte2 + $10) & $F0 | (score_byte2 & $0F)
+  if joy0left then score_byte1 = (score_byte1 + $10) & $F0 | (score_byte1 & $0F)
+  if joy0right then score_byte1 = (score_byte1 & $F0) | ((score_byte1 + 1) & $0F)
 
   drawscreen
   goto __Main_Loop
