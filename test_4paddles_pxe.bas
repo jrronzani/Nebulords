@@ -55,6 +55,10 @@
   ;  Initialize
   ;***************************************************************
 __Game_Init
+  ; Set sprite colors
+  COLUP0 = $46  ; Blue for player0
+  COLUP1 = $86  ; Purple for player1
+
   ; Position sprites vertically
   player0y = 40
   player1y = 100
