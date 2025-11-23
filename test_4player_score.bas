@@ -32,12 +32,12 @@ __Main_Loop
   goto __Main_Loop
 
   scorecolors:
-  $0E
-  $0C
-  $0A
-  $0A
-  $08
-  $08
-  $06
-  $06
+  $F4
+  $F6
+  $F8
+  $FA
+  $FC
+  $FE
+  $FC
+  $FA
 end
