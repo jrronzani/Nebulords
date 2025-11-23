@@ -6,23 +6,27 @@
   PF_MODE = $fd
   PF_FRAC_INC = 0
 
+  dim score_byte0 = score+2
+  dim score_byte1 = score+1
+  dim score_byte2 = score
+
 __Game_Init
   COLUBK = $00
   COLUPF = $0E
 
-  score+2 = $00
-  score+1 = $00
-  score+0 = $00
+  score_byte0 = $00
+  score_byte1 = $00
+  score_byte2 = $00
 
   drawscreen
   goto __Main_Loop
 
 __Main_Loop
 
-  if joy0right then score+2 = (score+2 + 1) & $0F
-  if joy0left then score+1 = (score+1 + $10) & $F0 | (score+1 & $0F)
-  if joy1right then score+1 = (score+1 & $F0) | ((score+1 + 1) & $0F)
-  if joy1left then score+0 = (score+0 + $10) & $F0 | (score+0 & $0F)
+  if joy0right then score_byte0 = (score_byte0 + 1) & $0F
+  if joy0left then score_byte1 = (score_byte1 + $10) & $F0 | (score_byte1 & $0F)
+  if joy1right then score_byte1 = (score_byte1 & $F0) | ((score_byte1 + 1) & $0F)
+  if joy1left then score_byte2 = (score_byte2 + $10) & $F0 | (score_byte2 & $0F)
 
   drawscreen
   goto __Main_Loop
