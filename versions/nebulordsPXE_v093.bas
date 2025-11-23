@@ -1674,6 +1674,1288 @@ __P2_Auto_Launch
   return
 
 
+__P3_Thrust
+  ; Apply thrust in direction temp_dir (0-31)
+  temp_dir = (temp_dir + 16) & 31
+  on temp_dir goto __P3T_0 __P3T_1 __P3T_2 __P3T_3 __P3T_4 __P3T_5 __P3T_6 __P3T_7 __P3T_8 __P3T_9 __P3T_10 __P3T_11 __P3T_12 __P3T_13 __P3T_14 __P3T_15 __P3T_16 __P3T_17 __P3T_18 __P3T_19 __P3T_20 __P3T_21 __P3T_22 __P3T_23 __P3T_24 __P3T_25 __P3T_26 __P3T_27 __P3T_28 __P3T_29 __P3T_30 __P3T_31
+
+; 32-direction thrust: 0=N, 8=E, 16=S, 24=W
+__P3T_0
+  gosub __P3_Accel_Up : return
+__P3T_1
+  gosub __P3_Accel_Up : gosub __P3_Accel_Right : return
+__P3T_2
+  gosub __P3_Accel_Up : gosub __P3_Accel_Right : return
+__P3T_3
+  gosub __P3_Accel_Up : gosub __P3_Accel_Right : return
+__P3T_4
+  gosub __P3_Accel_Up : gosub __P3_Accel_Right : return
+__P3T_5
+  gosub __P3_Accel_Up : gosub __P3_Accel_Right : return
+__P3T_6
+  gosub __P3_Accel_Up : gosub __P3_Accel_Right : return
+__P3T_7
+  gosub __P3_Accel_Up : gosub __P3_Accel_Right : return
+__P3T_8
+  gosub __P3_Accel_Right : return
+__P3T_9
+  gosub __P3_Accel_Down : gosub __P3_Accel_Right : return
+__P3T_10
+  gosub __P3_Accel_Down : gosub __P3_Accel_Right : return
+__P3T_11
+  gosub __P3_Accel_Down : gosub __P3_Accel_Right : return
+__P3T_12
+  gosub __P3_Accel_Down : gosub __P3_Accel_Right : return
+__P3T_13
+  gosub __P3_Accel_Down : gosub __P3_Accel_Right : return
+__P3T_14
+  gosub __P3_Accel_Down : gosub __P3_Accel_Right : return
+__P3T_15
+  gosub __P3_Accel_Down : gosub __P3_Accel_Right : return
+__P3T_16
+  gosub __P3_Accel_Down : return
+__P3T_17
+  gosub __P3_Accel_Down : gosub __P3_Accel_Left : return
+__P3T_18
+  gosub __P3_Accel_Down : gosub __P3_Accel_Left : return
+__P3T_19
+  gosub __P3_Accel_Down : gosub __P3_Accel_Left : return
+__P3T_20
+  gosub __P3_Accel_Down : gosub __P3_Accel_Left : return
+__P3T_21
+  gosub __P3_Accel_Down : gosub __P3_Accel_Left : return
+__P3T_22
+  gosub __P3_Accel_Down : gosub __P3_Accel_Left : return
+__P3T_23
+  gosub __P3_Accel_Down : gosub __P3_Accel_Left : return
+__P3T_24
+  gosub __P3_Accel_Left : return
+__P3T_25
+  gosub __P3_Accel_Up : gosub __P3_Accel_Left : return
+__P3T_26
+  gosub __P3_Accel_Up : gosub __P3_Accel_Left : return
+__P3T_27
+  gosub __P3_Accel_Up : gosub __P3_Accel_Left : return
+__P3T_28
+  gosub __P3_Accel_Up : gosub __P3_Accel_Left : return
+__P3T_29
+  gosub __P3_Accel_Up : gosub __P3_Accel_Left : return
+__P3T_30
+  gosub __P3_Accel_Up : gosub __P3_Accel_Left : return
+__P3T_31
+  gosub __P3_Accel_Up : gosub __P3_Accel_Left : return
+
+
+__P3_Accel_Right
+  ; If moving left, decelerate (return on stop to prevent same-frame re-accel)
+  if p3_dir_x = 255 then p3_speed_x = p3_speed_x + 2 : if p3_speed_x >= 16 then p3_dir_x = 0 : p3_speed_x = 16 : return
+  if p3_dir_x = 0 then p3_dir_x = 1
+  if p3_dir_x = 1 then if p3_speed_x > max_speed then p3_speed_x = p3_speed_x - 2
+  return
+
+__P3_Accel_Left
+  ; If moving right, decelerate (return on stop to prevent same-frame re-accel)
+  if p3_dir_x = 1 then p3_speed_x = p3_speed_x + 2 : if p3_speed_x >= 16 then p3_dir_x = 0 : p3_speed_x = 16 : return
+  if p3_dir_x = 0 then p3_dir_x = 255
+  if p3_dir_x = 255 then if p3_speed_x > max_speed then p3_speed_x = p3_speed_x - 2
+  return
+
+__P3_Accel_Up
+  ; If moving down, decelerate (return on stop to prevent same-frame re-accel)
+  if p3_dir_y = 1 then p3_speed_y = p3_speed_y + 2 : if p3_speed_y >= 16 then p3_dir_y = 0 : p3_speed_y = 16 : return
+  if p3_dir_y = 0 then p3_dir_y = 255
+  if p3_dir_y = 255 then if p3_speed_y > max_speed then p3_speed_y = p3_speed_y - 2
+  return
+
+__P3_Accel_Down
+  ; If moving up, decelerate (return on stop to prevent same-frame re-accel)
+  if p3_dir_y = 255 then p3_speed_y = p3_speed_y + 2 : if p3_speed_y >= 16 then p3_dir_y = 0 : p3_speed_y = 16 : return
+  if p3_dir_y = 0 then p3_dir_y = 1
+  if p3_dir_y = 1 then if p3_speed_y > max_speed then p3_speed_y = p3_speed_y - 2
+  return
+
+
+__P1_Apply_Movement
+  ; Skip movement if player is off-screen (killed)
+  if player0y >= 150 then return
+
+  ; Apply X movement (frame-based velocity)
+  if p1_dir_x <> 0 then p1_frame_x = p1_frame_x - 1
+  if p1_frame_x = 0 then player0x = player0x + p1_dir_x : p1_frame_x = p1_speed_x
+
+  ; Apply Y movement (frame-based velocity) - DOUBLED for PXE
+  if p1_dir_y <> 0 then p1_frame_y = p1_frame_y - 1
+  if p1_frame_y = 0 then player0y = player0y + p1_dir_y : player0y = player0y + p1_dir_y : p1_frame_y = p1_speed_y
+
+  return
+
+
+__P3_Apply_Movement
+  ; Skip movement if player is off-screen (killed)
+  if player4y >= 150 then return
+
+  ; Apply X movement
+  if p3_dir_x <> 0 then p3_frame_x = p3_frame_x - 1
+  if p3_frame_x = 0 then player4x = player4x + p3_dir_x : p3_frame_x = p3_speed_x
+
+  ; Apply Y movement - DOUBLED for PXE
+  if p3_dir_y <> 0 then p3_frame_y = p3_frame_y - 1
+  if p3_frame_y = 0 then player4y = player4y + p3_dir_y : player4y = player4y + p3_dir_y : p3_frame_y = p3_speed_y
+
+  return
+
+
+__P1_Wall_Bounce
+  ; Skip wall bounce if player is off-screen (killed)
+  if player0y >= 150 then return
+
+  ; Check left wall
+  if player0x < 3 then p1_dir_x = 1 : player0x = 3 : p1_frame_x = p1_speed_x
+
+  ; Check right wall
+  if player0x > 139 then p1_dir_x = 255 : player0x = 139 : p1_frame_x = p1_speed_x
+
+  ; Check top wall
+  if player0y < 8 then p1_dir_y = 1 : player0y = 8 : p1_frame_y = p1_speed_y
+
+  ; Check bottom wall
+  if player0y > 135 then p1_dir_y = 255 : player0y = 135 : p1_frame_y = p1_speed_y
+
+  return
+
+
+__P3_Wall_Bounce
+  ; Skip wall bounce if player is off-screen (killed)
+  if player4y >= 150 then return
+
+  ; Check left wall
+  if player4x < 3 then p3_dir_x = 1 : player4x = 3 : p3_frame_x = p3_speed_x
+
+  ; Check right wall
+  if player4x > 139 then p3_dir_x = 255 : player4x = 139 : p3_frame_x = p3_speed_x
+
+  ; Check top wall
+  if player4y < 8 then p3_dir_y = 1 : player4y = 8 : p3_frame_y = p3_speed_y
+
+  ; Check bottom wall
+  if player4y > 135 then p3_dir_y = 255 : player4y = 135 : p3_frame_y = p3_speed_y
+
+  return
+
+
+__Player_Collision
+  ; AABB Collision Detection between Player 1 and Player 2
+  ; Check if hitboxes overlap on both X and Y axes
+  ; Note: P2 uses adjusted position due to player4 sprite origin offset
+
+  ; X-axis overlap check (accounting for P2 hitbox offset)
+  ; player0x < (player4x - p3_hitbox_offset) + ship_width && player0x + ship_width > (player4x - p3_hitbox_offset)
+  if player0x >= player4x - p3_hitbox_offset + ship_width then goto __No_Collision
+  if player0x + ship_width <= player4x - p3_hitbox_offset then goto __No_Collision
+
+  ; Y-axis overlap check
+  ; player0y < player4y + ship_height && player0y + ship_height > player4y
+  if player0y >= player4y + ship_height then goto __No_Collision
+  if player0y + ship_height <= player4y then goto __No_Collision
+
+  ; Collision detected! Reverse velocities and separate ships
+
+  ; Reverse X direction
+  if p1_dir_x = 1 then p1_dir_x = 255 : goto __PC_CheckP1Y
+  if p1_dir_x = 255 then p1_dir_x = 1
+__PC_CheckP1Y
+  ; Reverse Y direction
+  if p1_dir_y = 1 then p1_dir_y = 255 : goto __PC_P2X
+  if p1_dir_y = 255 then p1_dir_y = 1
+
+__PC_P2X
+  ; Reverse P2 X direction
+  if p3_dir_x = 1 then p3_dir_x = 255 : goto __PC_P2Y
+  if p3_dir_x = 255 then p3_dir_x = 1
+__PC_P2Y
+  ; Reverse P2 Y direction
+  if p3_dir_y = 1 then p3_dir_y = 255 : goto __PC_Separate
+  if p3_dir_y = 255 then p3_dir_y = 1
+
+__PC_Separate
+  ; Separate ships to prevent sticking
+  ; Move P1 left and P2 right
+  if player0x < player4x then player0x = player0x - 2 : player4x = player4x + 2
+  if player0x >= player4x then player0x = player0x + 2 : player4x = player4x - 2
+
+  ; Reset frame counters
+  p1_frame_x = p1_speed_x : p1_frame_y = p1_speed_y
+  p3_frame_x = p3_speed_x : p3_frame_y = p3_speed_y
+
+__No_Collision
+  return
+
+
+__Set_Ball_Velocity
+  ; 32-direction fast ball: 0=N, 8=E, 16=S, 24=W
+  temp_dir = (temp_dir + 16) & 31
+  on temp_dir goto __BV_0 __BV_1 __BV_2 __BV_3 __BV_4 __BV_5 __BV_6 __BV_7 __BV_8 __BV_9 __BV_10 __BV_11 __BV_12 __BV_13 __BV_14 __BV_15 __BV_16 __BV_17 __BV_18 __BV_19 __BV_20 __BV_21 __BV_22 __BV_23 __BV_24 __BV_25 __BV_26 __BV_27 __BV_28 __BV_29 __BV_30 __BV_31
+
+__BV_0
+  ball_xvel = 0 : ball_yvel = 253 : return
+__BV_1
+  ball_xvel = 1 : ball_yvel = 253 : return
+__BV_2
+  ball_xvel = 1 : ball_yvel = 253 : return
+__BV_3
+  ball_xvel = 2 : ball_yvel = 254 : return
+__BV_4
+  ball_xvel = 2 : ball_yvel = 254 : return
+__BV_5
+  ball_xvel = 2 : ball_yvel = 254 : return
+__BV_6
+  ball_xvel = 2 : ball_yvel = 255 : return
+__BV_7
+  ball_xvel = 3 : ball_yvel = 255 : return
+__BV_8
+  ball_xvel = 3 : ball_yvel = 0 : return
+__BV_9
+  ball_xvel = 3 : ball_yvel = 1 : return
+__BV_10
+  ball_xvel = 2 : ball_yvel = 1 : return
+__BV_11
+  ball_xvel = 2 : ball_yvel = 2 : return
+__BV_12
+  ball_xvel = 2 : ball_yvel = 2 : return
+__BV_13
+  ball_xvel = 2 : ball_yvel = 2 : return
+__BV_14
+  ball_xvel = 1 : ball_yvel = 3 : return
+__BV_15
+  ball_xvel = 1 : ball_yvel = 3 : return
+__BV_16
+  ball_xvel = 0 : ball_yvel = 3 : return
+__BV_17
+  ball_xvel = 255 : ball_yvel = 3 : return
+__BV_18
+  ball_xvel = 255 : ball_yvel = 3 : return
+__BV_19
+  ball_xvel = 254 : ball_yvel = 2 : return
+__BV_20
+  ball_xvel = 254 : ball_yvel = 2 : return
+__BV_21
+  ball_xvel = 254 : ball_yvel = 2 : return
+__BV_22
+  ball_xvel = 254 : ball_yvel = 1 : return
+__BV_23
+  ball_xvel = 253 : ball_yvel = 1 : return
+__BV_24
+  ball_xvel = 253 : ball_yvel = 0 : return
+__BV_25
+  ball_xvel = 253 : ball_yvel = 255 : return
+__BV_26
+  ball_xvel = 254 : ball_yvel = 255 : return
+__BV_27
+  ball_xvel = 254 : ball_yvel = 254 : return
+__BV_28
+  ball_xvel = 254 : ball_yvel = 254 : return
+__BV_29
+  ball_xvel = 254 : ball_yvel = 254 : return
+__BV_30
+  ball_xvel = 255 : ball_yvel = 253 : return
+__BV_31
+  ball_xvel = 255 : ball_yvel = 253 : return
+
+
+  ;***************************************************************
+  ;  Set Ball Velocity - SLOW version (1 pixel/frame, default speed)
+  ;  temp_dir = 0-31 for direction
+  ;***************************************************************
+__Set_Ball_Velocity_Slow
+  temp_dir = (temp_dir + 16) & 31
+  on temp_dir goto __BVS_0 __BVS_1 __BVS_2 __BVS_3 __BVS_4 __BVS_5 __BVS_6 __BVS_7 __BVS_8 __BVS_9 __BVS_10 __BVS_11 __BVS_12 __BVS_13 __BVS_14 __BVS_15 __BVS_16 __BVS_17 __BVS_18 __BVS_19 __BVS_20 __BVS_21 __BVS_22 __BVS_23 __BVS_24 __BVS_25 __BVS_26 __BVS_27 __BVS_28 __BVS_29 __BVS_30 __BVS_31
+
+__BVS_0
+  ball_xvel = 0 : ball_yvel = 255 : return
+__BVS_1
+  ball_xvel = 1 : ball_yvel = 254 : return
+__BVS_2
+  ball_xvel = 1 : ball_yvel = 254 : return
+__BVS_3
+  ball_xvel = 1 : ball_yvel = 255 : return
+__BVS_4
+  ball_xvel = 1 : ball_yvel = 255 : return
+__BVS_5
+  ball_xvel = 1 : ball_yvel = 255 : return
+__BVS_6
+  ball_xvel = 1 : ball_yvel = 255 : return
+__BVS_7
+  ball_xvel = 1 : ball_yvel = 255 : return
+__BVS_8
+  ball_xvel = 1 : ball_yvel = 0 : return
+__BVS_9
+  ball_xvel = 1 : ball_yvel = 1 : return
+__BVS_10
+  ball_xvel = 1 : ball_yvel = 1 : return
+__BVS_11
+  ball_xvel = 1 : ball_yvel = 1 : return
+__BVS_12
+  ball_xvel = 1 : ball_yvel = 1 : return
+__BVS_13
+  ball_xvel = 1 : ball_yvel = 1 : return
+__BVS_14
+  ball_xvel = 1 : ball_yvel = 2 : return
+__BVS_15
+  ball_xvel = 1 : ball_yvel = 2 : return
+__BVS_16
+  ball_xvel = 0 : ball_yvel = 1 : return
+__BVS_17
+  ball_xvel = 255 : ball_yvel = 2 : return
+__BVS_18
+  ball_xvel = 255 : ball_yvel = 2 : return
+__BVS_19
+  ball_xvel = 255 : ball_yvel = 1 : return
+__BVS_20
+  ball_xvel = 255 : ball_yvel = 1 : return
+__BVS_21
+  ball_xvel = 255 : ball_yvel = 1 : return
+__BVS_22
+  ball_xvel = 255 : ball_yvel = 1 : return
+__BVS_23
+  ball_xvel = 255 : ball_yvel = 1 : return
+__BVS_24
+  ball_xvel = 255 : ball_yvel = 0 : return
+__BVS_25
+  ball_xvel = 255 : ball_yvel = 255 : return
+__BVS_26
+  ball_xvel = 255 : ball_yvel = 255 : return
+__BVS_27
+  ball_xvel = 255 : ball_yvel = 255 : return
+__BVS_28
+  ball_xvel = 255 : ball_yvel = 255 : return
+__BVS_29
+  ball_xvel = 255 : ball_yvel = 255 : return
+__BVS_30
+  ball_xvel = 255 : ball_yvel = 254 : return
+__BVS_31
+  ball_xvel = 255 : ball_yvel = 254 : return
+
+
+  ;***************************************************************
+  ;  Helper subroutines for paddle collision
+  ;***************************************************************
+__Check_P1_Paddle
+  temp_dir = p1_direction
+  gosub __Ball_Bounce_P1
+  return
+
+__Check_P3_Paddle
+  temp_dir = p3_direction
+  gosub __Ball_Bounce_P2
+  return
+
+
+  ;***************************************************************
+  ;  Ball Bounce off Paddles - Catch if button held, otherwise bounce
+  ;  temp_dir contains paddle direction (0-15)
+  ;  Direction 0=South, rotates counter-clockwise
+  ;***************************************************************
+__Ball_Bounce_P1
+  ; Check if button held AND not in cooldown - CATCH
+  if p1_state{0} && !p1_state{1} then ball_state = 1 : p1_catch_timer = 0 : p1_caught_dir = p1_direction : return
+
+  ; Otherwise BOUNCE - maintain current ball speed (temp_dir already set to paddle direction)
+  if ball_speed_timer > 0 then gosub __Set_Ball_Velocity : return
+  gosub __Set_Ball_Velocity_Slow
+  return
+
+__Ball_Bounce_P2
+  ; Check if button held AND not in cooldown - CATCH
+  if p3_state{0} && !p3_state{1} then ball_state = 2 : p3_catch_timer = 0 : p3_caught_dir = p3_direction : return
+
+  ; Otherwise BOUNCE - maintain current ball speed (temp_dir already set to paddle direction)
+  if ball_speed_timer > 0 then gosub __Set_Ball_Velocity : return
+  gosub __Set_Ball_Velocity_Slow
+  return
+
+
+  ;***************************************************************
+  ;  Brick Hit Detection - Determine which brick was hit and destroy it
+  ;  Sprite layout (26 scanlines):
+  ;    Lines 0-6:   Top brick (7 scanlines)
+  ;    Lines 7-8:   Upper connector (2 scanlines)
+  ;    Lines 9-16:  Middle (left brick + core + right brick, 8 scanlines)
+  ;    Lines 17-18: Lower connector (2 scanlines)
+  ;    Lines 19-25: Bottom brick (7 scanlines)
+  ;
+  ;  Brick bits: bit 0=top, bit 1=left, bit 2=right, bit 3=bottom
+  ;***************************************************************
+__P1_Brick_Hit
+  ; BRICK DETECTION - ball must actually overlap brick/core area
+  ; Core is center 6x10 pixels (X: 5-10, Y: 8-17 relative to sprite)
+  ; Bricks surround core: top (Y 0-7), bottom (Y 18-25), left (X 0-4), right (X 11-15)
+
+  ; Y determines top/middle/bottom section (middle expanded +1 up/down)
+  if bally + 4 > player0y + 19 then goto __P1_Bottom_Area
+  if bally > player0y + 6 then goto __P1_Middle_Area
+  goto __P1_Top_Area
+
+__P1_Top_Area
+  ; Top brick narrowed - redirect corners to side bricks
+  if ballx + 2 <= player0x + 1 then goto __P1_Left_Area
+  if ballx >= player0x + 14 then goto __P1_Right_Area
+  ; Top brick - if exists, destroy and bounce
+  if p1_bricks{0} then p1_bricks{0} = 0 : goto __P1_Brick_Bounce
+  ; Top brick destroyed - core only hit if ball X in center AND ball entering core Y
+  if bally + 4 < player0y + 8 then return
+  if ballx + 2 > player0x + 5 then if ballx < player0x + 11 then goto __P1_Core_Hit
+  return
+
+__P1_Middle_Area
+  ; X determines left or right side
+  if ballx + 2 <= player0x + 7 then goto __P1_Left_Area
+  goto __P1_Right_Area
+
+__P1_Left_Area
+  ; Left brick - if exists, destroy and bounce
+  if p1_bricks{2} then p1_bricks{2} = 0 : goto __P1_Brick_Bounce
+  ; Left brick destroyed - core only if ball overlaps core X range
+  if ballx + 2 > player0x + 5 then goto __P1_Core_Hit
+  return
+
+__P1_Right_Area
+  ; Right brick - if exists, destroy and bounce
+  if p1_bricks{1} then p1_bricks{1} = 0 : goto __P1_Brick_Bounce
+  ; Right brick destroyed - core only if ball overlaps core X range
+  if ballx < player0x + 11 then goto __P1_Core_Hit
+  return
+
+__P1_Bottom_Area
+  ; Bottom brick narrowed - redirect corners to side bricks
+  if ballx + 2 <= player0x + 1 then goto __P1_Left_Area
+  if ballx >= player0x + 14 then goto __P1_Right_Area
+  ; Bottom brick - if exists, destroy and bounce
+  if p1_bricks{3} then p1_bricks{3} = 0 : goto __P1_Brick_Bounce
+  ; Bottom brick destroyed - core only hit if ball X in center AND ball entering core Y
+  if bally > player0y + 17 then return
+  if ballx + 2 > player0x + 5 then if ballx < player0x + 11 then goto __P1_Core_Hit
+  return
+
+__P1_Core_Hit
+  ; Player 1 dies - Player 2 wins the round!
+  gosub __Award_P2_Point         ; Award point to Player 2 (BCD)
+  ; Hide P1 ship sprite off-screen (player0)
+  player0y = 200
+  ; Hide P1 paddle off-screen (player2)
+  player2y = 200
+  ; Start 3-second countdown before round reset
+  invincibility_timer = invincibility_duration
+  ; Round will reset automatically via __Round_Reset when timer expires
+  return
+
+__P1_Brick_Bounce
+  ; Bounce the ball back
+  ball_xvel = 0 - ball_xvel
+  ball_yvel = 0 - ball_yvel
+  ; Push ball away to prevent sticking
+  ballx = ballx + ball_xvel
+  ballx = ballx + ball_xvel
+  bally = bally + ball_yvel
+  bally = bally + ball_yvel
+  return
+
+
+__P3_Brick_Hit
+
+  ; BRICK DETECTION - ball must actually overlap brick/core area
+  ; Core is center 6x10 pixels (X: 7-12, Y: 8-17 relative to sprite, +2 offset for P2)
+  ; Bricks surround core: top (Y 0-7), bottom (Y 18-25), left (X 2-6), right (X 13-17)
+
+  ; Y determines top/middle/bottom section (middle expanded +1 up/down)
+  if bally + 4 > player4y + 19 then goto __P3_Bottom_Area
+  if bally > player4y + 6 then goto __P3_Middle_Area
+  goto __P3_Top_Area
+
+__P3_Top_Area
+  ; Top brick narrowed - redirect corners to side bricks (+2 offset for P2)
+  if ballx + 2 <= player4x + 3 then goto __P3_Left_Area
+  if ballx >= player4x + 16 then goto __P3_Right_Area
+  ; Top brick - if exists, destroy and bounce
+  if p3_bricks{0} then p3_bricks{0} = 0 : goto __P3_Brick_Bounce
+  ; Top brick destroyed - core only hit if ball X in center AND ball entering core Y
+  if bally + 4 < player4y + 8 then return
+  if ballx + 2 > player4x + 7 then if ballx < player4x + 13 then goto __P3_Core_Hit
+  return
+
+__P3_Middle_Area
+  ; X determines left or right side (+2 offset for P2)
+  if ballx + 2 <= player4x + 9 then goto __P3_Left_Area
+  goto __P3_Right_Area
+
+__P3_Left_Area
+  ; Left brick - if exists, destroy and bounce
+  if p3_bricks{2} then p3_bricks{2} = 0 : goto __P3_Brick_Bounce
+  ; Left brick destroyed - core only if ball overlaps core X range
+  if ballx + 2 > player4x + 7 then goto __P3_Core_Hit
+  return
+
+__P3_Right_Area
+  ; Right brick - if exists, destroy and bounce
+  if p3_bricks{1} then p3_bricks{1} = 0 : goto __P3_Brick_Bounce
+  ; Right brick destroyed - core only if ball overlaps core X range
+  if ballx < player4x + 13 then goto __P3_Core_Hit
+  return
+
+__P3_Bottom_Area
+  ; Bottom brick narrowed - redirect corners to side bricks (+2 offset for P2)
+  if ballx + 2 <= player4x + 3 then goto __P3_Left_Area
+  if ballx >= player4x + 16 then goto __P3_Right_Area
+  ; Bottom brick - if exists, destroy and bounce
+  if p3_bricks{3} then p3_bricks{3} = 0 : goto __P3_Brick_Bounce
+  ; Bottom brick destroyed - core only hit if ball X in center AND ball entering core Y
+  if bally > player4y + 17 then return
+  if ballx + 2 > player4x + 7 then if ballx < player4x + 13 then goto __P3_Core_Hit
+  return
+
+__P3_Core_Hit
+  ; Player 2 dies - Player 1 wins the round!
+  gosub __Award_P1_Point         ; Award point to Player 1 (BCD)
+  ; Hide P2 ship sprite off-screen (player4)
+  player4y = 200
+  ; Hide P2 paddle off-screen (player3)
+  player3y = 200
+  ; Start 3-second countdown before round reset
+  invincibility_timer = invincibility_duration
+  ; Round will reset automatically via __Round_Reset when timer expires
+  return
+
+__P3_Brick_Bounce
+  ; Bounce the ball back
+  ball_xvel = 0 - ball_xvel
+  ball_yvel = 0 - ball_yvel
+  ; Push ball away to prevent sticking
+  ballx = ballx + ball_xvel
+  ballx = ballx + ball_xvel
+  bally = bally + ball_yvel
+  bally = bally + ball_yvel
+  return
+
+
+  ;***************************************************************
+  ;#######################################################################
+  ;#######################################################################
+  ;
+  ;  SECTION: BALL FOLLOW POSITIONING COORDINATE DATA
+  ;  All P1 and P2 ball follow positions with X/Y offsets
+  ;  Easy to copy between players - just change player0 to player4
+  ;
+  ;#######################################################################
+  ;#######################################################################
+  ;  Ball Follow Player - Position ball around paddle based on direction
+  ;  Ball positioned just outside paddle sprite radius
+  ;***************************************************************
+__Ball_Follow_P1
+  temp_dir = p1_direction
+  ballx = player0x + _ball_x_offsets[temp_dir]
+  bally = player0y + _ball_y_offsets[temp_dir]
+  return
+
+__Ball_Follow_P2
+  temp_dir = p3_direction
+  ballx = player4x + _ball_x_offsets[temp_dir]
+  bally = player4y + _ball_y_offsets[temp_dir]
+  return
+
+__Ball_Follow_P3
+  temp_dir = p3_direction
+  ballx = player4x + _ball_x_offsets[temp_dir]
+  bally = player4y + _ball_y_offsets[temp_dir]
+  return
+
+__Ball_Follow_P4
+  temp_dir = p4_direction
+  ballx = player5x + _ball_x_offsets[temp_dir]
+  bally = player5y + _ball_y_offsets[temp_dir]
+  return
+
+__P1_Launch_Ball
+  ball_state = 0  ; Detach from P1
+  temp_dir = p1_direction  ; Use paddle direction
+  gosub __Set_Ball_Velocity  ; Set to FAST velocity
+  ball_speed_timer = fast_ball_duration  ; Start fast mode timer
+  return
+
+__P3_Launch_Ball
+  ball_state = 0  ; Detach from P2
+  temp_dir = p3_direction  ; Use paddle direction
+  gosub __Set_Ball_Velocity  ; Set to FAST velocity
+  ball_speed_timer = fast_ball_duration  ; Start fast mode timer
+  return
+
+__P3_Launch_Ball
+  ball_state = 0  ; Detach from P3
+  temp_dir = p3_direction  ; Use paddle direction
+  gosub __Set_Ball_Velocity  ; Set to FAST velocity
+  ball_speed_timer = fast_ball_duration  ; Start fast mode timer
+  return
+
+__P4_Launch_Ball
+  ball_state = 0  ; Detach from P4
+  temp_dir = p4_direction  ; Use paddle direction
+  gosub __Set_Ball_Velocity  ; Set to FAST velocity
+  ball_speed_timer = fast_ball_duration  ; Start fast mode timer
+  return
+
+__P1_Auto_Launch
+  gosub __P1_Launch_Ball
+  p1_catch_timer = 0  ; Reset timer (important to prevent repeated calls)
+  p1_state{1} = 1  ; Set cooldown flag
+  return
+
+__P3_Auto_Launch
+  gosub __P3_Launch_Ball
+  p3_catch_timer = 0  ; Reset timer (important to prevent repeated calls)
+  p3_state{1} = 1  ; Set cooldown flag
+  return
+
+
+__P4_Thrust
+  ; Apply thrust in direction temp_dir (0-31)
+  temp_dir = (temp_dir + 16) & 31
+  on temp_dir goto __P4T_0 __P4T_1 __P4T_2 __P4T_3 __P4T_4 __P4T_5 __P4T_6 __P4T_7 __P4T_8 __P4T_9 __P4T_10 __P4T_11 __P4T_12 __P4T_13 __P4T_14 __P4T_15 __P4T_16 __P4T_17 __P4T_18 __P4T_19 __P4T_20 __P4T_21 __P4T_22 __P4T_23 __P4T_24 __P4T_25 __P4T_26 __P4T_27 __P4T_28 __P4T_29 __P4T_30 __P4T_31
+
+; 32-direction thrust: 0=N, 8=E, 16=S, 24=W
+__P4T_0
+  gosub __P4_Accel_Up : return
+__P4T_1
+  gosub __P4_Accel_Up : gosub __P4_Accel_Right : return
+__P4T_2
+  gosub __P4_Accel_Up : gosub __P4_Accel_Right : return
+__P4T_3
+  gosub __P4_Accel_Up : gosub __P4_Accel_Right : return
+__P4T_4
+  gosub __P4_Accel_Up : gosub __P4_Accel_Right : return
+__P4T_5
+  gosub __P4_Accel_Up : gosub __P4_Accel_Right : return
+__P4T_6
+  gosub __P4_Accel_Up : gosub __P4_Accel_Right : return
+__P4T_7
+  gosub __P4_Accel_Up : gosub __P4_Accel_Right : return
+__P4T_8
+  gosub __P4_Accel_Right : return
+__P4T_9
+  gosub __P4_Accel_Down : gosub __P4_Accel_Right : return
+__P4T_10
+  gosub __P4_Accel_Down : gosub __P4_Accel_Right : return
+__P4T_11
+  gosub __P4_Accel_Down : gosub __P4_Accel_Right : return
+__P4T_12
+  gosub __P4_Accel_Down : gosub __P4_Accel_Right : return
+__P4T_13
+  gosub __P4_Accel_Down : gosub __P4_Accel_Right : return
+__P4T_14
+  gosub __P4_Accel_Down : gosub __P4_Accel_Right : return
+__P4T_15
+  gosub __P4_Accel_Down : gosub __P4_Accel_Right : return
+__P4T_16
+  gosub __P4_Accel_Down : return
+__P4T_17
+  gosub __P4_Accel_Down : gosub __P4_Accel_Left : return
+__P4T_18
+  gosub __P4_Accel_Down : gosub __P4_Accel_Left : return
+__P4T_19
+  gosub __P4_Accel_Down : gosub __P4_Accel_Left : return
+__P4T_20
+  gosub __P4_Accel_Down : gosub __P4_Accel_Left : return
+__P4T_21
+  gosub __P4_Accel_Down : gosub __P4_Accel_Left : return
+__P4T_22
+  gosub __P4_Accel_Down : gosub __P4_Accel_Left : return
+__P4T_23
+  gosub __P4_Accel_Down : gosub __P4_Accel_Left : return
+__P4T_24
+  gosub __P4_Accel_Left : return
+__P4T_25
+  gosub __P4_Accel_Up : gosub __P4_Accel_Left : return
+__P4T_26
+  gosub __P4_Accel_Up : gosub __P4_Accel_Left : return
+__P4T_27
+  gosub __P4_Accel_Up : gosub __P4_Accel_Left : return
+__P4T_28
+  gosub __P4_Accel_Up : gosub __P4_Accel_Left : return
+__P4T_29
+  gosub __P4_Accel_Up : gosub __P4_Accel_Left : return
+__P4T_30
+  gosub __P4_Accel_Up : gosub __P4_Accel_Left : return
+__P4T_31
+  gosub __P4_Accel_Up : gosub __P4_Accel_Left : return
+
+
+__P4_Accel_Right
+  ; If moving left, decelerate (return on stop to prevent same-frame re-accel)
+  if p4_dir_x = 255 then p4_speed_x = p4_speed_x + 2 : if p4_speed_x >= 16 then p4_dir_x = 0 : p4_speed_x = 16 : return
+  if p4_dir_x = 0 then p4_dir_x = 1
+  if p4_dir_x = 1 then if p4_speed_x > max_speed then p4_speed_x = p4_speed_x - 2
+  return
+
+__P4_Accel_Left
+  ; If moving right, decelerate (return on stop to prevent same-frame re-accel)
+  if p4_dir_x = 1 then p4_speed_x = p4_speed_x + 2 : if p4_speed_x >= 16 then p4_dir_x = 0 : p4_speed_x = 16 : return
+  if p4_dir_x = 0 then p4_dir_x = 255
+  if p4_dir_x = 255 then if p4_speed_x > max_speed then p4_speed_x = p4_speed_x - 2
+  return
+
+__P4_Accel_Up
+  ; If moving down, decelerate (return on stop to prevent same-frame re-accel)
+  if p4_dir_y = 1 then p4_speed_y = p4_speed_y + 2 : if p4_speed_y >= 16 then p4_dir_y = 0 : p4_speed_y = 16 : return
+  if p4_dir_y = 0 then p4_dir_y = 255
+  if p4_dir_y = 255 then if p4_speed_y > max_speed then p4_speed_y = p4_speed_y - 2
+  return
+
+__P4_Accel_Down
+  ; If moving up, decelerate (return on stop to prevent same-frame re-accel)
+  if p4_dir_y = 255 then p4_speed_y = p4_speed_y + 2 : if p4_speed_y >= 16 then p4_dir_y = 0 : p4_speed_y = 16 : return
+  if p4_dir_y = 0 then p4_dir_y = 1
+  if p4_dir_y = 1 then if p4_speed_y > max_speed then p4_speed_y = p4_speed_y - 2
+  return
+
+
+__P1_Apply_Movement
+  ; Skip movement if player is off-screen (killed)
+  if player0y >= 150 then return
+
+  ; Apply X movement (frame-based velocity)
+  if p1_dir_x <> 0 then p1_frame_x = p1_frame_x - 1
+  if p1_frame_x = 0 then player0x = player0x + p1_dir_x : p1_frame_x = p1_speed_x
+
+  ; Apply Y movement (frame-based velocity) - DOUBLED for PXE
+  if p1_dir_y <> 0 then p1_frame_y = p1_frame_y - 1
+  if p1_frame_y = 0 then player0y = player0y + p1_dir_y : player0y = player0y + p1_dir_y : p1_frame_y = p1_speed_y
+
+  return
+
+
+__P4_Apply_Movement
+  ; Skip movement if player is off-screen (killed)
+  if player5y >= 150 then return
+
+  ; Apply X movement
+  if p4_dir_x <> 0 then p4_frame_x = p4_frame_x - 1
+  if p4_frame_x = 0 then player5x = player5x + p4_dir_x : p4_frame_x = p4_speed_x
+
+  ; Apply Y movement - DOUBLED for PXE
+  if p4_dir_y <> 0 then p4_frame_y = p4_frame_y - 1
+  if p4_frame_y = 0 then player5y = player5y + p4_dir_y : player5y = player5y + p4_dir_y : p4_frame_y = p4_speed_y
+
+  return
+
+
+__P1_Wall_Bounce
+  ; Skip wall bounce if player is off-screen (killed)
+  if player0y >= 150 then return
+
+  ; Check left wall
+  if player0x < 3 then p1_dir_x = 1 : player0x = 3 : p1_frame_x = p1_speed_x
+
+  ; Check right wall
+  if player0x > 139 then p1_dir_x = 255 : player0x = 139 : p1_frame_x = p1_speed_x
+
+  ; Check top wall
+  if player0y < 8 then p1_dir_y = 1 : player0y = 8 : p1_frame_y = p1_speed_y
+
+  ; Check bottom wall
+  if player0y > 135 then p1_dir_y = 255 : player0y = 135 : p1_frame_y = p1_speed_y
+
+  return
+
+
+__P4_Wall_Bounce
+  ; Skip wall bounce if player is off-screen (killed)
+  if player5y >= 150 then return
+
+  ; Check left wall
+  if player5x < 3 then p4_dir_x = 1 : player5x = 3 : p4_frame_x = p4_speed_x
+
+  ; Check right wall
+  if player5x > 139 then p4_dir_x = 255 : player5x = 139 : p4_frame_x = p4_speed_x
+
+  ; Check top wall
+  if player5y < 8 then p4_dir_y = 1 : player5y = 8 : p4_frame_y = p4_speed_y
+
+  ; Check bottom wall
+  if player5y > 135 then p4_dir_y = 255 : player5y = 135 : p4_frame_y = p4_speed_y
+
+  return
+
+
+__Player_Collision
+  ; AABB Collision Detection between Player 1 and Player 2
+  ; Check if hitboxes overlap on both X and Y axes
+  ; Note: P2 uses adjusted position due to player5 sprite origin offset
+
+  ; X-axis overlap check (accounting for P2 hitbox offset)
+  ; player0x < (player5x - p4_hitbox_offset) + ship_width && player0x + ship_width > (player5x - p4_hitbox_offset)
+  if player0x >= player5x - p4_hitbox_offset + ship_width then goto __No_Collision
+  if player0x + ship_width <= player5x - p4_hitbox_offset then goto __No_Collision
+
+  ; Y-axis overlap check
+  ; player0y < player5y + ship_height && player0y + ship_height > player5y
+  if player0y >= player5y + ship_height then goto __No_Collision
+  if player0y + ship_height <= player5y then goto __No_Collision
+
+  ; Collision detected! Reverse velocities and separate ships
+
+  ; Reverse X direction
+  if p1_dir_x = 1 then p1_dir_x = 255 : goto __PC_CheckP1Y
+  if p1_dir_x = 255 then p1_dir_x = 1
+__PC_CheckP1Y
+  ; Reverse Y direction
+  if p1_dir_y = 1 then p1_dir_y = 255 : goto __PC_P2X
+  if p1_dir_y = 255 then p1_dir_y = 1
+
+__PC_P2X
+  ; Reverse P2 X direction
+  if p4_dir_x = 1 then p4_dir_x = 255 : goto __PC_P2Y
+  if p4_dir_x = 255 then p4_dir_x = 1
+__PC_P2Y
+  ; Reverse P2 Y direction
+  if p4_dir_y = 1 then p4_dir_y = 255 : goto __PC_Separate
+  if p4_dir_y = 255 then p4_dir_y = 1
+
+__PC_Separate
+  ; Separate ships to prevent sticking
+  ; Move P1 left and P2 right
+  if player0x < player5x then player0x = player0x - 2 : player5x = player5x + 2
+  if player0x >= player5x then player0x = player0x + 2 : player5x = player5x - 2
+
+  ; Reset frame counters
+  p1_frame_x = p1_speed_x : p1_frame_y = p1_speed_y
+  p4_frame_x = p4_speed_x : p4_frame_y = p4_speed_y
+
+__No_Collision
+  return
+
+
+__Set_Ball_Velocity
+  ; 32-direction fast ball: 0=N, 8=E, 16=S, 24=W
+  temp_dir = (temp_dir + 16) & 31
+  on temp_dir goto __BV_0 __BV_1 __BV_2 __BV_3 __BV_4 __BV_5 __BV_6 __BV_7 __BV_8 __BV_9 __BV_10 __BV_11 __BV_12 __BV_13 __BV_14 __BV_15 __BV_16 __BV_17 __BV_18 __BV_19 __BV_20 __BV_21 __BV_22 __BV_23 __BV_24 __BV_25 __BV_26 __BV_27 __BV_28 __BV_29 __BV_30 __BV_31
+
+__BV_0
+  ball_xvel = 0 : ball_yvel = 253 : return
+__BV_1
+  ball_xvel = 1 : ball_yvel = 253 : return
+__BV_2
+  ball_xvel = 1 : ball_yvel = 253 : return
+__BV_3
+  ball_xvel = 2 : ball_yvel = 254 : return
+__BV_4
+  ball_xvel = 2 : ball_yvel = 254 : return
+__BV_5
+  ball_xvel = 2 : ball_yvel = 254 : return
+__BV_6
+  ball_xvel = 2 : ball_yvel = 255 : return
+__BV_7
+  ball_xvel = 3 : ball_yvel = 255 : return
+__BV_8
+  ball_xvel = 3 : ball_yvel = 0 : return
+__BV_9
+  ball_xvel = 3 : ball_yvel = 1 : return
+__BV_10
+  ball_xvel = 2 : ball_yvel = 1 : return
+__BV_11
+  ball_xvel = 2 : ball_yvel = 2 : return
+__BV_12
+  ball_xvel = 2 : ball_yvel = 2 : return
+__BV_13
+  ball_xvel = 2 : ball_yvel = 2 : return
+__BV_14
+  ball_xvel = 1 : ball_yvel = 3 : return
+__BV_15
+  ball_xvel = 1 : ball_yvel = 3 : return
+__BV_16
+  ball_xvel = 0 : ball_yvel = 3 : return
+__BV_17
+  ball_xvel = 255 : ball_yvel = 3 : return
+__BV_18
+  ball_xvel = 255 : ball_yvel = 3 : return
+__BV_19
+  ball_xvel = 254 : ball_yvel = 2 : return
+__BV_20
+  ball_xvel = 254 : ball_yvel = 2 : return
+__BV_21
+  ball_xvel = 254 : ball_yvel = 2 : return
+__BV_22
+  ball_xvel = 254 : ball_yvel = 1 : return
+__BV_23
+  ball_xvel = 253 : ball_yvel = 1 : return
+__BV_24
+  ball_xvel = 253 : ball_yvel = 0 : return
+__BV_25
+  ball_xvel = 253 : ball_yvel = 255 : return
+__BV_26
+  ball_xvel = 254 : ball_yvel = 255 : return
+__BV_27
+  ball_xvel = 254 : ball_yvel = 254 : return
+__BV_28
+  ball_xvel = 254 : ball_yvel = 254 : return
+__BV_29
+  ball_xvel = 254 : ball_yvel = 254 : return
+__BV_30
+  ball_xvel = 255 : ball_yvel = 253 : return
+__BV_31
+  ball_xvel = 255 : ball_yvel = 253 : return
+
+
+  ;***************************************************************
+  ;  Set Ball Velocity - SLOW version (1 pixel/frame, default speed)
+  ;  temp_dir = 0-31 for direction
+  ;***************************************************************
+__Set_Ball_Velocity_Slow
+  temp_dir = (temp_dir + 16) & 31
+  on temp_dir goto __BVS_0 __BVS_1 __BVS_2 __BVS_3 __BVS_4 __BVS_5 __BVS_6 __BVS_7 __BVS_8 __BVS_9 __BVS_10 __BVS_11 __BVS_12 __BVS_13 __BVS_14 __BVS_15 __BVS_16 __BVS_17 __BVS_18 __BVS_19 __BVS_20 __BVS_21 __BVS_22 __BVS_23 __BVS_24 __BVS_25 __BVS_26 __BVS_27 __BVS_28 __BVS_29 __BVS_30 __BVS_31
+
+__BVS_0
+  ball_xvel = 0 : ball_yvel = 255 : return
+__BVS_1
+  ball_xvel = 1 : ball_yvel = 254 : return
+__BVS_2
+  ball_xvel = 1 : ball_yvel = 254 : return
+__BVS_3
+  ball_xvel = 1 : ball_yvel = 255 : return
+__BVS_4
+  ball_xvel = 1 : ball_yvel = 255 : return
+__BVS_5
+  ball_xvel = 1 : ball_yvel = 255 : return
+__BVS_6
+  ball_xvel = 1 : ball_yvel = 255 : return
+__BVS_7
+  ball_xvel = 1 : ball_yvel = 255 : return
+__BVS_8
+  ball_xvel = 1 : ball_yvel = 0 : return
+__BVS_9
+  ball_xvel = 1 : ball_yvel = 1 : return
+__BVS_10
+  ball_xvel = 1 : ball_yvel = 1 : return
+__BVS_11
+  ball_xvel = 1 : ball_yvel = 1 : return
+__BVS_12
+  ball_xvel = 1 : ball_yvel = 1 : return
+__BVS_13
+  ball_xvel = 1 : ball_yvel = 1 : return
+__BVS_14
+  ball_xvel = 1 : ball_yvel = 2 : return
+__BVS_15
+  ball_xvel = 1 : ball_yvel = 2 : return
+__BVS_16
+  ball_xvel = 0 : ball_yvel = 1 : return
+__BVS_17
+  ball_xvel = 255 : ball_yvel = 2 : return
+__BVS_18
+  ball_xvel = 255 : ball_yvel = 2 : return
+__BVS_19
+  ball_xvel = 255 : ball_yvel = 1 : return
+__BVS_20
+  ball_xvel = 255 : ball_yvel = 1 : return
+__BVS_21
+  ball_xvel = 255 : ball_yvel = 1 : return
+__BVS_22
+  ball_xvel = 255 : ball_yvel = 1 : return
+__BVS_23
+  ball_xvel = 255 : ball_yvel = 1 : return
+__BVS_24
+  ball_xvel = 255 : ball_yvel = 0 : return
+__BVS_25
+  ball_xvel = 255 : ball_yvel = 255 : return
+__BVS_26
+  ball_xvel = 255 : ball_yvel = 255 : return
+__BVS_27
+  ball_xvel = 255 : ball_yvel = 255 : return
+__BVS_28
+  ball_xvel = 255 : ball_yvel = 255 : return
+__BVS_29
+  ball_xvel = 255 : ball_yvel = 255 : return
+__BVS_30
+  ball_xvel = 255 : ball_yvel = 254 : return
+__BVS_31
+  ball_xvel = 255 : ball_yvel = 254 : return
+
+
+  ;***************************************************************
+  ;  Helper subroutines for paddle collision
+  ;***************************************************************
+__Check_P1_Paddle
+  temp_dir = p1_direction
+  gosub __Ball_Bounce_P1
+  return
+
+__Check_P4_Paddle
+  temp_dir = p4_direction
+  gosub __Ball_Bounce_P2
+  return
+
+
+  ;***************************************************************
+  ;  Ball Bounce off Paddles - Catch if button held, otherwise bounce
+  ;  temp_dir contains paddle direction (0-15)
+  ;  Direction 0=South, rotates counter-clockwise
+  ;***************************************************************
+__Ball_Bounce_P1
+  ; Check if button held AND not in cooldown - CATCH
+  if p1_state{0} && !p1_state{1} then ball_state = 1 : p1_catch_timer = 0 : p1_caught_dir = p1_direction : return
+
+  ; Otherwise BOUNCE - maintain current ball speed (temp_dir already set to paddle direction)
+  if ball_speed_timer > 0 then gosub __Set_Ball_Velocity : return
+  gosub __Set_Ball_Velocity_Slow
+  return
+
+__Ball_Bounce_P2
+  ; Check if button held AND not in cooldown - CATCH
+  if p4_state{0} && !p4_state{1} then ball_state = 2 : p4_catch_timer = 0 : p4_caught_dir = p4_direction : return
+
+  ; Otherwise BOUNCE - maintain current ball speed (temp_dir already set to paddle direction)
+  if ball_speed_timer > 0 then gosub __Set_Ball_Velocity : return
+  gosub __Set_Ball_Velocity_Slow
+  return
+
+
+  ;***************************************************************
+  ;  Brick Hit Detection - Determine which brick was hit and destroy it
+  ;  Sprite layout (26 scanlines):
+  ;    Lines 0-6:   Top brick (7 scanlines)
+  ;    Lines 7-8:   Upper connector (2 scanlines)
+  ;    Lines 9-16:  Middle (left brick + core + right brick, 8 scanlines)
+  ;    Lines 17-18: Lower connector (2 scanlines)
+  ;    Lines 19-25: Bottom brick (7 scanlines)
+  ;
+  ;  Brick bits: bit 0=top, bit 1=left, bit 2=right, bit 3=bottom
+  ;***************************************************************
+__P1_Brick_Hit
+  ; BRICK DETECTION - ball must actually overlap brick/core area
+  ; Core is center 6x10 pixels (X: 5-10, Y: 8-17 relative to sprite)
+  ; Bricks surround core: top (Y 0-7), bottom (Y 18-25), left (X 0-4), right (X 11-15)
+
+  ; Y determines top/middle/bottom section (middle expanded +1 up/down)
+  if bally + 4 > player0y + 19 then goto __P1_Bottom_Area
+  if bally > player0y + 6 then goto __P1_Middle_Area
+  goto __P1_Top_Area
+
+__P1_Top_Area
+  ; Top brick narrowed - redirect corners to side bricks
+  if ballx + 2 <= player0x + 1 then goto __P1_Left_Area
+  if ballx >= player0x + 14 then goto __P1_Right_Area
+  ; Top brick - if exists, destroy and bounce
+  if p1_bricks{0} then p1_bricks{0} = 0 : goto __P1_Brick_Bounce
+  ; Top brick destroyed - core only hit if ball X in center AND ball entering core Y
+  if bally + 4 < player0y + 8 then return
+  if ballx + 2 > player0x + 5 then if ballx < player0x + 11 then goto __P1_Core_Hit
+  return
+
+__P1_Middle_Area
+  ; X determines left or right side
+  if ballx + 2 <= player0x + 7 then goto __P1_Left_Area
+  goto __P1_Right_Area
+
+__P1_Left_Area
+  ; Left brick - if exists, destroy and bounce
+  if p1_bricks{2} then p1_bricks{2} = 0 : goto __P1_Brick_Bounce
+  ; Left brick destroyed - core only if ball overlaps core X range
+  if ballx + 2 > player0x + 5 then goto __P1_Core_Hit
+  return
+
+__P1_Right_Area
+  ; Right brick - if exists, destroy and bounce
+  if p1_bricks{1} then p1_bricks{1} = 0 : goto __P1_Brick_Bounce
+  ; Right brick destroyed - core only if ball overlaps core X range
+  if ballx < player0x + 11 then goto __P1_Core_Hit
+  return
+
+__P1_Bottom_Area
+  ; Bottom brick narrowed - redirect corners to side bricks
+  if ballx + 2 <= player0x + 1 then goto __P1_Left_Area
+  if ballx >= player0x + 14 then goto __P1_Right_Area
+  ; Bottom brick - if exists, destroy and bounce
+  if p1_bricks{3} then p1_bricks{3} = 0 : goto __P1_Brick_Bounce
+  ; Bottom brick destroyed - core only hit if ball X in center AND ball entering core Y
+  if bally > player0y + 17 then return
+  if ballx + 2 > player0x + 5 then if ballx < player0x + 11 then goto __P1_Core_Hit
+  return
+
+__P1_Core_Hit
+  ; Player 1 dies - Player 2 wins the round!
+  gosub __Award_P2_Point         ; Award point to Player 2 (BCD)
+  ; Hide P1 ship sprite off-screen (player0)
+  player0y = 200
+  ; Hide P1 paddle off-screen (player2)
+  player2y = 200
+  ; Start 3-second countdown before round reset
+  invincibility_timer = invincibility_duration
+  ; Round will reset automatically via __Round_Reset when timer expires
+  return
+
+__P1_Brick_Bounce
+  ; Bounce the ball back
+  ball_xvel = 0 - ball_xvel
+  ball_yvel = 0 - ball_yvel
+  ; Push ball away to prevent sticking
+  ballx = ballx + ball_xvel
+  ballx = ballx + ball_xvel
+  bally = bally + ball_yvel
+  bally = bally + ball_yvel
+  return
+
+
+__P4_Brick_Hit
+
+  ; BRICK DETECTION - ball must actually overlap brick/core area
+  ; Core is center 6x10 pixels (X: 7-12, Y: 8-17 relative to sprite, +2 offset for P2)
+  ; Bricks surround core: top (Y 0-7), bottom (Y 18-25), left (X 2-6), right (X 13-17)
+
+  ; Y determines top/middle/bottom section (middle expanded +1 up/down)
+  if bally + 4 > player5y + 19 then goto __P4_Bottom_Area
+  if bally > player5y + 6 then goto __P4_Middle_Area
+  goto __P4_Top_Area
+
+__P4_Top_Area
+  ; Top brick narrowed - redirect corners to side bricks (+2 offset for P2)
+  if ballx + 2 <= player5x + 3 then goto __P4_Left_Area
+  if ballx >= player5x + 16 then goto __P4_Right_Area
+  ; Top brick - if exists, destroy and bounce
+  if p4_bricks{0} then p4_bricks{0} = 0 : goto __P4_Brick_Bounce
+  ; Top brick destroyed - core only hit if ball X in center AND ball entering core Y
+  if bally + 4 < player5y + 8 then return
+  if ballx + 2 > player5x + 7 then if ballx < player5x + 13 then goto __P4_Core_Hit
+  return
+
+__P4_Middle_Area
+  ; X determines left or right side (+2 offset for P2)
+  if ballx + 2 <= player5x + 9 then goto __P4_Left_Area
+  goto __P4_Right_Area
+
+__P4_Left_Area
+  ; Left brick - if exists, destroy and bounce
+  if p4_bricks{2} then p4_bricks{2} = 0 : goto __P4_Brick_Bounce
+  ; Left brick destroyed - core only if ball overlaps core X range
+  if ballx + 2 > player5x + 7 then goto __P4_Core_Hit
+  return
+
+__P4_Right_Area
+  ; Right brick - if exists, destroy and bounce
+  if p4_bricks{1} then p4_bricks{1} = 0 : goto __P4_Brick_Bounce
+  ; Right brick destroyed - core only if ball overlaps core X range
+  if ballx < player5x + 13 then goto __P4_Core_Hit
+  return
+
+__P4_Bottom_Area
+  ; Bottom brick narrowed - redirect corners to side bricks (+2 offset for P2)
+  if ballx + 2 <= player5x + 3 then goto __P4_Left_Area
+  if ballx >= player5x + 16 then goto __P4_Right_Area
+  ; Bottom brick - if exists, destroy and bounce
+  if p4_bricks{3} then p4_bricks{3} = 0 : goto __P4_Brick_Bounce
+  ; Bottom brick destroyed - core only hit if ball X in center AND ball entering core Y
+  if bally > player5y + 17 then return
+  if ballx + 2 > player5x + 7 then if ballx < player5x + 13 then goto __P4_Core_Hit
+  return
+
+__P4_Core_Hit
+  ; Player 2 dies - Player 1 wins the round!
+  gosub __Award_P1_Point         ; Award point to Player 1 (BCD)
+  ; Hide P2 ship sprite off-screen (player5)
+  player5y = 200
+  ; Hide P2 paddle off-screen (player3)
+  player3y = 200
+  ; Start 3-second countdown before round reset
+  invincibility_timer = invincibility_duration
+  ; Round will reset automatically via __Round_Reset when timer expires
+  return
+
+__P4_Brick_Bounce
+  ; Bounce the ball back
+  ball_xvel = 0 - ball_xvel
+  ball_yvel = 0 - ball_yvel
+  ; Push ball away to prevent sticking
+  ballx = ballx + ball_xvel
+  ballx = ballx + ball_xvel
+  bally = bally + ball_yvel
+  bally = bally + ball_yvel
+  return
+
+
+  ;***************************************************************
+  ;#######################################################################
+  ;#######################################################################
+  ;
+  ;  SECTION: BALL FOLLOW POSITIONING COORDINATE DATA
+  ;  All P1 and P2 ball follow positions with X/Y offsets
+  ;  Easy to copy between players - just change player0 to player5
+  ;
+  ;#######################################################################
+  ;#######################################################################
+  ;  Ball Follow Player - Position ball around paddle based on direction
+  ;  Ball positioned just outside paddle sprite radius
+  ;***************************************************************
+__Ball_Follow_P1
+  temp_dir = p1_direction
+  ballx = player0x + _ball_x_offsets[temp_dir]
+  bally = player0y + _ball_y_offsets[temp_dir]
+  return
+
+__Ball_Follow_P2
+  temp_dir = p4_direction
+  ballx = player5x + _ball_x_offsets[temp_dir]
+  bally = player5y + _ball_y_offsets[temp_dir]
+  return
+
+__Ball_Follow_P3
+  temp_dir = p3_direction
+  ballx = player4x + _ball_x_offsets[temp_dir]
+  bally = player4y + _ball_y_offsets[temp_dir]
+  return
+
+__Ball_Follow_P4
+  temp_dir = p4_direction
+  ballx = player5x + _ball_x_offsets[temp_dir]
+  bally = player5y + _ball_y_offsets[temp_dir]
+  return
+
+__P1_Launch_Ball
+  ball_state = 0  ; Detach from P1
+  temp_dir = p1_direction  ; Use paddle direction
+  gosub __Set_Ball_Velocity  ; Set to FAST velocity
+  ball_speed_timer = fast_ball_duration  ; Start fast mode timer
+  return
+
+__P4_Launch_Ball
+  ball_state = 0  ; Detach from P2
+  temp_dir = p4_direction  ; Use paddle direction
+  gosub __Set_Ball_Velocity  ; Set to FAST velocity
+  ball_speed_timer = fast_ball_duration  ; Start fast mode timer
+  return
+
+__P3_Launch_Ball
+  ball_state = 0  ; Detach from P3
+  temp_dir = p3_direction  ; Use paddle direction
+  gosub __Set_Ball_Velocity  ; Set to FAST velocity
+  ball_speed_timer = fast_ball_duration  ; Start fast mode timer
+  return
+
+__P4_Launch_Ball
+  ball_state = 0  ; Detach from P4
+  temp_dir = p4_direction  ; Use paddle direction
+  gosub __Set_Ball_Velocity  ; Set to FAST velocity
+  ball_speed_timer = fast_ball_duration  ; Start fast mode timer
+  return
+
+__P1_Auto_Launch
+  gosub __P1_Launch_Ball
+  p1_catch_timer = 0  ; Reset timer (important to prevent repeated calls)
+  p1_state{1} = 1  ; Set cooldown flag
+  return
+
+__P4_Auto_Launch
+  gosub __P4_Launch_Ball
+  p4_catch_timer = 0  ; Reset timer (important to prevent repeated calls)
+  p4_state{1} = 1  ; Set cooldown flag
+  return
+
+
+
+
   ;***************************************************************
   ;  Slow Ball Down - Reduce velocity from fast to slow
   ;***************************************************************
