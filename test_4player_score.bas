@@ -48,10 +48,10 @@ __Game_Init
 
 __Main_Loop
 
-  if joy0up then score_byte2 = score_byte2 + 1
-  if joy0down then score_byte1 = score_byte1 + 1
-  if joy0left then score_byte1 = score_byte1 + $10
-  if joy0right then score_byte0 = score_byte0 + $10
+  if joy0up then score_byte2 = score_byte2 + 1 : player0y = player0y - 1
+  if joy0down then score_byte1 = score_byte1 + 1 : player0y = player0y + 1
+  if joy0left then score_byte1 = score_byte1 + $10 : player0x = player0x - 1
+  if joy0right then score_byte0 = score_byte0 + $10 : player0x = player0x + 1
 
   drawscreen
   goto __Main_Loop
