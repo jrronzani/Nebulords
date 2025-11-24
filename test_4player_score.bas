@@ -48,10 +48,12 @@ __Game_Init
 
 __Main_Loop
 
-  if joy0up then score_byte2 = score_byte2 + 1 : player0y = player0y - 1
-  if joy0down then score_byte1 = score_byte1 + 1 : player0y = player0y + 1
-  if joy0left then score_byte1 = score_byte1 + $10 : player0x = player0x - 1
-  if joy0right then score_byte0 = score_byte0 + $10 : player0x = player0x + 1
+  if joy0fire then rem force joystick mode
+
+  if joy0up then score_byte2 = (score_byte2 & $F0) | ((score_byte2 + 1) & $0F) : player0y = player0y - 1 : if (score_byte2 & $0F) > 9 then score_byte2 = (score_byte2 & $F0)
+  if joy0down then score_byte1 = (score_byte1 + $10) | (score_byte1 & $0F) : player0y = player0y + 1 : if (score_byte1 & $F0) > $90 then score_byte1 = (score_byte1 & $0F)
+  if joy0left then score_byte1 = (score_byte1 & $F0) | ((score_byte1 + 1) & $0F) : player0x = player0x - 1 : if (score_byte1 & $0F) > 9 then score_byte1 = (score_byte1 & $F0)
+  if joy0right then score_byte0 = (score_byte0 + $10) | (score_byte0 & $0F) : player0x = player0x + 1 : if (score_byte0 & $F0) > $90 then score_byte0 = (score_byte0 & $0F)
 
   drawscreen
   goto __Main_Loop
