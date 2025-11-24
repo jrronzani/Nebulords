@@ -27,6 +27,11 @@ end
   %11111111
   %11111111
   %11111111
+  %11111111
+  %11111111
+  %11111111
+  %11111111
+  %11111111
 end
 
   scorecolors:
@@ -46,7 +51,7 @@ __Game_Init
   COLUP0 = $46
 
   player0x = 70 : player0y = 80
-  player1x = 60 : player1y = 180
+  player1x = 60 : player1y = 85
 
   score_byte2 = $A0
   score_byte1 = $00
