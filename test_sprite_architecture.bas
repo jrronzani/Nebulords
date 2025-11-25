@@ -70,7 +70,7 @@
     $96
     $96
     $96
-  end
+end
 
   player1color:
     $26
@@ -81,7 +81,7 @@
     $26
     $26
     $26
-  end
+end
 
   player2color:
     $C6
@@ -92,7 +92,7 @@
     $C6
     $C6
     $C6
-  end
+end
 
   player3color:
     $76
@@ -103,7 +103,7 @@
     $76
     $76
     $76
-  end
+end
 
   ;***************************************************************
   ;  MAIN LOOP
@@ -171,7 +171,7 @@ __Update_P0_Sprite
   ; Use on goto to select sprite based on frame
   on p0_frame goto __P0_Frame_0 __P0_Frame_1 __P0_Frame_2 __P0_Frame_3
 
-__P0_Frame_0:  ; Arrow Up
+__P0_Frame_0  ; Arrow Up
   player0:
     %00011000
     %00111100
@@ -181,10 +181,10 @@ __P0_Frame_0:  ; Arrow Up
     %00011000
     %00011000
     %00000000
-  end
+end
   return
 
-__P0_Frame_1:  ; Arrow Right
+__P0_Frame_1  ; Arrow Right
   player0:
     %00000000
     %00011000
@@ -194,10 +194,10 @@ __P0_Frame_1:  ; Arrow Right
     %00001100
     %00011000
     %00000000
-  end
+end
   return
 
-__P0_Frame_2:  ; Arrow Down
+__P0_Frame_2  ; Arrow Down
   player0:
     %00000000
     %00011000
@@ -207,10 +207,10 @@ __P0_Frame_2:  ; Arrow Down
     %01111110
     %00111100
     %00011000
-  end
+end
   return
 
-__P0_Frame_3:  ; Arrow Left
+__P0_Frame_3  ; Arrow Left
   player0:
     %00000000
     %00011000
@@ -220,14 +220,14 @@ __P0_Frame_3:  ; Arrow Left
     %00110000
     %00011000
     %00000000
-  end
+end
   return
 
 
 __Update_P1_Sprite
   on p1_frame goto __P1_Frame_0 __P1_Frame_1 __P1_Frame_2 __P1_Frame_3
 
-__P1_Frame_0:  ; Arrow Up (same pattern as P0)
+__P1_Frame_0  ; Arrow Up (same pattern as P0)
   player1:
     %00011000
     %00111100
@@ -237,10 +237,10 @@ __P1_Frame_0:  ; Arrow Up (same pattern as P0)
     %00011000
     %00011000
     %00000000
-  end
+end
   return
 
-__P1_Frame_1:  ; Arrow Right
+__P1_Frame_1  ; Arrow Right
   player1:
     %00000000
     %00011000
@@ -250,10 +250,10 @@ __P1_Frame_1:  ; Arrow Right
     %00001100
     %00011000
     %00000000
-  end
+end
   return
 
-__P1_Frame_2:  ; Arrow Down
+__P1_Frame_2  ; Arrow Down
   player1:
     %00000000
     %00011000
@@ -263,10 +263,10 @@ __P1_Frame_2:  ; Arrow Down
     %01111110
     %00111100
     %00011000
-  end
+end
   return
 
-__P1_Frame_3:  ; Arrow Left
+__P1_Frame_3  ; Arrow Left
   player1:
     %00000000
     %00011000
@@ -276,14 +276,14 @@ __P1_Frame_3:  ; Arrow Left
     %00110000
     %00011000
     %00000000
-  end
+end
   return
 
 
 __Update_P2_Sprite
   on p2_frame goto __P2_Frame_0 __P2_Frame_1 __P2_Frame_2 __P2_Frame_3
 
-__P2_Frame_0:  ; Arrow Up
+__P2_Frame_0  ; Arrow Up
   player2:
     %00011000
     %00111100
@@ -293,10 +293,10 @@ __P2_Frame_0:  ; Arrow Up
     %00011000
     %00011000
     %00000000
-  end
+end
   return
 
-__P2_Frame_1:  ; Arrow Right
+__P2_Frame_1  ; Arrow Right
   player2:
     %00000000
     %00011000
@@ -306,10 +306,10 @@ __P2_Frame_1:  ; Arrow Right
     %00001100
     %00011000
     %00000000
-  end
+end
   return
 
-__P2_Frame_2:  ; Arrow Down
+__P2_Frame_2  ; Arrow Down
   player2:
     %00000000
     %00011000
@@ -319,10 +319,10 @@ __P2_Frame_2:  ; Arrow Down
     %01111110
     %00111100
     %00011000
-  end
+end
   return
 
-__P2_Frame_3:  ; Arrow Left
+__P2_Frame_3  ; Arrow Left
   player2:
     %00000000
     %00011000
@@ -332,14 +332,14 @@ __P2_Frame_3:  ; Arrow Left
     %00110000
     %00011000
     %00000000
-  end
+end
   return
 
 
 __Update_P3_Sprite
   on p3_frame goto __P3_Frame_0 __P3_Frame_1 __P3_Frame_2 __P3_Frame_3
 
-__P3_Frame_0:  ; Arrow Up
+__P3_Frame_0  ; Arrow Up
   player3:
     %00011000
     %00111100
@@ -349,10 +349,10 @@ __P3_Frame_0:  ; Arrow Up
     %00011000
     %00011000
     %00000000
-  end
+end
   return
 
-__P3_Frame_1:  ; Arrow Right
+__P3_Frame_1  ; Arrow Right
   player3:
     %00000000
     %00011000
@@ -362,10 +362,10 @@ __P3_Frame_1:  ; Arrow Right
     %00001100
     %00011000
     %00000000
-  end
+end
   return
 
-__P3_Frame_2:  ; Arrow Down
+__P3_Frame_2  ; Arrow Down
   player3:
     %00000000
     %00011000
@@ -375,10 +375,10 @@ __P3_Frame_2:  ; Arrow Down
     %01111110
     %00111100
     %00011000
-  end
+end
   return
 
-__P3_Frame_3:  ; Arrow Left
+__P3_Frame_3  ; Arrow Left
   player3:
     %00000000
     %00011000
@@ -388,5 +388,5 @@ __P3_Frame_3:  ; Arrow Left
     %00110000
     %00011000
     %00000000
-  end
+end
   return
