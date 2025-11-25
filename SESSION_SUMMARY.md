@@ -2,7 +2,14 @@
 
 ## Current Status - Nebulords Main Game
 
-**Latest Version**: v079B (in versions/ folder)
+**Latest Version**: v094 (in versions/ folder)
+
+**Optimization from v079B → v094**:
+- ✅ **~180 lines of code removed** via shared physics functions
+- ✅ **Refactored physics**: Single thrust/acceleration/movement functions (not duplicated per player)
+- ✅ **Load/Store context functions** for player physics state
+- ✅ **Temp variables** for shared physics processing
+- **Result**: Much better positioned to avoid page boundary issues when adding 4-player support
 
 **Current Player Support**: 2 players only
 - Player 1: Paddle0 + joy0right (thrust button)
@@ -180,7 +187,7 @@ dim score_byte2 = score     ; Leftmost 2 digits
    - Separate initialization from main loop
    - Use labels and sections for clarity
 
-### Main Loop Current Structure (v079B)
+### Main Loop Current Structure (v094)
 ```
 __Main_Loop:
   1. Ball collision checks (with paddles, bricks, core)
@@ -228,7 +235,7 @@ __Main_Loop:
 
 ## Key Files
 
-- `versions/nebulordsPXE_v079B.bas` - Latest working 2-player game
+- `versions/nebulordsPXE_v094.bas` - Latest working 2-player game (optimized from v079B)
 - `test_4player_score_v3.bas` - User's score test (original colors)
 - `test_4player_score_v4.bas` - Score test with corrected Nebulords colors
 - `8_Way Scrolling_Rev_B.bas` - Reference for PXE features
