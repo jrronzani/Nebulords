@@ -52,8 +52,8 @@ __Game_Init
   score_byte1 = $00
   score_byte0 = $0A
 
-  dash_x = 60
-  dash_color = $46
+  dash_x = 64
+  dash_color = $96
 
   drawscreen
   goto __Main_Loop
@@ -62,8 +62,8 @@ __Main_Loop
 
   if joy0fire then rem force joystick mode
 
-  if joy0up then score_byte2 = (score_byte2 & $F0) | ((score_byte2 + 1) & $0F) : player0y = player0y - 1 : if (score_byte2 & $0F) > 9 then score_byte2 = (score_byte2 & $F0) : dash_x = 64 : dash_color = $46
-  if joy0down then score_byte1 = (score_byte1 + $10) | (score_byte1 & $0F) : player0y = player0y + 1 : if (score_byte1 & $F0) > $90 then score_byte1 = (score_byte1 & $0F) : dash_x = 72 : dash_color = $86
+  if joy0up then score_byte2 = (score_byte2 & $F0) | ((score_byte2 + 1) & $0F) : player0y = player0y - 1 : if (score_byte2 & $0F) > 9 then score_byte2 = (score_byte2 & $F0) : dash_x = 64 : dash_color = $96
+  if joy0down then score_byte1 = (score_byte1 + $10) | (score_byte1 & $0F) : player0y = player0y + 1 : if (score_byte1 & $F0) > $90 then score_byte1 = (score_byte1 & $0F) : dash_x = 72 : dash_color = $76
   if joy0left then score_byte1 = (score_byte1 & $F0) | ((score_byte1 + 1) & $0F) : player0x = player0x - 1 : if (score_byte1 & $0F) > 9 then score_byte1 = (score_byte1 & $F0) : dash_x = 80 : dash_color = $26
   if joy0right then score_byte0 = (score_byte0 + $10) | (score_byte0 & $0F) : player0x = player0x + 1 : if (score_byte0 & $F0) > $90 then score_byte0 = (score_byte0 & $0F) : dash_x = 88 : dash_color = $C6
 
