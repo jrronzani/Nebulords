@@ -233,8 +233,9 @@ __Game_Init
   p2_bricks = %00001111      ; Top, Left, Right, Bottom all intact
 
   ; Initialize scores - 4-player format (v096): _0000_
-  ; score_byte2 = $00 (blank + P1=0), score_byte1 = $00 (P2=0 + P3=0), score_byte0 = $00 (P4=0 + blank)
-  score_byte2 = $00 : score_byte1 = $00 : score_byte0 = $00
+  ; score_byte2 = $A0 (blank + P1=0), score_byte1 = $00 (P2=0 + P3=0), score_byte0 = $0A (P4=0 + blank)
+  ; Using $A for blank spaces in BCD display
+  score_byte2 = $A0 : score_byte1 = $00 : score_byte0 = $0A
   invincibility_timer = 0    ; No invincibility at start
 
   ballx = 80 : bally = 88
