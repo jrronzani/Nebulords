@@ -76,18 +76,6 @@
   PaddleRange0 = 136
   PaddleRange1 = 136
 
-  ; Score color gradient (for 4-player score display)
-  scorecolors:
-    $F4
-    $F6
-    $F8
-    $FA
-    $FC
-    $FE
-    $FC
-    $FA
-end
-
   ;***************************************************************
   ;  Physics Constants
   ;***************************************************************
@@ -439,6 +427,18 @@ end
   $74
   $76
   $78
+end
+
+  ; Score color gradient (for 4-player score display)
+  scorecolors:
+    $F4
+    $F6
+    $F8
+    $FA
+    $FC
+    $FE
+    $FC
+    $FA
 end
 
 
