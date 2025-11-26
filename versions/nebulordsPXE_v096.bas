@@ -62,6 +62,10 @@
   ;***************************************************************
   set kernel PXE
 
+  ; Enable PXE score display
+  const pfscore = 1
+  const font = retroputer
+
   ; Set Playfield to full 40 pixel width
   PF_MODE = $fd
 
