@@ -276,21 +276,21 @@ __Game_Init
 
   ballheight = 1
 
-  ; Enable double-width sprites for ships
-  NUSIZ0 = $05
-  _NUSIZ1 = $05
-  _NUSIZ4 = $05  ; P3 ship (double-width)
-  _NUSIZ5 = $05  ; P4 ship (double-width)
+  ; Enable double-width sprites for ships (player0-3)
+  NUSIZ0 = $05   ; P1 ship
+  _NUSIZ1 = $05  ; P2 ship
+  NUSIZ2 = $05   ; P3 ship
+  NUSIZ3 = $05   ; P4 ship
 
-  ; Single-width for paddles
-  NUSIZ2 = $00
-  NUSIZ3 = $00
+  ; Single-width for paddles (player4-5)
+  NUSIZ4 = $00   ; P1 paddle
+  NUSIZ5 = $00   ; P2 paddle
 
   ; Initialize ship positions (4-player layout)
-  player0x = 25 : player0y = 40    ; P1: Top-left (red)
-  player1x = 117 : player1y = 40   ; P2: Top-right (blue)
-  player4x = 25 : player4y = 136   ; P3: Bottom-left (orange)
-  player5x = 117 : player5y = 136  ; P4: Bottom-right (green)
+  player0x = 25 : player0y = 40    ; P1 ship: Top-left (red)
+  player1x = 117 : player1y = 40   ; P2 ship: Top-right (blue)
+  player2x = 25 : player2y = 136   ; P3 ship: Bottom-left (orange)
+  player3x = 117 : player3y = 136  ; P4 ship: Bottom-right (green)
 
   ; Initialize ship directions
   p1_direction = 24  ; Facing right (toward center)
@@ -552,8 +552,8 @@ end
   $78
 end
 
-  ; Player 4 sprite (P3 ship - bottom-left, orange)
-  player4:
+  ; Player 2 sprite (P3 ship - bottom-left, orange)
+  player2:
   %00111100
   %00111100
   %00111100
@@ -582,7 +582,7 @@ end
   %00111100
 end
 
-  player4color:
+  player2color:
   $20
   $22
   $24
@@ -611,8 +611,8 @@ end
   $22
 end
 
-  ; Player 5 sprite (P4 ship - bottom-right, green)
-  player5:
+  ; Player 3 sprite (P4 ship - bottom-right, green)
+  player3:
   %00111100
   %00111100
   %00111100
@@ -641,7 +641,7 @@ end
   %00111100
 end
 
-  player5color:
+  player3color:
   $C0
   $C2
   $C4
@@ -747,9 +747,9 @@ __P1_Button_Done
   ; P2 coordinate collision (shifted +2px for player1 sprite offset) - using inclusive bounds
   if player1y < 200 then if (bally + 4) >= player1y && bally <= (player1y + 26) then if (ballx + 2) >= (player1x + 2) && ballx <= (player1x + 18) then gosub __P2_Brick_Hit : goto __Skip_Brick_Collision
   ; P3 coordinate collision (shifted +2px for player4 sprite offset) - using inclusive bounds
-  if player4y < 200 then if (bally + 4) >= player4y && bally <= (player4y + 26) then if (ballx + 2) >= (player4x + 2) && ballx <= (player4x + 18) then gosub __P3_Brick_Hit : goto __Skip_Brick_Collision
+  if player2y < 200 then if (bally + 4) >= player2y && bally <= (player2y + 26) then if (ballx + 2) >= (player2x + 2) && ballx <= (player2x + 18) then gosub __P3_Brick_Hit : goto __Skip_Brick_Collision
   ; P4 coordinate collision (shifted +2px for player5 sprite offset) - using inclusive bounds
-  if player5y < 200 then if (bally + 4) >= player5y && bally <= (player5y + 26) then if (ballx + 2) >= (player5x + 2) && ballx <= (player5x + 18) then gosub __P4_Brick_Hit
+  if player3y < 200 then if (bally + 4) >= player3y && bally <= (player3y + 26) then if (ballx + 2) >= (player3x + 2) && ballx <= (player3x + 18) then gosub __P4_Brick_Hit
 
 __Skip_Brick_Collision
 
@@ -768,11 +768,11 @@ __Skip_Brick_Collision
   ;***************************************************************
   if ball_state > 0 then goto __Skip_Paddle_Collision
 
-  ; Check P1 paddle (player2)
-  if ballx < player2x + 11 && ballx + 2 > player2x + 3 then if bally < player2y + 10 && bally + 4 > player2y - 1 then gosub __Check_P1_Paddle
+  ; Check P1 paddle (player4)
+  if ballx < player4x + 11 && ballx + 2 > player4x + 3 then if bally < player4y + 10 && bally + 4 > player4y - 1 then gosub __Check_P1_Paddle
 
-  ; Check P2 paddle (player3)
-  if ballx < player3x + 9 && ballx + 2 > player3x + 1 then if bally < player3y + 10 && bally + 4 > player3y - 1 then gosub __Check_P2_Paddle
+  ; Check P2 paddle (player5)
+  if ballx < player5x + 9 && ballx + 2 > player5x + 1 then if bally < player5y + 10 && bally + 4 > player5y - 1 then gosub __Check_P2_Paddle
 
 __Skip_Paddle_Collision
 
@@ -1443,8 +1443,8 @@ __P1_Core_Hit
   gosub __Award_P2_Point         ; Award point to Player 2 (BCD)
   ; Hide P1 ship sprite off-screen (player0)
   player0y = 200
-  ; Hide P1 paddle off-screen (player2)
-  player2y = 200
+  ; Hide P1 paddle off-screen (player4)
+  player4y = 200
   ; Start 3-second countdown before round reset
   invincibility_timer = invincibility_duration
   ; Round will reset automatically via __Round_Reset when timer expires
@@ -1521,8 +1521,8 @@ __P2_Core_Hit
   gosub __Award_P1_Point         ; Award point to Player 1 (BCD)
   ; Hide P2 ship sprite off-screen (player1)
   player1y = 200
-  ; Hide P2 paddle off-screen (player3)
-  player3y = 200
+  ; Hide P2 paddle off-screen (player5)
+  player5y = 200
   ; Start 3-second countdown before round reset
   invincibility_timer = invincibility_duration
   ; Round will reset automatically via __Round_Reset when timer expires
@@ -1544,43 +1544,43 @@ __P2_Brick_Bounce
 
 __P3_Brick_Hit
   ; P3 uses player4 (same +2 offset as player1/P2)
-  if bally + 4 > player4y + 19 then goto __P3_Bottom_Area
-  if bally > player4y + 6 then goto __P3_Middle_Area
+  if bally + 4 > player2y + 19 then goto __P3_Bottom_Area
+  if bally > player2y + 6 then goto __P3_Middle_Area
   goto __P3_Top_Area
 
 __P3_Top_Area
-  if ballx + 2 <= player4x + 3 then goto __P3_Left_Area
-  if ballx >= player4x + 16 then goto __P3_Right_Area
+  if ballx + 2 <= player2x + 3 then goto __P3_Left_Area
+  if ballx >= player2x + 16 then goto __P3_Right_Area
   if p3_bricks{0} then p3_bricks{0} = 0 : goto __P3_Brick_Bounce
-  if bally + 4 < player4y + 8 then return
-  if ballx + 2 > player4x + 7 then if ballx < player4x + 13 then goto __P3_Core_Hit
+  if bally + 4 < player2y + 8 then return
+  if ballx + 2 > player2x + 7 then if ballx < player2x + 13 then goto __P3_Core_Hit
   return
 
 __P3_Middle_Area
-  if ballx + 2 <= player4x + 9 then goto __P3_Left_Area
+  if ballx + 2 <= player2x + 9 then goto __P3_Left_Area
   goto __P3_Right_Area
 
 __P3_Left_Area
   if p3_bricks{2} then p3_bricks{2} = 0 : goto __P3_Brick_Bounce
-  if ballx + 2 > player4x + 7 then goto __P3_Core_Hit
+  if ballx + 2 > player2x + 7 then goto __P3_Core_Hit
   return
 
 __P3_Right_Area
   if p3_bricks{1} then p3_bricks{1} = 0 : goto __P3_Brick_Bounce
-  if ballx < player4x + 13 then goto __P3_Core_Hit
+  if ballx < player2x + 13 then goto __P3_Core_Hit
   return
 
 __P3_Bottom_Area
-  if ballx + 2 <= player4x + 3 then goto __P3_Left_Area
-  if ballx >= player4x + 16 then goto __P3_Right_Area
+  if ballx + 2 <= player2x + 3 then goto __P3_Left_Area
+  if ballx >= player2x + 16 then goto __P3_Right_Area
   if p3_bricks{3} then p3_bricks{3} = 0 : goto __P3_Brick_Bounce
-  if bally > player4y + 17 then return
-  if ballx + 2 > player4x + 7 then if ballx < player4x + 13 then goto __P3_Core_Hit
+  if bally > player2y + 17 then return
+  if ballx + 2 > player2x + 7 then if ballx < player2x + 13 then goto __P3_Core_Hit
   return
 
 __P3_Core_Hit
   gosub __Award_P1_Point  ; P1 gets point when P3 dies
-  player4y = 200  ; Hide P3 ship
+  player2y = 200  ; Hide P3 ship
   invincibility_timer = invincibility_duration
   return
 
@@ -1597,43 +1597,43 @@ __P3_Brick_Bounce
 
 __P4_Brick_Hit
   ; P4 uses player5 (same +2 offset as player1/P2)
-  if bally + 4 > player5y + 19 then goto __P4_Bottom_Area
-  if bally > player5y + 6 then goto __P4_Middle_Area
+  if bally + 4 > player3y + 19 then goto __P4_Bottom_Area
+  if bally > player3y + 6 then goto __P4_Middle_Area
   goto __P4_Top_Area
 
 __P4_Top_Area
-  if ballx + 2 <= player5x + 3 then goto __P4_Left_Area
-  if ballx >= player5x + 16 then goto __P4_Right_Area
+  if ballx + 2 <= player3x + 3 then goto __P4_Left_Area
+  if ballx >= player3x + 16 then goto __P4_Right_Area
   if p4_bricks{0} then p4_bricks{0} = 0 : goto __P4_Brick_Bounce
-  if bally + 4 < player5y + 8 then return
-  if ballx + 2 > player5x + 7 then if ballx < player5x + 13 then goto __P4_Core_Hit
+  if bally + 4 < player3y + 8 then return
+  if ballx + 2 > player3x + 7 then if ballx < player3x + 13 then goto __P4_Core_Hit
   return
 
 __P4_Middle_Area
-  if ballx + 2 <= player5x + 9 then goto __P4_Left_Area
+  if ballx + 2 <= player3x + 9 then goto __P4_Left_Area
   goto __P4_Right_Area
 
 __P4_Left_Area
   if p4_bricks{2} then p4_bricks{2} = 0 : goto __P4_Brick_Bounce
-  if ballx + 2 > player5x + 7 then goto __P4_Core_Hit
+  if ballx + 2 > player3x + 7 then goto __P4_Core_Hit
   return
 
 __P4_Right_Area
   if p4_bricks{1} then p4_bricks{1} = 0 : goto __P4_Brick_Bounce
-  if ballx < player5x + 13 then goto __P4_Core_Hit
+  if ballx < player3x + 13 then goto __P4_Core_Hit
   return
 
 __P4_Bottom_Area
-  if ballx + 2 <= player5x + 3 then goto __P4_Left_Area
-  if ballx >= player5x + 16 then goto __P4_Right_Area
+  if ballx + 2 <= player3x + 3 then goto __P4_Left_Area
+  if ballx >= player3x + 16 then goto __P4_Right_Area
   if p4_bricks{3} then p4_bricks{3} = 0 : goto __P4_Brick_Bounce
-  if bally > player5y + 17 then return
-  if ballx + 2 > player5x + 7 then if ballx < player5x + 13 then goto __P4_Core_Hit
+  if bally > player3y + 17 then return
+  if ballx + 2 > player3x + 7 then if ballx < player3x + 13 then goto __P4_Core_Hit
   return
 
 __P4_Core_Hit
   gosub __Award_P1_Point  ; P1 gets point when P4 dies
-  player5y = 200  ; Hide P4 ship
+  player3y = 200  ; Hide P4 ship
   invincibility_timer = invincibility_duration
   return
 
@@ -1675,14 +1675,14 @@ __Ball_Follow_P2
 
 __Ball_Follow_P3
   temp_dir = p3_direction
-  ballx = player4x + _ball_x_offsets[temp_dir]
-  bally = player4y + _ball_y_offsets[temp_dir]
+  ballx = player2x + _ball_x_offsets[temp_dir]
+  bally = player2y + _ball_y_offsets[temp_dir]
   return
 
 __Ball_Follow_P4
   temp_dir = p4_direction
-  ballx = player5x + _ball_x_offsets[temp_dir]
-  bally = player5y + _ball_y_offsets[temp_dir]
+  ballx = player3x + _ball_x_offsets[temp_dir]
+  bally = player3y + _ball_y_offsets[temp_dir]
   return
 
 __P1_Launch_Ball
@@ -1844,14 +1844,14 @@ __AI_Update_P2
   ;  Update AI target direction with reaction delay and noise
   ;***************************************************************
   ; Tick down update timer
-  ai_update_timer = ai_update_timer - 1
-  if ai_update_timer > 0 then goto __AI_Rotate_P2
+  ai_p2_update_timer = ai_p2_update_timer - 1
+  if ai_p2_update_timer > 0 then goto __AI_Rotate_P2
 
   ; Timer expired - calculate new target direction
-  ai_update_timer = 30  ; Reset to 0.5 second reaction time (HARD: faster)
+  ai_p2_update_timer = 30  ; Reset to 0.5 second reaction time (HARD: faster)
 
   ; 5% chance to wander (ignore ball) - keeps unpredictability
-  if (rand & 31) < 2 then ai_target_direction = (rand & 31) : goto __AI_Rotate_P2
+  if (rand & 31) < 2 then ai_p2_target_direction = (rand & 31) : goto __AI_Rotate_P2
 
   ; SMART SHOOTING: If holding ball, aim at PLAYER'S CORE (not ball!)
   if ball_state = 2 then temp1 = player0x - player1x : temp2 = player0y - player1y : goto __AI_Calculate_Direction
@@ -1871,50 +1871,50 @@ __AI_Calculate_Direction
   ; Using ratio of X/Y distances for finer angle resolution
 
   ; Determine quadrant first, then refine within quadrant
-  ai_target_direction = 16  ; Default: North
+  ai_p2_target_direction = 16  ; Default: North
 
   ; QUADRANT 1: Right + Down (SE)
-  if ballx > player1x && bally > player1y then ai_target_direction = 28
-  if ballx > player1x && bally > player1y && temp1 > temp2 * 2 then ai_target_direction = 26  ; More E than S
-  if ballx > player1x && bally > player1y && temp2 > temp1 * 2 then ai_target_direction = 30  ; More S than E
+  if ballx > player1x && bally > player1y then ai_p2_target_direction = 28
+  if ballx > player1x && bally > player1y && temp1 > temp2 * 2 then ai_p2_target_direction = 26  ; More E than S
+  if ballx > player1x && bally > player1y && temp2 > temp1 * 2 then ai_p2_target_direction = 30  ; More S than E
 
   ; QUADRANT 2: Right + Up (NE)
-  if ballx > player1x && bally < player1y then ai_target_direction = 20
-  if ballx > player1x && bally < player1y && temp1 > temp2 * 2 then ai_target_direction = 22  ; More E than N
-  if ballx > player1x && bally < player1y && temp2 > temp1 * 2 then ai_target_direction = 18  ; More N than E
+  if ballx > player1x && bally < player1y then ai_p2_target_direction = 20
+  if ballx > player1x && bally < player1y && temp1 > temp2 * 2 then ai_p2_target_direction = 22  ; More E than N
+  if ballx > player1x && bally < player1y && temp2 > temp1 * 2 then ai_p2_target_direction = 18  ; More N than E
 
   ; QUADRANT 3: Left + Down (SW)
-  if ballx < player1x && bally > player1y then ai_target_direction = 4
-  if ballx < player1x && bally > player1y && temp1 > temp2 * 2 then ai_target_direction = 6   ; More W than S
-  if ballx < player1x && bally > player1y && temp2 > temp1 * 2 then ai_target_direction = 2   ; More S than W
+  if ballx < player1x && bally > player1y then ai_p2_target_direction = 4
+  if ballx < player1x && bally > player1y && temp1 > temp2 * 2 then ai_p2_target_direction = 6   ; More W than S
+  if ballx < player1x && bally > player1y && temp2 > temp1 * 2 then ai_p2_target_direction = 2   ; More S than W
 
   ; QUADRANT 4: Left + Up (NW)
-  if ballx < player1x && bally < player1y then ai_target_direction = 12
-  if ballx < player1x && bally < player1y && temp1 > temp2 * 2 then ai_target_direction = 10  ; More W than N
-  if ballx < player1x && bally < player1y && temp2 > temp1 * 2 then ai_target_direction = 14  ; More N than W
+  if ballx < player1x && bally < player1y then ai_p2_target_direction = 12
+  if ballx < player1x && bally < player1y && temp1 > temp2 * 2 then ai_p2_target_direction = 10  ; More W than N
+  if ballx < player1x && bally < player1y && temp2 > temp1 * 2 then ai_p2_target_direction = 14  ; More N than W
 
   ; CARDINALS: Strongly one direction
-  if ballx > player1x && temp1 > temp2 * 3 then ai_target_direction = 24  ; E (mostly right)
-  if ballx < player1x && temp1 > temp2 * 3 then ai_target_direction = 8   ; W (mostly left)
-  if bally > player1y && temp2 > temp1 * 3 then ai_target_direction = 0   ; S (mostly down)
-  if bally < player1y && temp2 > temp1 * 3 then ai_target_direction = 16  ; N (mostly up)
+  if ballx > player1x && temp1 > temp2 * 3 then ai_p2_target_direction = 24  ; E (mostly right)
+  if ballx < player1x && temp1 > temp2 * 3 then ai_p2_target_direction = 8   ; W (mostly left)
+  if bally > player1y && temp2 > temp1 * 3 then ai_p2_target_direction = 0   ; S (mostly down)
+  if bally < player1y && temp2 > temp1 * 3 then ai_p2_target_direction = 16  ; N (mostly up)
 
   ; Add noise: ±1 position for good accuracy (HARD: less error)
   temp1 = (rand & 1)      ; Random 0 or 1
   if rand & 2 then temp1 = 0 - temp1  ; Make it negative 50% of time (±1)
-  ai_target_direction = ai_target_direction + temp1
-  if ai_target_direction >= 32 then ai_target_direction = ai_target_direction - 32
-  if ai_target_direction < 0 then ai_target_direction = ai_target_direction + 32
+  ai_p2_target_direction = ai_p2_target_direction + temp1
+  if ai_p2_target_direction >= 32 then ai_p2_target_direction = ai_p2_target_direction - 32
+  if ai_p2_target_direction < 0 then ai_p2_target_direction = ai_p2_target_direction + 32
 
 __AI_Rotate_P2
   ;***************************************************************
   ;  Smoothly rotate current direction toward target
   ;***************************************************************
   ; If already at target, done
-  if p2_direction = ai_target_direction then goto __AI_Actions_P2
+  if p2_direction = ai_p2_target_direction then goto __AI_Actions_P2
 
   ; Calculate rotation direction (clockwise or counter-clockwise)
-  temp1 = ai_target_direction - p2_direction
+  temp1 = ai_p2_target_direction - p2_direction
   if temp1 < 0 then temp1 = temp1 + 32  ; Normalize to 0-31
 
   ; Rotate 1 step toward target
@@ -1931,7 +1931,7 @@ __AI_Actions_P2
   ;***************************************************************
   ; Check if currently aimed close enough to target direction
   ; AI can only thrust in direction it's CURRENTLY facing (like humans)
-  temp1 = p2_direction - ai_target_direction
+  temp1 = p2_direction - ai_p2_target_direction
   if temp1 < 0 then temp1 = 0 - temp1     ; abs(temp1)
   if temp1 > 16 then temp1 = 32 - temp1   ; Handle wraparound (e.g., 30-2 = 28, but real distance is 4)
 
@@ -1977,11 +1977,11 @@ __AI_Update_P3
   if (rand & 31) < 2 then ai_p3_target_direction = (rand & 31) : goto __AI_Rotate_P3
 
   ; SMART SHOOTING: If holding ball, aim at PLAYER'S CORE (not ball!)
-  if ball_state = 3 then temp1 = player0x - player4x : temp2 = player0y - player4y : goto __AI_Calculate_Direction_P3
+  if ball_state = 3 then temp1 = player0x - player2x : temp2 = player0y - player2y : goto __AI_Calculate_Direction_P3
 
   ; Calculate direction to ball for tracking/catching
-  temp1 = ballx - player4x  ; X distance to ball
-  temp2 = bally - player4y  ; Y distance to ball
+  temp1 = ballx - player2x  ; X distance to ball
+  temp2 = bally - player2y  ; Y distance to ball
 
 __AI_Calculate_Direction_P3
 
@@ -1993,30 +1993,30 @@ __AI_Calculate_Direction_P3
   ai_p3_target_direction = 16  ; Default: North
 
   ; QUADRANT 1: Right + Down (SE)
-  if ballx > player4x && bally > player4y then ai_p3_target_direction = 28
-  if ballx > player4x && bally > player4y && temp1 > temp2 * 2 then ai_p3_target_direction = 26
-  if ballx > player4x && bally > player4y && temp2 > temp1 * 2 then ai_p3_target_direction = 30
+  if ballx > player2x && bally > player2y then ai_p3_target_direction = 28
+  if ballx > player2x && bally > player2y && temp1 > temp2 * 2 then ai_p3_target_direction = 26
+  if ballx > player2x && bally > player2y && temp2 > temp1 * 2 then ai_p3_target_direction = 30
 
   ; QUADRANT 2: Right + Up (NE)
-  if ballx > player4x && bally < player4y then ai_p3_target_direction = 20
-  if ballx > player4x && bally < player4y && temp1 > temp2 * 2 then ai_p3_target_direction = 22
-  if ballx > player4x && bally < player4y && temp2 > temp1 * 2 then ai_p3_target_direction = 18
+  if ballx > player2x && bally < player2y then ai_p3_target_direction = 20
+  if ballx > player2x && bally < player2y && temp1 > temp2 * 2 then ai_p3_target_direction = 22
+  if ballx > player2x && bally < player2y && temp2 > temp1 * 2 then ai_p3_target_direction = 18
 
   ; QUADRANT 3: Left + Down (SW)
-  if ballx < player4x && bally > player4y then ai_p3_target_direction = 4
-  if ballx < player4x && bally > player4y && temp1 > temp2 * 2 then ai_p3_target_direction = 6
-  if ballx < player4x && bally > player4y && temp2 > temp1 * 2 then ai_p3_target_direction = 2
+  if ballx < player2x && bally > player2y then ai_p3_target_direction = 4
+  if ballx < player2x && bally > player2y && temp1 > temp2 * 2 then ai_p3_target_direction = 6
+  if ballx < player2x && bally > player2y && temp2 > temp1 * 2 then ai_p3_target_direction = 2
 
   ; QUADRANT 4: Left + Up (NW)
-  if ballx < player4x && bally < player4y then ai_p3_target_direction = 12
-  if ballx < player4x && bally < player4y && temp1 > temp2 * 2 then ai_p3_target_direction = 10
-  if ballx < player4x && bally < player4y && temp2 > temp1 * 2 then ai_p3_target_direction = 14
+  if ballx < player2x && bally < player2y then ai_p3_target_direction = 12
+  if ballx < player2x && bally < player2y && temp1 > temp2 * 2 then ai_p3_target_direction = 10
+  if ballx < player2x && bally < player2y && temp2 > temp1 * 2 then ai_p3_target_direction = 14
 
   ; CARDINALS: Strongly one direction
-  if ballx > player4x && temp1 > temp2 * 3 then ai_p3_target_direction = 24
-  if ballx < player4x && temp1 > temp2 * 3 then ai_p3_target_direction = 8
-  if bally > player4y && temp2 > temp1 * 3 then ai_p3_target_direction = 0
-  if bally < player4y && temp2 > temp1 * 3 then ai_p3_target_direction = 16
+  if ballx > player2x && temp1 > temp2 * 3 then ai_p3_target_direction = 24
+  if ballx < player2x && temp1 > temp2 * 3 then ai_p3_target_direction = 8
+  if bally > player2y && temp2 > temp1 * 3 then ai_p3_target_direction = 0
+  if bally < player2y && temp2 > temp1 * 3 then ai_p3_target_direction = 16
 
   ; Add noise: ±1 position for good accuracy
   temp1 = (rand & 1)
@@ -2050,9 +2050,9 @@ __AI_Actions_P3
   if temp1 > 3 then p3_state{0} = 0 : return
 
   ; Check distance to ball for thrust/catch decisions
-  temp1 = ballx - player4x
+  temp1 = ballx - player2x
   if temp1 < 128 then temp1 = 0 - temp1
-  temp2 = bally - player4y
+  temp2 = bally - player2y
   if temp2 < 128 then temp2 = 0 - temp2
 
   ; Approximate distance
@@ -2088,11 +2088,11 @@ __AI_Update_P4
   if (rand & 31) < 2 then ai_p4_target_direction = (rand & 31) : goto __AI_Rotate_P4
 
   ; SMART SHOOTING: If holding ball, aim at PLAYER'S CORE (not ball!)
-  if ball_state = 4 then temp1 = player0x - player5x : temp2 = player0y - player5y : goto __AI_Calculate_Direction_P4
+  if ball_state = 4 then temp1 = player0x - player3x : temp2 = player0y - player3y : goto __AI_Calculate_Direction_P4
 
   ; Calculate direction to ball for tracking/catching
-  temp1 = ballx - player5x  ; X distance to ball
-  temp2 = bally - player5y  ; Y distance to ball
+  temp1 = ballx - player3x  ; X distance to ball
+  temp2 = bally - player3y  ; Y distance to ball
 
 __AI_Calculate_Direction_P4
 
@@ -2104,30 +2104,30 @@ __AI_Calculate_Direction_P4
   ai_p4_target_direction = 16  ; Default: North
 
   ; QUADRANT 1: Right + Down (SE)
-  if ballx > player5x && bally > player5y then ai_p4_target_direction = 28
-  if ballx > player5x && bally > player5y && temp1 > temp2 * 2 then ai_p4_target_direction = 26
-  if ballx > player5x && bally > player5y && temp2 > temp1 * 2 then ai_p4_target_direction = 30
+  if ballx > player3x && bally > player3y then ai_p4_target_direction = 28
+  if ballx > player3x && bally > player3y && temp1 > temp2 * 2 then ai_p4_target_direction = 26
+  if ballx > player3x && bally > player3y && temp2 > temp1 * 2 then ai_p4_target_direction = 30
 
   ; QUADRANT 2: Right + Up (NE)
-  if ballx > player5x && bally < player5y then ai_p4_target_direction = 20
-  if ballx > player5x && bally < player5y && temp1 > temp2 * 2 then ai_p4_target_direction = 22
-  if ballx > player5x && bally < player5y && temp2 > temp1 * 2 then ai_p4_target_direction = 18
+  if ballx > player3x && bally < player3y then ai_p4_target_direction = 20
+  if ballx > player3x && bally < player3y && temp1 > temp2 * 2 then ai_p4_target_direction = 22
+  if ballx > player3x && bally < player3y && temp2 > temp1 * 2 then ai_p4_target_direction = 18
 
   ; QUADRANT 3: Left + Down (SW)
-  if ballx < player5x && bally > player5y then ai_p4_target_direction = 4
-  if ballx < player5x && bally > player5y && temp1 > temp2 * 2 then ai_p4_target_direction = 6
-  if ballx < player5x && bally > player5y && temp2 > temp1 * 2 then ai_p4_target_direction = 2
+  if ballx < player3x && bally > player3y then ai_p4_target_direction = 4
+  if ballx < player3x && bally > player3y && temp1 > temp2 * 2 then ai_p4_target_direction = 6
+  if ballx < player3x && bally > player3y && temp2 > temp1 * 2 then ai_p4_target_direction = 2
 
   ; QUADRANT 4: Left + Up (NW)
-  if ballx < player5x && bally < player5y then ai_p4_target_direction = 12
-  if ballx < player5x && bally < player5y && temp1 > temp2 * 2 then ai_p4_target_direction = 10
-  if ballx < player5x && bally < player5y && temp2 > temp1 * 2 then ai_p4_target_direction = 14
+  if ballx < player3x && bally < player3y then ai_p4_target_direction = 12
+  if ballx < player3x && bally < player3y && temp1 > temp2 * 2 then ai_p4_target_direction = 10
+  if ballx < player3x && bally < player3y && temp2 > temp1 * 2 then ai_p4_target_direction = 14
 
   ; CARDINALS: Strongly one direction
-  if ballx > player5x && temp1 > temp2 * 3 then ai_p4_target_direction = 24
-  if ballx < player5x && temp1 > temp2 * 3 then ai_p4_target_direction = 8
-  if bally > player5y && temp2 > temp1 * 3 then ai_p4_target_direction = 0
-  if bally < player5y && temp2 > temp1 * 3 then ai_p4_target_direction = 16
+  if ballx > player3x && temp1 > temp2 * 3 then ai_p4_target_direction = 24
+  if ballx < player3x && temp1 > temp2 * 3 then ai_p4_target_direction = 8
+  if bally > player3y && temp2 > temp1 * 3 then ai_p4_target_direction = 0
+  if bally < player3y && temp2 > temp1 * 3 then ai_p4_target_direction = 16
 
   ; Add noise: ±1 position for good accuracy
   temp1 = (rand & 1)
@@ -2161,9 +2161,9 @@ __AI_Actions_P4
   if temp1 > 3 then p4_state{0} = 0 : return
 
   ; Check distance to ball for thrust/catch decisions
-  temp1 = ballx - player5x
+  temp1 = ballx - player3x
   if temp1 < 128 then temp1 = 0 - temp1
-  temp2 = bally - player5y
+  temp2 = bally - player3y
   if temp2 < 128 then temp2 = 0 - temp2
 
   ; Approximate distance
@@ -2246,8 +2246,8 @@ __Update_P1_Paddle
   %111111
   %011110
 end
-  player2x = player0x + _paddle_x_offsets[p1_direction]
-  player2y = player0y + _paddle_y_offsets[p1_direction]
+  player4x = player0x + _paddle_x_offsets[p1_direction]
+  player4y = player0y + _paddle_y_offsets[p1_direction]
   return
 
 
@@ -2259,7 +2259,7 @@ end
   ;  Same offsets as Player 1, same sprite
   ;***************************************************************
 __Update_P2_Paddle
-  player3:
+  player5:
   %011110
   %111111
   %111111
@@ -2270,8 +2270,8 @@ __Update_P2_Paddle
   %111111
   %011110
 end
-  player3x = player1x + _paddle_x_offsets[p2_direction]
-  player3y = player1y + _paddle_y_offsets[p2_direction]
+  player5x = player1x + _paddle_x_offsets[p2_direction]
+  player5y = player1y + _paddle_y_offsets[p2_direction]
   return
 
 
@@ -3335,7 +3335,7 @@ __Update_P3_Ship_Sprite
 
 ; State 0: All bricks destroyed - core still visible
 __P3S_0
-  player4:
+  player2:
   %00000000
   %00000000
   %00000000
@@ -3367,7 +3367,7 @@ end
 
 ; State 15: All bricks intact (default)
 __P3S_15
-  player4:
+  player2:
   %00111100
   %00111100
   %00111100
@@ -3426,7 +3426,7 @@ __Update_P4_Ship_Sprite
 
 ; State 0: All bricks destroyed - core still visible
 __P4S_0
-  player5:
+  player3:
   %00000000
   %00000000
   %00000000
@@ -3458,7 +3458,7 @@ end
 
 ; State 15: All bricks intact (default)
 __P4S_15
-  player5:
+  player3:
   %00111100
   %00111100
   %00111100
