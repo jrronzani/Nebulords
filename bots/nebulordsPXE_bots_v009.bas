@@ -1212,50 +1212,169 @@ __Wall_Bounce
 
 
 __Player_Collision
-  ; AABB Collision Detection between Player 1 and Player 2
-  ; Check if hitboxes overlap on both X and Y axes
-  ; Note: P2 uses adjusted position due to player1 sprite origin offset
+  ; AABB Collision Detection for all player pairs (4-player mode)
+  ; Note: P2/P3/P4 use hitbox offset due to player1/2/3 sprite positioning
 
-  ; X-axis overlap check (accounting for P2 hitbox offset)
-  ; player0x < (player1x - p2_hitbox_offset) + ship_width && player0x + ship_width > (player1x - p2_hitbox_offset)
-  if player0x >= player1x - p2_hitbox_offset + ship_width then goto __No_Collision
-  if player0x + ship_width <= player1x - p2_hitbox_offset then goto __No_Collision
-
+  ;***************************************************************
+  ; P1 vs P2 Collision
+  ;***************************************************************
+  if player0y >= 200 then goto __PC_P1_P3  ; P1 dead, skip
+  if player1y >= 200 then goto __PC_P1_P3  ; P2 dead, skip
+  ; X-axis overlap check
+  if player0x >= player1x - p2_hitbox_offset + ship_width then goto __PC_P1_P3
+  if player0x + ship_width <= player1x - p2_hitbox_offset then goto __PC_P1_P3
   ; Y-axis overlap check
-  ; player0y < player1y + ship_height && player0y + ship_height > player1y
-  if player0y >= player1y + ship_height then goto __No_Collision
-  if player0y + ship_height <= player1y then goto __No_Collision
-
-  ; Collision detected! Reverse velocities and separate ships
-
-  ; Reverse X direction
-  if p1_dir_x = 1 then p1_dir_x = 255 : goto __PC_CheckP1Y
+  if player0y >= player1y + ship_height then goto __PC_P1_P3
+  if player0y + ship_height <= player1y then goto __PC_P1_P3
+  ; Collision! Reverse velocities
+  if p1_dir_x = 1 then p1_dir_x = 255
   if p1_dir_x = 255 then p1_dir_x = 1
-__PC_CheckP1Y
-  ; Reverse Y direction
-  if p1_dir_y = 1 then p1_dir_y = 255 : goto __PC_P2X
+  if p1_dir_y = 1 then p1_dir_y = 255
   if p1_dir_y = 255 then p1_dir_y = 1
-
-__PC_P2X
-  ; Reverse P2 X direction
-  if p2_dir_x = 1 then p2_dir_x = 255 : goto __PC_P2Y
+  if p2_dir_x = 1 then p2_dir_x = 255
   if p2_dir_x = 255 then p2_dir_x = 1
-__PC_P2Y
-  ; Reverse P2 Y direction
-  if p2_dir_y = 1 then p2_dir_y = 255 : goto __PC_Separate
+  if p2_dir_y = 1 then p2_dir_y = 255
   if p2_dir_y = 255 then p2_dir_y = 1
-
-__PC_Separate
-  ; Separate ships to prevent sticking
-  ; Move P1 left and P2 right
+  ; Separate ships
   if player0x < player1x then player0x = player0x - 2 : player1x = player1x + 2
   if player0x >= player1x then player0x = player0x + 2 : player1x = player1x - 2
-
-  ; Reset frame counters
   p1_frame_x = p1_speed_x : p1_frame_y = p1_speed_y
   p2_frame_x = p2_speed_x : p2_frame_y = p2_speed_y
 
-__No_Collision
+  ;***************************************************************
+  ; P1 vs P3 Collision
+  ;***************************************************************
+__PC_P1_P3
+  if player0y >= 200 then goto __PC_P1_P4  ; P1 dead, skip
+  if player2y >= 200 then goto __PC_P1_P4  ; P3 dead, skip
+  ; X-axis overlap check
+  if player0x >= player2x - p2_hitbox_offset + ship_width then goto __PC_P1_P4
+  if player0x + ship_width <= player2x - p2_hitbox_offset then goto __PC_P1_P4
+  ; Y-axis overlap check
+  if player0y >= player2y + ship_height then goto __PC_P1_P4
+  if player0y + ship_height <= player2y then goto __PC_P1_P4
+  ; Collision! Reverse velocities
+  if p1_dir_x = 1 then p1_dir_x = 255
+  if p1_dir_x = 255 then p1_dir_x = 1
+  if p1_dir_y = 1 then p1_dir_y = 255
+  if p1_dir_y = 255 then p1_dir_y = 1
+  if p3_dir_x = 1 then p3_dir_x = 255
+  if p3_dir_x = 255 then p3_dir_x = 1
+  if p3_dir_y = 1 then p3_dir_y = 255
+  if p3_dir_y = 255 then p3_dir_y = 1
+  ; Separate ships
+  if player0x < player2x then player0x = player0x - 2 : player2x = player2x + 2
+  if player0x >= player2x then player0x = player0x + 2 : player2x = player2x - 2
+  p1_frame_x = p1_speed_x : p1_frame_y = p1_speed_y
+  p3_frame_x = p3_speed_x : p3_frame_y = p3_speed_y
+
+  ;***************************************************************
+  ; P1 vs P4 Collision
+  ;***************************************************************
+__PC_P1_P4
+  if player0y >= 200 then goto __PC_P2_P3  ; P1 dead, skip
+  if player3y >= 200 then goto __PC_P2_P3  ; P4 dead, skip
+  ; X-axis overlap check
+  if player0x >= player3x - p2_hitbox_offset + ship_width then goto __PC_P2_P3
+  if player0x + ship_width <= player3x - p2_hitbox_offset then goto __PC_P2_P3
+  ; Y-axis overlap check
+  if player0y >= player3y + ship_height then goto __PC_P2_P3
+  if player0y + ship_height <= player3y then goto __PC_P2_P3
+  ; Collision! Reverse velocities
+  if p1_dir_x = 1 then p1_dir_x = 255
+  if p1_dir_x = 255 then p1_dir_x = 1
+  if p1_dir_y = 1 then p1_dir_y = 255
+  if p1_dir_y = 255 then p1_dir_y = 1
+  if p4_dir_x = 1 then p4_dir_x = 255
+  if p4_dir_x = 255 then p4_dir_x = 1
+  if p4_dir_y = 1 then p4_dir_y = 255
+  if p4_dir_y = 255 then p4_dir_y = 1
+  ; Separate ships
+  if player0x < player3x then player0x = player0x - 2 : player3x = player3x + 2
+  if player0x >= player3x then player0x = player0x + 2 : player3x = player3x - 2
+  p1_frame_x = p1_speed_x : p1_frame_y = p1_speed_y
+  p4_frame_x = p4_speed_x : p4_frame_y = p4_speed_y
+
+  ;***************************************************************
+  ; P2 vs P3 Collision
+  ;***************************************************************
+__PC_P2_P3
+  if player1y >= 200 then goto __PC_P2_P4  ; P2 dead, skip
+  if player2y >= 200 then goto __PC_P2_P4  ; P3 dead, skip
+  ; X-axis overlap check (both have hitbox offset)
+  if player1x - p2_hitbox_offset >= player2x - p2_hitbox_offset + ship_width then goto __PC_P2_P4
+  if player1x - p2_hitbox_offset + ship_width <= player2x - p2_hitbox_offset then goto __PC_P2_P4
+  ; Y-axis overlap check
+  if player1y >= player2y + ship_height then goto __PC_P2_P4
+  if player1y + ship_height <= player2y then goto __PC_P2_P4
+  ; Collision! Reverse velocities
+  if p2_dir_x = 1 then p2_dir_x = 255
+  if p2_dir_x = 255 then p2_dir_x = 1
+  if p2_dir_y = 1 then p2_dir_y = 255
+  if p2_dir_y = 255 then p2_dir_y = 1
+  if p3_dir_x = 1 then p3_dir_x = 255
+  if p3_dir_x = 255 then p3_dir_x = 1
+  if p3_dir_y = 1 then p3_dir_y = 255
+  if p3_dir_y = 255 then p3_dir_y = 1
+  ; Separate ships
+  if player1x < player2x then player1x = player1x - 2 : player2x = player2x + 2
+  if player1x >= player2x then player1x = player1x + 2 : player2x = player2x - 2
+  p2_frame_x = p2_speed_x : p2_frame_y = p2_speed_y
+  p3_frame_x = p3_speed_x : p3_frame_y = p3_speed_y
+
+  ;***************************************************************
+  ; P2 vs P4 Collision
+  ;***************************************************************
+__PC_P2_P4
+  if player1y >= 200 then goto __PC_P3_P4  ; P2 dead, skip
+  if player3y >= 200 then goto __PC_P3_P4  ; P4 dead, skip
+  ; X-axis overlap check (both have hitbox offset)
+  if player1x - p2_hitbox_offset >= player3x - p2_hitbox_offset + ship_width then goto __PC_P3_P4
+  if player1x - p2_hitbox_offset + ship_width <= player3x - p2_hitbox_offset then goto __PC_P3_P4
+  ; Y-axis overlap check
+  if player1y >= player3y + ship_height then goto __PC_P3_P4
+  if player1y + ship_height <= player3y then goto __PC_P3_P4
+  ; Collision! Reverse velocities
+  if p2_dir_x = 1 then p2_dir_x = 255
+  if p2_dir_x = 255 then p2_dir_x = 1
+  if p2_dir_y = 1 then p2_dir_y = 255
+  if p2_dir_y = 255 then p2_dir_y = 1
+  if p4_dir_x = 1 then p4_dir_x = 255
+  if p4_dir_x = 255 then p4_dir_x = 1
+  if p4_dir_y = 1 then p4_dir_y = 255
+  if p4_dir_y = 255 then p4_dir_y = 1
+  ; Separate ships
+  if player1x < player3x then player1x = player1x - 2 : player3x = player3x + 2
+  if player1x >= player3x then player1x = player1x + 2 : player3x = player3x - 2
+  p2_frame_x = p2_speed_x : p2_frame_y = p2_speed_y
+  p4_frame_x = p4_speed_x : p4_frame_y = p4_speed_y
+
+  ;***************************************************************
+  ; P3 vs P4 Collision
+  ;***************************************************************
+__PC_P3_P4
+  if player2y >= 200 then return  ; P3 dead, done
+  if player3y >= 200 then return  ; P4 dead, done
+  ; X-axis overlap check (both have hitbox offset)
+  if player2x - p2_hitbox_offset >= player3x - p2_hitbox_offset + ship_width then return
+  if player2x - p2_hitbox_offset + ship_width <= player3x - p2_hitbox_offset then return
+  ; Y-axis overlap check
+  if player2y >= player3y + ship_height then return
+  if player2y + ship_height <= player3y then return
+  ; Collision! Reverse velocities
+  if p3_dir_x = 1 then p3_dir_x = 255
+  if p3_dir_x = 255 then p3_dir_x = 1
+  if p3_dir_y = 1 then p3_dir_y = 255
+  if p3_dir_y = 255 then p3_dir_y = 1
+  if p4_dir_x = 1 then p4_dir_x = 255
+  if p4_dir_x = 255 then p4_dir_x = 1
+  if p4_dir_y = 1 then p4_dir_y = 255
+  if p4_dir_y = 255 then p4_dir_y = 1
+  ; Separate ships
+  if player2x < player3x then player2x = player2x - 2 : player3x = player3x + 2
+  if player2x >= player3x then player2x = player2x + 2 : player3x = player3x - 2
+  p3_frame_x = p3_speed_x : p3_frame_y = p3_speed_y
+  p4_frame_x = p4_speed_x : p4_frame_y = p4_speed_y
   return
 
 
@@ -1873,9 +1992,27 @@ __Round_Reset
   p2_dir_x = 0 : p2_dir_y = 0
   p2_frame_x = p2_speed_x : p2_frame_y = p2_speed_y
 
+  ; Reset Player 3
+  player2x = 25 : player2y = 106
+  p3_bricks = %00001111
+  p3_direction = 16
+  p3_speed_x = 16 : p3_speed_y = 16
+  p3_dir_x = 0 : p3_dir_y = 0
+  p3_frame_x = p3_speed_x : p3_frame_y = p3_speed_y
+
+  ; Reset Player 4
+  player3x = 117 : player3y = 106
+  p4_bricks = %00001111
+  p4_direction = 16
+  p4_speed_x = 16 : p4_speed_y = 16
+  p4_dir_x = 0 : p4_dir_y = 0
+  p4_frame_x = p4_speed_x : p4_frame_y = p4_speed_y
+
   ; Update sprites to show all bricks intact (v095 optimization)
   gosub __Update_P1_Ship_Sprite
   gosub __Update_P2_Ship_Sprite
+  gosub __Update_P3_Ship_Sprite
+  gosub __Update_P4_Ship_Sprite
 
   ; Reset ball to center
   ballx = 80 : bally = 88
@@ -1883,11 +2020,22 @@ __Round_Reset
   temp_dir = (rand & 31)
   gosub __Set_Ball_Velocity_Slow
 
-  ; Reset timers
+  ; Reset timers (all 4 players)
   ball_speed_timer = 0
-  p1_catch_timer = 0 : p2_catch_timer = 0
-  p1_state = 0 : p2_state = 0
+  p1_catch_timer = 0 : p2_catch_timer = 0 : p3_catch_timer = 0 : p4_catch_timer = 0
+  p1_state = 0 : p2_state = 0 : p3_state = 0 : p4_state = 0
   invincibility_timer = 0
+
+  ; Reset AI bots (v005 difficulty)
+  ai_p2_target_direction = 8    ; P2 faces left (toward center)
+  ai_p2_update_timer = 30
+  ai_p2_action_timer = 15
+  ai_p3_target_direction = 16   ; P3 faces up (toward center)
+  ai_p3_update_timer = 30
+  ai_p3_action_timer = 15
+  ai_p4_target_direction = 16   ; P4 faces up (toward center)
+  ai_p4_update_timer = 30
+  ai_p4_action_timer = 15
 
   return
 
@@ -1957,11 +2105,16 @@ __AI_Update_P2
   if (rand & 31) < 2 then ai_p2_target_direction = (rand & 31) : goto __AI_Rotate_P2
 
   ; SMART SHOOTING: If holding ball, aim at PLAYER'S CORE (not ball!)
-  if ball_state = 2 then temp1 = player0x - player1x : temp2 = player0y - player1y : goto __AI_Calculate_Direction
+  ; Store target coordinates in temp3/temp4 for quadrant logic
+  if ball_state = 2 then temp3 = player0x : temp4 = player0y : goto __AI_P2_Calculate_Offset
 
   ; Calculate direction to ball for tracking/catching
-  temp1 = ballx - player1x  ; X distance to ball
-  temp2 = bally - player1y  ; Y distance to ball
+  temp3 = ballx : temp4 = bally
+
+__AI_P2_Calculate_Offset
+  ; Calculate distance from ship to target (temp3/temp4)
+  temp1 = temp3 - player1x  ; X distance to target
+  temp2 = temp4 - player1y  ; Y distance to target
 
 __AI_Calculate_Direction
 
@@ -1977,30 +2130,30 @@ __AI_Calculate_Direction
   ai_p2_target_direction = 16  ; Default: North
 
   ; QUADRANT 1: Right + Down (SE)
-  if ballx > player1x && bally > player1y then ai_p2_target_direction = 28
-  if ballx > player1x && bally > player1y && temp1 > temp2 * 2 then ai_p2_target_direction = 26  ; More E than S
-  if ballx > player1x && bally > player1y && temp2 > temp1 * 2 then ai_p2_target_direction = 30  ; More S than E
+  if temp3 > player1x && temp4 > player1y then ai_p2_target_direction = 28
+  if temp3 > player1x && temp4 > player1y && temp1 > temp2 * 2 then ai_p2_target_direction = 26  ; More E than S
+  if temp3 > player1x && temp4 > player1y && temp2 > temp1 * 2 then ai_p2_target_direction = 30  ; More S than E
 
   ; QUADRANT 2: Right + Up (NE)
-  if ballx > player1x && bally < player1y then ai_p2_target_direction = 20
-  if ballx > player1x && bally < player1y && temp1 > temp2 * 2 then ai_p2_target_direction = 22  ; More E than N
-  if ballx > player1x && bally < player1y && temp2 > temp1 * 2 then ai_p2_target_direction = 18  ; More N than E
+  if temp3 > player1x && temp4 < player1y then ai_p2_target_direction = 20
+  if temp3 > player1x && temp4 < player1y && temp1 > temp2 * 2 then ai_p2_target_direction = 22  ; More E than N
+  if temp3 > player1x && temp4 < player1y && temp2 > temp1 * 2 then ai_p2_target_direction = 18  ; More N than E
 
   ; QUADRANT 3: Left + Down (SW)
-  if ballx < player1x && bally > player1y then ai_p2_target_direction = 4
-  if ballx < player1x && bally > player1y && temp1 > temp2 * 2 then ai_p2_target_direction = 6   ; More W than S
-  if ballx < player1x && bally > player1y && temp2 > temp1 * 2 then ai_p2_target_direction = 2   ; More S than W
+  if temp3 < player1x && temp4 > player1y then ai_p2_target_direction = 4
+  if temp3 < player1x && temp4 > player1y && temp1 > temp2 * 2 then ai_p2_target_direction = 6   ; More W than S
+  if temp3 < player1x && temp4 > player1y && temp2 > temp1 * 2 then ai_p2_target_direction = 2   ; More S than W
 
   ; QUADRANT 4: Left + Up (NW)
-  if ballx < player1x && bally < player1y then ai_p2_target_direction = 12
-  if ballx < player1x && bally < player1y && temp1 > temp2 * 2 then ai_p2_target_direction = 10  ; More W than N
-  if ballx < player1x && bally < player1y && temp2 > temp1 * 2 then ai_p2_target_direction = 14  ; More N than W
+  if temp3 < player1x && temp4 < player1y then ai_p2_target_direction = 12
+  if temp3 < player1x && temp4 < player1y && temp1 > temp2 * 2 then ai_p2_target_direction = 10  ; More W than N
+  if temp3 < player1x && temp4 < player1y && temp2 > temp1 * 2 then ai_p2_target_direction = 14  ; More N than W
 
   ; CARDINALS: Strongly one direction
-  if ballx > player1x && temp1 > temp2 * 3 then ai_p2_target_direction = 24  ; E (mostly right)
-  if ballx < player1x && temp1 > temp2 * 3 then ai_p2_target_direction = 8   ; W (mostly left)
-  if bally > player1y && temp2 > temp1 * 3 then ai_p2_target_direction = 0   ; S (mostly down)
-  if bally < player1y && temp2 > temp1 * 3 then ai_p2_target_direction = 16  ; N (mostly up)
+  if temp3 > player1x && temp1 > temp2 * 3 then ai_p2_target_direction = 24  ; E (mostly right)
+  if temp3 < player1x && temp1 > temp2 * 3 then ai_p2_target_direction = 8   ; W (mostly left)
+  if temp4 > player1y && temp2 > temp1 * 3 then ai_p2_target_direction = 0   ; S (mostly down)
+  if temp4 < player1y && temp2 > temp1 * 3 then ai_p2_target_direction = 16  ; N (mostly up)
 
   ; Add noise: ±1 position for good accuracy (HARD: less error)
   temp1 = (rand & 1)      ; Random 0 or 1
@@ -2080,11 +2233,16 @@ __AI_Update_P3
   if (rand & 31) < 2 then ai_p3_target_direction = (rand & 31) : goto __AI_Rotate_P3
 
   ; SMART SHOOTING: If holding ball, aim at PLAYER'S CORE (not ball!)
-  if ball_state = 3 then temp1 = player0x - player2x : temp2 = player0y - player2y : goto __AI_Calculate_Direction_P3
+  ; Store target coordinates in temp3/temp4 for quadrant logic
+  if ball_state = 3 then temp3 = player0x : temp4 = player0y : goto __AI_P3_Calculate_Offset
 
   ; Calculate direction to ball for tracking/catching
-  temp1 = ballx - player2x  ; X distance to ball
-  temp2 = bally - player2y  ; Y distance to ball
+  temp3 = ballx : temp4 = bally
+
+__AI_P3_Calculate_Offset
+  ; Calculate distance from ship to target (temp3/temp4)
+  temp1 = temp3 - player2x  ; X distance to target
+  temp2 = temp4 - player2y  ; Y distance to target
 
 __AI_Calculate_Direction_P3
 
@@ -2096,30 +2254,30 @@ __AI_Calculate_Direction_P3
   ai_p3_target_direction = 16  ; Default: North
 
   ; QUADRANT 1: Right + Down (SE)
-  if ballx > player2x && bally > player2y then ai_p3_target_direction = 28
-  if ballx > player2x && bally > player2y && temp1 > temp2 * 2 then ai_p3_target_direction = 26
-  if ballx > player2x && bally > player2y && temp2 > temp1 * 2 then ai_p3_target_direction = 30
+  if temp3 > player2x && temp4 > player2y then ai_p3_target_direction = 28
+  if temp3 > player2x && temp4 > player2y && temp1 > temp2 * 2 then ai_p3_target_direction = 26
+  if temp3 > player2x && temp4 > player2y && temp2 > temp1 * 2 then ai_p3_target_direction = 30
 
   ; QUADRANT 2: Right + Up (NE)
-  if ballx > player2x && bally < player2y then ai_p3_target_direction = 20
-  if ballx > player2x && bally < player2y && temp1 > temp2 * 2 then ai_p3_target_direction = 22
-  if ballx > player2x && bally < player2y && temp2 > temp1 * 2 then ai_p3_target_direction = 18
+  if temp3 > player2x && temp4 < player2y then ai_p3_target_direction = 20
+  if temp3 > player2x && temp4 < player2y && temp1 > temp2 * 2 then ai_p3_target_direction = 22
+  if temp3 > player2x && temp4 < player2y && temp2 > temp1 * 2 then ai_p3_target_direction = 18
 
   ; QUADRANT 3: Left + Down (SW)
-  if ballx < player2x && bally > player2y then ai_p3_target_direction = 4
-  if ballx < player2x && bally > player2y && temp1 > temp2 * 2 then ai_p3_target_direction = 6
-  if ballx < player2x && bally > player2y && temp2 > temp1 * 2 then ai_p3_target_direction = 2
+  if temp3 < player2x && temp4 > player2y then ai_p3_target_direction = 4
+  if temp3 < player2x && temp4 > player2y && temp1 > temp2 * 2 then ai_p3_target_direction = 6
+  if temp3 < player2x && temp4 > player2y && temp2 > temp1 * 2 then ai_p3_target_direction = 2
 
   ; QUADRANT 4: Left + Up (NW)
-  if ballx < player2x && bally < player2y then ai_p3_target_direction = 12
-  if ballx < player2x && bally < player2y && temp1 > temp2 * 2 then ai_p3_target_direction = 10
-  if ballx < player2x && bally < player2y && temp2 > temp1 * 2 then ai_p3_target_direction = 14
+  if temp3 < player2x && temp4 < player2y then ai_p3_target_direction = 12
+  if temp3 < player2x && temp4 < player2y && temp1 > temp2 * 2 then ai_p3_target_direction = 10
+  if temp3 < player2x && temp4 < player2y && temp2 > temp1 * 2 then ai_p3_target_direction = 14
 
   ; CARDINALS: Strongly one direction
-  if ballx > player2x && temp1 > temp2 * 3 then ai_p3_target_direction = 24
-  if ballx < player2x && temp1 > temp2 * 3 then ai_p3_target_direction = 8
-  if bally > player2y && temp2 > temp1 * 3 then ai_p3_target_direction = 0
-  if bally < player2y && temp2 > temp1 * 3 then ai_p3_target_direction = 16
+  if temp3 > player2x && temp1 > temp2 * 3 then ai_p3_target_direction = 24
+  if temp3 < player2x && temp1 > temp2 * 3 then ai_p3_target_direction = 8
+  if temp4 > player2y && temp2 > temp1 * 3 then ai_p3_target_direction = 0
+  if temp4 < player2y && temp2 > temp1 * 3 then ai_p3_target_direction = 16
 
   ; Add noise: ±1 position for good accuracy
   temp1 = (rand & 1)
@@ -2191,11 +2349,16 @@ __AI_Update_P4
   if (rand & 31) < 2 then ai_p4_target_direction = (rand & 31) : goto __AI_Rotate_P4
 
   ; SMART SHOOTING: If holding ball, aim at PLAYER'S CORE (not ball!)
-  if ball_state = 4 then temp1 = player0x - player3x : temp2 = player0y - player3y : goto __AI_Calculate_Direction_P4
+  ; Store target coordinates in temp3/temp4 for quadrant logic
+  if ball_state = 4 then temp3 = player0x : temp4 = player0y : goto __AI_P4_Calculate_Offset
 
   ; Calculate direction to ball for tracking/catching
-  temp1 = ballx - player3x  ; X distance to ball
-  temp2 = bally - player3y  ; Y distance to ball
+  temp3 = ballx : temp4 = bally
+
+__AI_P4_Calculate_Offset
+  ; Calculate distance from ship to target (temp3/temp4)
+  temp1 = temp3 - player3x  ; X distance to target
+  temp2 = temp4 - player3y  ; Y distance to target
 
 __AI_Calculate_Direction_P4
 
@@ -2207,30 +2370,30 @@ __AI_Calculate_Direction_P4
   ai_p4_target_direction = 16  ; Default: North
 
   ; QUADRANT 1: Right + Down (SE)
-  if ballx > player3x && bally > player3y then ai_p4_target_direction = 28
-  if ballx > player3x && bally > player3y && temp1 > temp2 * 2 then ai_p4_target_direction = 26
-  if ballx > player3x && bally > player3y && temp2 > temp1 * 2 then ai_p4_target_direction = 30
+  if temp3 > player3x && temp4 > player3y then ai_p4_target_direction = 28
+  if temp3 > player3x && temp4 > player3y && temp1 > temp2 * 2 then ai_p4_target_direction = 26
+  if temp3 > player3x && temp4 > player3y && temp2 > temp1 * 2 then ai_p4_target_direction = 30
 
   ; QUADRANT 2: Right + Up (NE)
-  if ballx > player3x && bally < player3y then ai_p4_target_direction = 20
-  if ballx > player3x && bally < player3y && temp1 > temp2 * 2 then ai_p4_target_direction = 22
-  if ballx > player3x && bally < player3y && temp2 > temp1 * 2 then ai_p4_target_direction = 18
+  if temp3 > player3x && temp4 < player3y then ai_p4_target_direction = 20
+  if temp3 > player3x && temp4 < player3y && temp1 > temp2 * 2 then ai_p4_target_direction = 22
+  if temp3 > player3x && temp4 < player3y && temp2 > temp1 * 2 then ai_p4_target_direction = 18
 
   ; QUADRANT 3: Left + Down (SW)
-  if ballx < player3x && bally > player3y then ai_p4_target_direction = 4
-  if ballx < player3x && bally > player3y && temp1 > temp2 * 2 then ai_p4_target_direction = 6
-  if ballx < player3x && bally > player3y && temp2 > temp1 * 2 then ai_p4_target_direction = 2
+  if temp3 < player3x && temp4 > player3y then ai_p4_target_direction = 4
+  if temp3 < player3x && temp4 > player3y && temp1 > temp2 * 2 then ai_p4_target_direction = 6
+  if temp3 < player3x && temp4 > player3y && temp2 > temp1 * 2 then ai_p4_target_direction = 2
 
   ; QUADRANT 4: Left + Up (NW)
-  if ballx < player3x && bally < player3y then ai_p4_target_direction = 12
-  if ballx < player3x && bally < player3y && temp1 > temp2 * 2 then ai_p4_target_direction = 10
-  if ballx < player3x && bally < player3y && temp2 > temp1 * 2 then ai_p4_target_direction = 14
+  if temp3 < player3x && temp4 < player3y then ai_p4_target_direction = 12
+  if temp3 < player3x && temp4 < player3y && temp1 > temp2 * 2 then ai_p4_target_direction = 10
+  if temp3 < player3x && temp4 < player3y && temp2 > temp1 * 2 then ai_p4_target_direction = 14
 
   ; CARDINALS: Strongly one direction
-  if ballx > player3x && temp1 > temp2 * 3 then ai_p4_target_direction = 24
-  if ballx < player3x && temp1 > temp2 * 3 then ai_p4_target_direction = 8
-  if bally > player3y && temp2 > temp1 * 3 then ai_p4_target_direction = 0
-  if bally < player3y && temp2 > temp1 * 3 then ai_p4_target_direction = 16
+  if temp3 > player3x && temp1 > temp2 * 3 then ai_p4_target_direction = 24
+  if temp3 < player3x && temp1 > temp2 * 3 then ai_p4_target_direction = 8
+  if temp4 > player3y && temp2 > temp1 * 3 then ai_p4_target_direction = 0
+  if temp4 < player3y && temp2 > temp1 * 3 then ai_p4_target_direction = 16
 
   ; Add noise: ±1 position for good accuracy
   temp1 = (rand & 1)
@@ -3544,23 +3707,453 @@ __P3S_15
 end
   return
 
-; Other states (1-14) - minimal implementation for now
-__P3S_1
-__P3S_2
-__P3S_3
-__P3S_4
-__P3S_5
-__P3S_6
-__P3S_7
-__P3S_8
-__P3S_9
-__P3S_10
-__P3S_11
-__P3S_12
-__P3S_13
+; State 14: Top brick destroyed
 __P3S_14
-  ; Use state 15 (all bricks) as default for intermediate states
-  goto __P3S_15
+  player2:
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %11000011
+  %11000011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11000011
+  %11000011
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 13: Right brick destroyed
+__P3S_13
+  player2:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000000
+  %11000000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11000000
+  %11000000
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 12: Top AND right destroyed
+__P3S_12
+  player2:
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %11000000
+  %11000000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11000000
+  %11000000
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 11: Left brick destroyed
+__P3S_11
+  player2:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00000011
+  %00000011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00000011
+  %00000011
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 10: Top AND left destroyed
+__P3S_10
+  player2:
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000011
+  %00000011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00000011
+  %00000011
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 9: Left AND right destroyed
+__P3S_9
+  player2:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00000000
+  %00000000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00000000
+  %00000000
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 8: Top, left AND right destroyed
+__P3S_8
+  player2:
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00000000
+  %00000000
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 7: Bottom brick destroyed
+__P3S_7
+  player2:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000011
+  %11000011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11000011
+  %11000011
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 6: Top AND bottom destroyed
+__P3S_6
+  player2:
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %11000011
+  %11000011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11000011
+  %11000011
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 5: Right AND bottom destroyed
+__P3S_5
+  player2:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000000
+  %11000000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11000000
+  %11000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 4: Top, right AND bottom destroyed
+__P3S_4
+  player2:
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %11000000
+  %11000000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11000000
+  %11000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 3: Left AND bottom destroyed
+__P3S_3
+  player2:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00000011
+  %00000011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00000011
+  %00000011
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 2: Top, left AND bottom destroyed
+__P3S_2
+  player2:
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000011
+  %00000011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00000011
+  %00000011
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 1: Left, right AND bottom destroyed
+__P3S_1
+  player2:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00000000
+  %00000000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
 
 
   ;***************************************************************
@@ -3635,23 +4228,453 @@ __P4S_15
 end
   return
 
-; Other states (1-14) - minimal implementation for now
-__P4S_1
-__P4S_2
-__P4S_3
-__P4S_4
-__P4S_5
-__P4S_6
-__P4S_7
-__P4S_8
-__P4S_9
-__P4S_10
-__P4S_11
-__P4S_12
-__P4S_13
+; State 14: Top brick destroyed
 __P4S_14
-  ; Use state 15 (all bricks) as default for intermediate states
-  goto __P4S_15
+  player3:
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %11000011
+  %11000011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11000011
+  %11000011
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 13: Right brick destroyed
+__P4S_13
+  player3:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000000
+  %11000000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11000000
+  %11000000
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 12: Top AND right destroyed
+__P4S_12
+  player3:
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %11000000
+  %11000000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11000000
+  %11000000
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 11: Left brick destroyed
+__P4S_11
+  player3:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00000011
+  %00000011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00000011
+  %00000011
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 10: Top AND left destroyed
+__P4S_10
+  player3:
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000011
+  %00000011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00000011
+  %00000011
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 9: Left AND right destroyed
+__P4S_9
+  player3:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00000000
+  %00000000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00000000
+  %00000000
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 8: Top, left AND right destroyed
+__P4S_8
+  player3:
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00000000
+  %00000000
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+end
+  return
+
+; State 7: Bottom brick destroyed
+__P4S_7
+  player3:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000011
+  %11000011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11000011
+  %11000011
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 6: Top AND bottom destroyed
+__P4S_6
+  player3:
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %11000011
+  %11000011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11011011
+  %11000011
+  %11000011
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 5: Right AND bottom destroyed
+__P4S_5
+  player3:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %11000000
+  %11000000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11000000
+  %11000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 4: Top, right AND bottom destroyed
+__P4S_4
+  player3:
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %11000000
+  %11000000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11011000
+  %11000000
+  %11000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 3: Left AND bottom destroyed
+__P4S_3
+  player3:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00000011
+  %00000011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00000011
+  %00000011
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 2: Top, left AND bottom destroyed
+__P4S_2
+  player3:
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000011
+  %00000011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00011011
+  %00000011
+  %00000011
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
+
+; State 1: Left, right AND bottom destroyed
+__P4S_1
+  player3:
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00111100
+  %00000000
+  %00000000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00011000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+  %00000000
+end
+  return
 
 
   ;***************************************************************
