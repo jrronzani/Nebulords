@@ -1,29 +1,29 @@
   ;***************************************************************
-  ;  NEBULORDS PXE - BOTS Version 005
+  ;  NEBULORDS PXE - BOTS Version 006
   ;  Warlords-style Space Combat with Paddle Controls
-  ;  EXPERIMENTAL: 1v1 AI Bot Mode (P1 Human vs P2 AI)
+  ;  4-PLAYER MODE: 1 Human vs 3 AI Bots
   ;
-  ;  Based on: bots_v003 (Keep organic "swatting" feel)
+  ;  Based on: bots_v005 (Expand to 4 players)
   ;
-  ;  Changes from bots_v003:
-  ;  - IMPROVE: 16-direction aiming (was 8) for better accuracy
-  ;  - ADD: Smart shooting - aims at player core when holding ball
-  ;  - ADD: Random launch timing (2-4 seconds, not fixed 4s)
-  ;  - KEEP: 1 step rotation (organic movement, not robotic)
-  ;  - KEEP: 5% wander + ±1 noise (unpredictable "swatting")
+  ;  Changes from bots_v005:
+  ;  - ADD: Player 3 AI bot (bottom left, orange, using player4 sprite)
+  ;  - ADD: Player 4 AI bot (bottom right, green, using player5 sprite)
+  ;  - ADD: Physics variables for P3 and P4
+  ;  - ADD: AI variables for P3 and P4 (same smart system as P2)
+  ;  - ADD: Ball catching for P3 and P4 (ball_state 3 and 4)
+  ;  - SCALE: All collision, physics, and AI logic to 4 players
   ;
-  ;  Why v003 base (not v004):
-  ;  - v004's 2-step rotation was too fast/robotic
-  ;  - v004's 8-direction locking was too discrete
-  ;  - v003's randomness made it less predictable (harder!)
-  ;  - v003's slower aim had better "swatting" feel
+  ;  Player Layout:
+  ;  P1 (Human):  Top Left,     Red,    player0 sprite
+  ;  P2 (Bot):    Top Right,    Blue,   player1 sprite
+  ;  P3 (Bot):    Bottom Left,  Orange, player4 sprite
+  ;  P4 (Bot):    Bottom Right, Green,  player5 sprite
   ;
-  ;  AI Behavior (MEDIUM):
-  ;  - Rotation: 1 step/frame (organic, not robotic)
-  ;  - Aiming: 16 directions (more accurate than v003's 8)
-  ;  - Smart launch: Aims at player + random timing (2-4s)
-  ;  - Wander: 5% chance (unpredictable)
-  ;  - Noise: ±1 position (natural imperfection)
+  ;  AI Behavior (All bots use v005 intelligence):
+  ;  - 16-direction aiming for accuracy
+  ;  - Smart shooting (aims at nearest opponent when holding ball)
+  ;  - Random launch timing (2-4 seconds)
+  ;  - 5% wander + ±1 noise (organic "swatting" feel)
   ;
   ;  Changes from v096:
   ;  - FIX: Score display properly shows _0000_ format with blank spaces
