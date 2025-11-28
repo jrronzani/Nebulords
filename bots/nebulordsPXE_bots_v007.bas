@@ -6,9 +6,9 @@
   ;  Based on: bots_v006
   ;
   ;  Changes from bots_v006:
-  ;  - ADD: Game mode switching via switchable.b (Game Select)
-  ;  - ADD: 1 Player vs Bot mode (switchable.b = 0)
-  ;  - ADD: 2 Player vs Player mode (switchable.b = 1)
+  ;  - ADD: Game mode switching via switchselect (Game Select)
+  ;  - ADD: 1 Player vs Bot mode (switchselect = 0)
+  ;  - ADD: 2 Player vs Player mode (switchselect = 1)
   ;  - CONSOLIDATE: Launch ball functions into shared __Launch_Ball
   ;  - CONSOLIDATE: Brick bounce functions into shared __Brick_Bounce
   ;  - OPTIMIZE: ~13 lines saved via function consolidation
@@ -779,10 +779,10 @@ __Main_Loop
 
   ;***************************************************************
   ;  Player 2 Input - AI Bot OR Human based on Game Select
-  ;  switchable.b = 0: AI Bot (1 Player mode)
-  ;  switchable.b = 1: Human Paddle1 (2 Player mode)
+  ;  switchselect = 0: AI Bot (1 Player mode)
+  ;  switchselect = 1: Human Paddle1 (2 Player mode)
   ;***************************************************************
-  if switchable.b then goto __P2_Human_Input
+  if switchselect then goto __P2_Human_Input
 
   ; Mode 0: AI Bot controls Player 2
   gosub __AI_Update_P2  ; AI calculates direction and actions
