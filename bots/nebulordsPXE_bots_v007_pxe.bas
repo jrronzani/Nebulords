@@ -1,9 +1,23 @@
   ;***************************************************************
-  ;  NEBULORDS PXE - BOTS Version 005
+  ;  NEBULORDS PXE - BOTS Version 007
   ;  Warlords-style Space Combat with Paddle Controls
-  ;  EXPERIMENTAL: 1v1 AI Bot Mode (P1 Human vs P2 AI)
+  ;  Supports 1P vs Bot and 2P vs 2P modes via Game Select switch
   ;
-  ;  Based on: bots_v003 (Keep organic "swatting" feel)
+  ;  Based on: bots_v005
+  ;
+  ;  Changes from bots_v005:
+  ;  - ADD: Game mode switching via switchselect (Game Select switch)
+  ;  - ADD: 1 Player vs Bot mode (switchselect DOWN = 0)
+  ;  - ADD: 2 Player vs Player mode (switchselect UP = 1)
+  ;  - CHANGE: Last-man-standing scoring (1 point to survivor at round end)
+  ;  - CONSOLIDATE: Launch ball functions → shared __Launch_Ball
+  ;  - CONSOLIDATE: Brick bounce functions → shared __Brick_Bounce
+  ;  - FIX: Playfield borders visible (COLUPF = $44 bright red/orange)
+  ;  - NOTE: Sprite sharing NOT possible in PXE kernel (duplicated sprites kept)
+  ;
+  ;  Game Modes (use Game Select switch):
+  ;  - Mode 0 (DOWN): 1 Player (P1 human) vs Bot (P2 AI)
+  ;  - Mode 1 (UP): 2 Players (P1 and P2 both human)
   ;
   ;  Changes from bots_v003:
   ;  - IMPROVE: 16-direction aiming (was 8) for better accuracy
@@ -231,8 +245,9 @@
   ;  Initialize game
   ;***************************************************************
 __Game_Init
-  COLUBK = $00
-  COLUPF = $0E
+  ; Colors
+  COLUBK = $00  ; Black background
+  COLUPF = $44  ; Red/orange playfield borders (bright and visible)
 
   ballheight = 1
 
@@ -505,27 +520,47 @@ __Main_Loop
   if p1_direction >= 32 then p1_direction = 0
 
   ;***************************************************************
-  ;  AI Bot Update for Player 2 direction (replaces Paddle 1 input)
+  ;  Player 2 Input - AI Bot OR Human (based on Game Select)
+  ;  switchselect = 0 (DOWN): AI Bot (1 Player mode)
+  ;  switchselect = 1 (UP): Human Paddle1 (2 Player mode)
   ;***************************************************************
+  if switchselect then goto __P2_Human_Input
+
+  ; Mode 0: AI Bot controls Player 2
   gosub __AI_Update_P2  ; AI calculates direction and actions
+  ; AI random launch: 2-4 seconds randomly
+  if ball_state = 2 && p2_catch_timer >= 120 && (rand & 1) = 0 then temp_dir = p2_direction : gosub __Launch_Ball
+  goto __P2_Input_Done
+
+__P2_Human_Input
+  ; Mode 1: Human controls Player 2 via Paddle1
+  temp_paddle = Paddle1
+  p2_direction = temp_paddle / 4
+  if p2_direction >= 32 then p2_direction = 0
+
+  ; P2 button tracking (same as P1)
+  if joy0left then goto __P2_Button_Down
+  ; Button released - launch if ball attached
+  if p2_state{0} && ball_state = 2 then temp_dir = p2_direction : gosub __Launch_Ball
+  p2_state{0} = 0
+  goto __P2_Input_Done
+__P2_Button_Down
+  p2_state{0} = 1
+
+__P2_Input_Done
 
   ;***************************************************************
-  ;  Track button state and handle ball launching
+  ;  Track P1 button state and handle ball launching
   ;***************************************************************
   ; P1 button tracking
   if joy0right then goto __P1_Button_Down
   ; Button released - launch if ball attached
-  if p1_state{0} && ball_state = 1 then gosub __P1_Launch_Ball
+  if p1_state{0} && ball_state = 1 then temp_dir = p1_direction : gosub __Launch_Ball
   p1_state{0} = 0
   goto __P1_Button_Done
 __P1_Button_Down
   p1_state{0} = 1
 __P1_Button_Done
-
-  ; P2 AI button tracking (AI sets p2_state{0} in __AI_Update_P2)
-  ; RANDOM LAUNCH: Launch after 2-4 seconds (120-240 frames) randomly
-  ; Calculate random threshold once when ball caught, launch when timer exceeds it
-  if ball_state = 2 && p2_catch_timer >= 120 && (rand & 1) = 0 then gosub __P2_Launch_Ball
 
   ;***************************************************************
   ;  Ball physics - FIRST (before ship moves, same moment in time)
@@ -1161,29 +1196,20 @@ __P1_Bottom_Area
   return
 
 __P1_Core_Hit
-  ; Player 1 dies - Player 2 wins the round!
-  gosub __Award_P2_Point         ; Award point to Player 2 (BCD)
+  ; Player 1 dies - Player 2 is last man standing
+  ; CHANGED: No immediate point award - wait for round reset (last-man-standing)
   ; Hide P1 ship sprite off-screen (player0)
   player0y = 200
   ; Hide P1 paddle off-screen (player2)
   player2y = 200
   ; Start 3-second countdown before round reset
   invincibility_timer = invincibility_duration
-  ; Round will reset automatically via __Round_Reset when timer expires
+  ; Point will be awarded to survivor in __Round_Reset
   return
 
 __P1_Brick_Bounce
-  ; Bounce the ball back
-  ball_xvel = 0 - ball_xvel
-  ball_yvel = 0 - ball_yvel
-  ; Push ball away to prevent sticking
-  ballx = ballx + ball_xvel
-  ballx = ballx + ball_xvel
-  bally = bally + ball_yvel
-  bally = bally + ball_yvel
-  ; Update P1 sprite to reflect brick destruction (v095 optimization)
-  gosub __Update_P1_Ship_Sprite
-  return
+  temp_player_num = 0  ; P1
+  goto __Brick_Bounce
 
 
 __P2_Brick_Hit
@@ -1239,28 +1265,37 @@ __P2_Bottom_Area
   return
 
 __P2_Core_Hit
-  ; Player 2 dies - Player 1 wins the round!
-  gosub __Award_P1_Point         ; Award point to Player 1 (BCD)
+  ; Player 2 dies - Player 1 is last man standing
+  ; CHANGED: No immediate point award - wait for round reset (last-man-standing)
   ; Hide P2 ship sprite off-screen (player1)
   player1y = 200
   ; Hide P2 paddle off-screen (player3)
   player3y = 200
   ; Start 3-second countdown before round reset
   invincibility_timer = invincibility_duration
-  ; Round will reset automatically via __Round_Reset when timer expires
+  ; Point will be awarded to survivor in __Round_Reset
   return
 
 __P2_Brick_Bounce
+  temp_player_num = 1  ; P2
+  goto __Brick_Bounce
+
+  ;***************************************************************
+  ;  CONSOLIDATED: Brick Bounce (shared by P1 and P2)
+  ;  temp_player_num must be set before calling (0=P1, 1=P2)
+  ;***************************************************************
+__Brick_Bounce
   ; Bounce the ball back
   ball_xvel = 0 - ball_xvel
   ball_yvel = 0 - ball_yvel
-  ; Push ball away to prevent sticking
+  ; Push ball away to prevent sticking (2x for safety)
   ballx = ballx + ball_xvel
   ballx = ballx + ball_xvel
   bally = bally + ball_yvel
   bally = bally + ball_yvel
-  ; Update P2 sprite to reflect brick destruction (v095 optimization)
-  gosub __Update_P2_Ship_Sprite
+  ; Update sprite based on which player
+  if temp_player_num = 0 then gosub __Update_P1_Ship_Sprite
+  if temp_player_num = 1 then gosub __Update_P2_Ship_Sprite
   return
 
 
@@ -1289,29 +1324,31 @@ __Ball_Follow_P2
   bally = player1y + _ball_y_offsets[temp_dir]
   return
 
-__P1_Launch_Ball
-  ball_state = 0  ; Detach from P1
-  temp_dir = p1_direction  ; Use paddle direction
-  gosub __Set_Ball_Velocity  ; Set to FAST velocity
+  ;***************************************************************
+  ;  CONSOLIDATED: Launch Ball (shared by P1, P2, human, AI)
+  ;  temp_dir must be set by caller before calling
+  ;  Detaches ball and sets to FAST velocity in direction of temp_dir
+  ;***************************************************************
+__Launch_Ball
+  ball_state = 0  ; Detach from player
+  gosub __Set_Ball_Velocity  ; Set to FAST velocity in temp_dir direction
   ball_speed_timer = fast_ball_duration  ; Start fast mode timer
   return
 
-__P2_Launch_Ball
-  ball_state = 0  ; Detach from P2
-  temp_dir = p2_direction  ; Use paddle direction
-  gosub __Set_Ball_Velocity  ; Set to FAST velocity
-  ball_speed_timer = fast_ball_duration  ; Start fast mode timer
-  return
-
+  ;***************************************************************
+  ;  Auto-Launch - Called when player holds ball too long
+  ;***************************************************************
 __P1_Auto_Launch
-  gosub __P1_Launch_Ball
-  p1_catch_timer = 0  ; Reset timer (important to prevent repeated calls)
+  temp_dir = p1_direction
+  gosub __Launch_Ball
+  p1_catch_timer = 0  ; Reset timer (prevent repeated calls)
   p1_state{1} = 1  ; Set cooldown flag
   return
 
 __P2_Auto_Launch
-  gosub __P2_Launch_Ball
-  p2_catch_timer = 0  ; Reset timer (important to prevent repeated calls)
+  temp_dir = p2_direction
+  gosub __Launch_Ball
+  p2_catch_timer = 0  ; Reset timer (prevent repeated calls)
   p2_state{1} = 1  ; Set cooldown flag
   return
 
@@ -1344,8 +1381,14 @@ __SBD_Done
   ;***************************************************************
   ;  Round Reset - Start new round after invincibility period
   ;  Resets both players, ball, and bricks
+  ;  CHANGED: Last-man-standing scoring - award point to survivor
   ;***************************************************************
 __Round_Reset
+  ; Last-Man-Standing Scoring: Award point to the player still alive
+  ; Dead players have Y=200 (off-screen), alive players have Y<200
+  if player0y > 100 then if player1y < 100 then gosub __Award_P2_Point
+  if player1y > 100 then if player0y < 100 then gosub __Award_P1_Point
+
   ; Reset Player 1
   player0x = 25 : player0y = 40
   p1_bricks = %00001111
