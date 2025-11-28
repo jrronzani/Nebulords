@@ -258,8 +258,9 @@
   ;  Initialize game
   ;***************************************************************
 __Game_Init
-  COLUBK = $00
-  COLUPF = $0E
+  ; Colors
+  COLUBK = $00  ; Black background
+  COLUPF = $44  ; Red/orange playfield borders (bright and visible)
 
   ballheight = 1
 
