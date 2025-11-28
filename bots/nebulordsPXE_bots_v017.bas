@@ -145,9 +145,9 @@
   ;***************************************************************
   ;  AI DIFFICULTY TUNING - Adjust these 3 values!
   ;***************************************************************
-  const AI_REACTION = 30         ; Reaction time in frames (EASY:60, MEDIUM:30, HARD:15)
-  const AI_SWAT = 1              ; Swatting noise 0-3 (EASY:3, MEDIUM:1, HARD:0)
-  const AI_AGGRO = 2             ; Aggression 0-3 (EASY:0, MEDIUM:2, HARD:3)
+  const AI_REACTION = 15         ; Reaction time in frames (EASY:60, MEDIUM:30, HARD:15)
+  const AI_SWAT = 0              ; Swatting noise 0-3 (EASY:3, MEDIUM:1, HARD:0)
+  const AI_AGGRO = 3             ; Aggression 0-3 (EASY:0, MEDIUM:2, HARD:3)
 
   ;***************************************************************
   ;  Collision Constants (Hitbox sizes)
