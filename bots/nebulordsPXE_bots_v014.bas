@@ -200,6 +200,9 @@
   dim p1_bricks = var0           ; bit 0=top, bit 1=left, bit 2=right, bit 3=bottom (1=intact)
   dim p2_bricks = var1           ; bit 0=top, bit 1=left, bit 2=right, bit 3=bottom (1=intact)
 
+  ; Game mode tracking
+  dim last_game_mode = var2      ; Track previous switchselect value to detect changes
+
   ; REPLACED - SEE BELOW
   ;***************************************************************
   ;  SCORE SYSTEM - 4-Player Format (v098)
@@ -247,7 +250,6 @@
 __Game_Init
   ; Colors
   COLUBK = $00  ; Black background
-  COLUPF = $44  ; Red/orange playfield borders (bright and visible)
 
   ballheight = 1
 
@@ -296,6 +298,9 @@ __Game_Init
   ; Display order: score (left), score+1 (middle), score+2 (right) = "_0000_"
   score_byte2 = $A0 : score_byte1 = $00 : score_byte0 = $0A
   invincibility_timer = 0    ; No invincibility at start
+
+  ; Track initial game mode
+  last_game_mode = switchselect
 
   ; Initialize AI bot for Player 2 (HARD difficulty)
   ai_target_direction = 16   ; Start facing south (toward center)
@@ -511,6 +516,16 @@ end
   ;  MAIN LOOP
   ;***************************************************************
 __Main_Loop
+
+  ;***************************************************************
+  ;  Game Mode Change Detection - Restart game if mode switched
+  ;***************************************************************
+  if switchselect = last_game_mode then goto __Mode_Check_Done
+  ; Mode changed! Zero scores and restart match
+  score_byte2 = $A0 : score_byte1 = $00 : score_byte0 = $0A
+  last_game_mode = switchselect
+  gosub __Round_Reset
+__Mode_Check_Done
 
   ;***************************************************************
   ;  Read Paddle 0 for Player 1 direction
@@ -1197,14 +1212,14 @@ __P1_Bottom_Area
 
 __P1_Core_Hit
   ; Player 1 dies - Player 2 is last man standing
-  ; CHANGED: No immediate point award - wait for round reset (last-man-standing)
+  ; Award point to P2 immediately (last-man-standing)
+  gosub __Award_P2_Point
   ; Hide P1 ship sprite off-screen (player0)
   player0y = 200
   ; Hide P1 paddle off-screen (player2)
   player2y = 200
   ; Start 3-second countdown before round reset
   invincibility_timer = invincibility_duration
-  ; Point will be awarded to survivor in __Round_Reset
   return
 
 __P1_Brick_Bounce
@@ -1266,14 +1281,14 @@ __P2_Bottom_Area
 
 __P2_Core_Hit
   ; Player 2 dies - Player 1 is last man standing
-  ; CHANGED: No immediate point award - wait for round reset (last-man-standing)
+  ; Award point to P1 immediately (last-man-standing)
+  gosub __Award_P1_Point
   ; Hide P2 ship sprite off-screen (player1)
   player1y = 200
   ; Hide P2 paddle off-screen (player3)
   player3y = 200
   ; Start 3-second countdown before round reset
   invincibility_timer = invincibility_duration
-  ; Point will be awarded to survivor in __Round_Reset
   return
 
 __P2_Brick_Bounce
@@ -1381,14 +1396,9 @@ __SBD_Done
   ;***************************************************************
   ;  Round Reset - Start new round after invincibility period
   ;  Resets both players, ball, and bricks
-  ;  CHANGED: Last-man-standing scoring - award point to survivor
+  ;  Scoring happens in core hit functions (immediate feedback)
   ;***************************************************************
 __Round_Reset
-  ; Last-Man-Standing Scoring: Award point to the player still alive
-  ; Dead players have Y=200 (off-screen), alive players have Y<200
-  if player0y > 100 then if player1y < 100 then gosub __Award_P2_Point
-  if player1y > 100 then if player0y < 100 then gosub __Award_P1_Point
-
   ; Reset Player 1
   player0x = 25 : player0y = 40
   p1_bricks = %00001111
