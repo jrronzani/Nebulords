@@ -3278,13 +3278,50 @@ __Advance_Death_Animation
   death_anim_counter = death_anim_counter + 1
   ; Check if animation complete
   if death_anim_counter > 48 then death_anim_counter = 0 : player8y = 200 : return
-  ; Update sprite (frame calculated from counter)
-  gosub __Update_Death_Animation
+  ; Only update sprite on frame boundaries (1,4,7,10,13,16,19,22,25,28,31,34,37,40,43,46)
+  ; Check if counter-1 is divisible by 3 using modulo via successive subtraction
+  temp_dir = death_anim_counter - 1
+  if temp_dir >= 3 then temp_dir = temp_dir - 3
+  if temp_dir >= 3 then temp_dir = temp_dir - 3
+  if temp_dir >= 3 then temp_dir = temp_dir - 3
+  if temp_dir >= 3 then temp_dir = temp_dir - 3
+  if temp_dir >= 3 then temp_dir = temp_dir - 3
+  if temp_dir >= 3 then temp_dir = temp_dir - 3
+  if temp_dir >= 3 then temp_dir = temp_dir - 3
+  if temp_dir >= 3 then temp_dir = temp_dir - 3
+  if temp_dir >= 3 then temp_dir = temp_dir - 3
+  if temp_dir >= 3 then temp_dir = temp_dir - 3
+  if temp_dir >= 3 then temp_dir = temp_dir - 3
+  if temp_dir >= 3 then temp_dir = temp_dir - 3
+  if temp_dir >= 3 then temp_dir = temp_dir - 3
+  if temp_dir >= 3 then temp_dir = temp_dir - 3
+  if temp_dir >= 3 then temp_dir = temp_dir - 3
+  if temp_dir >= 3 then temp_dir = temp_dir - 3
+  ; temp_dir now contains the remainder (0, 1, or 2)
+  ; Only update sprite if remainder is 0 (meaning we're at a frame boundary)
+  if temp_dir = 0 then gosub __Update_Death_Animation
   return
 
 __Update_Death_Animation
-  ; Calculate frame from counter (0-15) and dispatch
-  temp_dir = (death_anim_counter - 1) / 3
+  ; Determine frame by checking counter ranges
+  if death_anim_counter < 4 then temp_dir = 0 : goto __DA_dispatch
+  if death_anim_counter < 7 then temp_dir = 1 : goto __DA_dispatch
+  if death_anim_counter < 10 then temp_dir = 2 : goto __DA_dispatch
+  if death_anim_counter < 13 then temp_dir = 3 : goto __DA_dispatch
+  if death_anim_counter < 16 then temp_dir = 4 : goto __DA_dispatch
+  if death_anim_counter < 19 then temp_dir = 5 : goto __DA_dispatch
+  if death_anim_counter < 22 then temp_dir = 6 : goto __DA_dispatch
+  if death_anim_counter < 25 then temp_dir = 7 : goto __DA_dispatch
+  if death_anim_counter < 28 then temp_dir = 8 : goto __DA_dispatch
+  if death_anim_counter < 31 then temp_dir = 9 : goto __DA_dispatch
+  if death_anim_counter < 34 then temp_dir = 10 : goto __DA_dispatch
+  if death_anim_counter < 37 then temp_dir = 11 : goto __DA_dispatch
+  if death_anim_counter < 40 then temp_dir = 12 : goto __DA_dispatch
+  if death_anim_counter < 43 then temp_dir = 13 : goto __DA_dispatch
+  if death_anim_counter < 46 then temp_dir = 14 : goto __DA_dispatch
+  temp_dir = 15
+
+__DA_dispatch
   on temp_dir goto __DA_0 __DA_1 __DA_2 __DA_3 __DA_4 __DA_5 __DA_6 __DA_7 __DA_8 __DA_9 __DA_10 __DA_11 __DA_12 __DA_13 __DA_14 __DA_15
 
 __DA_0
